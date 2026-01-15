@@ -452,3 +452,186 @@ function renderSubs(rows){
   if (!pick.dataset.wired){
     pick.dataset.wired = "1";
     const apply = () => {
+      const v = (pick.value || "").trim().toLowerCase();
+      const found = SUBS_ALL.find(x => x.sub.toLowerCase() === v);
+      renderSubDetail(found || null);
+    };
+    pick.addEventListener("change", apply);
+    pick.addEventListener("blur", apply);
+    pick.addEventListener("keydown", (e)=>{ if (e.key === "Enter") apply(); });
+  }
+}
+
+/*** INCIDENTS ***/
+let INC_ALL = [];
+
+function pillForSeverity(sev){
+  const s = (sev || "").toLowerCase();
+  if (s === "high") return `<span class="pill high">High</span>`;
+  if (s === "moderate") return `<span class="pill mod">Moderate</span>`;
+  if (s === "low") return `<span class="pill low">Low</span>`;
+  return "";
+}
+
+function normalizeIncidentRows(rows){
+  return rows.map(r => ({
+    Date: r.Date || r.date || "",
+    IncidentID: r.IncidentID || r.IncidentId || r.ID || r.Id || "",
+    Subcontractor: r.Subcontractor || r.subcontractor || r.Sub || "",
+    Project: r.Project || r.project || "",
+    Severity: r.Severity || r.severity || "",
+    ReportLink: r.ReportLink || r.reportlink || r.Link || ""
+  })).filter(x => x.IncidentID && String(x.IncidentID).trim().toLowerCase() !== "incidentid");
+}
+
+function renderIncidentDetail(item){
+  const box = document.getElementById("incDetail");
+  if(!item){
+    box.innerHTML = `
+      <div class="title">Select an incident</div>
+      <div class="hint">Details will appear here.</div>
+      <div class="small">No selection.</div>
+    `;
+    return;
+  }
+
+  box.innerHTML = `
+    <div class="title">${safeText(item.IncidentID) || "—"}</div>
+    <div class="hint">${safeText(item.Date) || ""} • ${safeText(item.Severity) || "—"} • ${safeText(item.Subcontractor) || "—"}</div>
+    <div class="kv">
+      <div class="k">Project</div><div class="v">${safeText(item.Project) || "—"}</div>
+      <div class="k">Subcontractor</div><div class="v">${safeText(item.Subcontractor) || "—"}</div>
+      <div class="k">Severity</div><div class="v">${safeText(item.Severity) || "—"}</div>
+      <div class="k">Date</div><div class="v">${safeText(item.Date) || "—"}</div>
+    </div>
+    <div style="margin-top:12px;">
+      ${item.ReportLink
+        ? `<a class="link" href="${item.ReportLink}" target="_blank" rel="noopener">View report</a>`
+        : `<span class="small">No report link</span>`}
+    </div>
+  `;
+}
+
+function renderIncidentsLookup(rows){
+  INC_ALL = normalizeIncidentRows(rows);
+
+  const dl = document.getElementById("incList");
+  dl.innerHTML = [...INC_ALL]
+    .sort((a,b)=> String(a.IncidentID).localeCompare(String(b.IncidentID)))
+    .map(r => `<option value="${safeText(r.IncidentID)}"></option>`)
+    .join("");
+
+  const pick = document.getElementById("incPick");
+  if(!pick.dataset.wired){
+    pick.dataset.wired = "1";
+    const apply = () => {
+      const v = (pick.value || "").trim().toLowerCase();
+      const found = INC_ALL.find(x => String(x.IncidentID || "").trim().toLowerCase() === v);
+      renderIncidentDetail(found || null);
+    };
+    pick.addEventListener("change", apply);
+    pick.addEventListener("blur", apply);
+    pick.addEventListener("keydown", (e)=>{ if(e.key==="Enter") apply(); });
+  }
+}
+
+function renderIncidentsTable(allIncidents){
+  const q = document.getElementById("q").value.trim().toLowerCase();
+  const sev = document.getElementById("sev").value;
+
+  let rows = normalizeIncidentRows(allIncidents);
+
+  if (sev) rows = rows.filter(r => (r.Severity || "") === sev);
+
+  if (q){
+    rows = rows.filter(r => (
+      String(r.IncidentID || "").toLowerCase().includes(q) ||
+      String(r.Subcontractor || "").toLowerCase().includes(q) ||
+      String(r.Project || "").toLowerCase().includes(q)
+    ));
+  }
+
+  rows.sort((a,b)=>{
+    const da = Date.parse(a.Date) || 0;
+    const db = Date.parse(b.Date) || 0;
+    return db - da;
+  });
+
+  const cap = (q || sev) ? 10 : 5;
+  const shown = rows.slice(0, cap);
+
+  document.getElementById("incHint").textContent =
+    (q || sev)
+      ? `Showing top ${Math.min(cap, rows.length)} matches (capped).`
+      : "Showing latest 5 incidents.";
+
+  const list = document.getElementById("incidentList");
+  if (!shown.length){
+    list.innerHTML = `<div class="small" style="padding:12px 0;">No incidents match your filters.</div>`;
+    return;
+  }
+
+  list.innerHTML = shown.map(r => `
+    <div class="inc-row">
+      <div>
+        <strong>${safeText(r.Date) || "—"}</strong>
+        <div class="meta">${safeText(r.IncidentID) || "—"}</div>
+      </div>
+      <div>
+        <strong>${safeText(r.Subcontractor) || "—"} ${pillForSeverity(r.Severity)}</strong>
+        <div class="meta">${safeText(r.Project) || ""}</div>
+      </div>
+      <div style="text-align:right;">
+        ${r.ReportLink ? `<a class="link" href="${r.ReportLink}" target="_blank" rel="noopener">View report</a>` : `<span class="small">—</span>`}
+      </div>
+    </div>
+  `).join("");
+}
+
+/*** init ***/
+(async function init(){
+  try {
+    setStatus("Loading data…");
+    const [kpis, subs, inc] = await Promise.all([
+      fetchTable(KPI_CSV),
+      fetchTable(SUBS_CSV),
+      fetchTable(INCIDENTS_CSV)
+    ]);
+
+    renderKPIs(kpis);
+    renderSubs(subs);
+
+    // Incidents: list + lookup/detail
+    renderIncidentsTable(inc);
+    renderIncidentsLookup(inc);
+
+    // Optional: auto-select most recent incident into detail panel
+    // (keeps panel from looking empty on load)
+    const latest = normalizeIncidentRows(inc).sort((a,b)=>{
+      const da = Date.parse(a.Date) || 0;
+      const db = Date.parse(b.Date) || 0;
+      return db - da;
+    })[0];
+    if (latest) renderIncidentDetail(latest);
+
+    document.getElementById("q").addEventListener("input", ()=>renderIncidentsTable(inc));
+    document.getElementById("sev").addEventListener("change", ()=>renderIncidentsTable(inc));
+    document.getElementById("clear").addEventListener("click", (e)=>{
+      e.preventDefault();
+      document.getElementById("q").value = "";
+      document.getElementById("sev").value = "";
+      renderIncidentsTable(inc);
+    });
+
+    setStatus("");
+  } catch (err){
+    console.error(err);
+    setStatus("Data fetch failed. Check CSV publish links, then refresh.", true);
+    document.getElementById("subHint").textContent = "Could not load subcontractor data. Verify your published SUBS CSV.";
+    document.getElementById("incHint").textContent = "Could not load incidents. Verify your published INCIDENTS CSV.";
+  }
+})();
+</script>
+
+</body>
+</html>
