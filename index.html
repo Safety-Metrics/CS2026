@@ -4,97 +4,244 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>2026 Safety Performance</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#fff; --text:#111; --muted:#6b6b6b; --border:#e5e5e5; --danger:#b11226;
-      --chip:#f6f6f6;
+      --bg:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --border:#e5e7eb;
+      --card:#ffffff;
+      --shadow: 0 1px 2px rgba(0,0,0,.04);
+      --radius: 12px;
+      --max: 1040px;
     }
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-    .wrap{max-width:1080px;margin:0 auto;padding:44px 22px}
-    h1{font-size:34px;letter-spacing:-.02em;margin:0 0 6px}
-    .subtitle{color:var(--muted);margin:0 0 26px;font-size:14px}
-    .metrics{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;margin:22px 0 34px}
-    .metric{border:1px solid var(--border);border-radius:14px;padding:16px 16px 14px;background:#fff}
-    .metric h2{margin:0;font-size:28px;letter-spacing:-.02em}
-    .metric span{display:block;margin-top:6px;color:var(--muted);font-size:12px}
-    .section{margin:34px 0}
-    .section h3{margin:0 0 6px;font-size:18px}
-    .section .desc{color:var(--muted);font-size:13px;margin:0 0 14px}
-    .subs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-    .sub{border:1px solid var(--border);border-radius:14px;padding:14px 14px 12px}
-    .sub h4{margin:0;font-size:14px}
-    .meta{color:var(--muted);font-size:12px;margin:6px 0 8px}
-    .stats{font-size:12px;line-height:1.55}
-    .bad{color:var(--danger);font-weight:600}
-    .pill{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:999px;background:var(--chip);font-size:11px;color:#333;vertical-align:middle;border:1px solid var(--border)}
-    .pill.high{border-color:rgba(177,18,38,.25);color:var(--danger);background:rgba(177,18,38,.06)}
-    .controls{display:flex;gap:10px;align-items:center;margin:10px 0 10px}
-    .input, select, button{font:inherit}
-    .input{border:1px solid var(--border);border-radius:10px;padding:9px 10px;font-size:12px;min-width:260px}
-    select{border:1px solid var(--border);border-radius:10px;padding:9px 10px;font-size:12px;background:#fff}
-    button{border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:12px;background:#fff;cursor:pointer}
-    .hint{color:var(--muted);font-size:12px;margin:0 0 8px}
-    .table{border-top:1px solid var(--border);margin-top:10px}
-    .row{display:grid;grid-template-columns:140px 1fr 140px;gap:12px;padding:12px 6px;border-bottom:1px solid var(--border);align-items:center}
-    .link{color:#111;text-decoration:underline;font-size:12px}
-    .small{color:var(--muted);font-size:12px}
-
-    /* Subcontractor detail (premium + clean) */
-    .subdetail{display:grid;grid-template-columns:340px 1fr;gap:24px;margin-top:18px}
-    .subpick{display:flex;flex-direction:column;gap:8px}
-    .label{font-size:13px;color:var(--muted)}
-    .subdetail-card{min-height:160px}
-
-    @media (max-width: 900px){
-      .metrics{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .subs{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .row{grid-template-columns:120px 1fr 120px}
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+      background:var(--bg);
     }
-    @media (max-width: 720px){
-      .subs{grid-template-columns:1fr}
-      .row{grid-template-columns:1fr}
-      .input{min-width:0;width:100%}
-      .controls{flex-direction:column;align-items:stretch}
-      .subdetail{grid-template-columns:1fr}
+    .container{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 44px 18px 80px;
+    }
+    h1{
+      font-size: 34px;
+      margin: 0 0 6px;
+      letter-spacing:-.02em;
+    }
+    .subhead{
+      color: var(--muted);
+      margin: 0 0 28px;
+      font-size: 14px;
+    }
+    .kpi-row{
+      display:grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 18px;
+      margin: 18px 0 34px;
+    }
+    .kpi{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 16px 14px;
+      box-shadow: var(--shadow);
+      min-height: 76px;
+    }
+    .kpi .val{
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing:-.02em;
+    }
+    .kpi .lab{
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .section{
+      margin-top: 28px;
+    }
+    .section h2{
+      font-size: 18px;
+      margin: 0 0 6px;
+      letter-spacing:-.01em;
+    }
+    .section p{
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .row{
+      display:flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items:center;
+    }
+    .input, select, button{
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius: 10px;
+      padding: 9px 10px;
+      font-size: 13px;
+      color: var(--text);
+      outline: none;
+    }
+    .input{
+      min-width: 280px;
+    }
+    button{
+      cursor:pointer;
+    }
+    button:hover{ filter: brightness(.98); }
+
+    .grid-3{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      min-height: 140px;
+    }
+    .card h3{
+      margin: 0 0 8px;
+      font-size: 14px;
+      letter-spacing:-.01em;
+    }
+    .meta{
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .kv{
+      margin-top: 10px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 10px;
+      font-size: 12px;
+    }
+    .kv .k{ color: var(--muted); }
+    .kv .v{ font-weight: 600; text-align:right; }
+
+    .panel{
+      margin-top: 14px;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+    .panel .title{
+      font-weight: 700;
+      font-size: 14px;
+      margin: 0 0 4px;
+    }
+    .panel .hint{
+      color: var(--muted);
+      font-size: 12px;
+      margin: 0 0 12px;
+    }
+
+    .inc-list{
+      margin-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .inc-row{
+      display:grid;
+      grid-template-columns: 160px 1fr 120px;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      align-items:center;
+    }
+    .inc-row strong{
+      display:block;
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
+    .pill{
+      display:inline-block;
+      border:1px solid var(--border);
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 11px;
+      color: var(--muted);
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .pill.high{ border-color:#fca5a5; color:#b91c1c; }
+    .pill.mod{ border-color:#fde68a; color:#92400e; }
+    .pill.low{ border-color:#bbf7d0; color:#166534; }
+    a.link{
+      color: #111827;
+      text-decoration: underline;
+      font-size: 12px;
+    }
+    .small{
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .status{
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .danger{ color:#b91c1c; }
+    @media (max-width: 980px){
+      .kpi-row{ grid-template-columns: 1fr 1fr; }
+      .grid-3{ grid-template-columns: 1fr; }
+      .inc-row{ grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
+  <div class="container">
     <h1>2026 Safety Performance</h1>
-    <p class="subtitle">Real-time safety metrics across all active projects and subcontractors.</p>
+    <p class="subhead">Real-time safety metrics across all active projects and subcontractors.</p>
 
-    <div class="metrics" id="kpis"></div>
-
-    <div class="section">
-      <h3>Subcontractor Performance</h3>
-      <p class="desc">Top subcontractors by hours are shown below.</p>
-
-      <div class="subs" id="subs"></div>
-
-      <div class="subdetail">
-        <div class="subpick">
-          <label class="label" for="subPick">Subcontractor</label>
-          <input class="input" id="subPick" list="subList" placeholder="Type a subcontractor name…" />
-          <datalist id="subList"></datalist>
-        </div>
-
-        <div class="sub subdetail-card" id="subDetail">
-          <h4>Select a subcontractor</h4>
-          <p class="meta">Details will appear here.</p>
-          <div class="stats"></div>
-        </div>
-      </div>
+    <div class="kpi-row" id="kpis">
+      <div class="kpi"><div class="val">—</div><div class="lab">Total Man-Hours</div></div>
+      <div class="kpi"><div class="val">—</div><div class="lab">TRIR</div></div>
+      <div class="kpi"><div class="val">—</div><div class="lab">LTIR</div></div>
+      <div class="kpi"><div class="val">—</div><div class="lab">Total Recordables</div></div>
+      <div class="kpi"><div class="val">—</div><div class="lab">Active Subcontractors</div></div>
     </div>
 
-    <div class="section" id="incidents">
-      <h3>Incidents</h3>
-      <p class="desc">Latest five shown.</p>
+    <div class="section">
+      <h2>Subcontractor Performance</h2>
+      <p>Top subcontractors by hours are shown below. Use the lookup to view any subcontractor’s detail without cluttering the page.</p>
 
-      <div class="controls">
-        <input class="input" id="q" placeholder="Search incidents (sub, project, ID)"/>
+      <div class="row">
+        <label class="small" for="subPick">Subcontractor</label>
+        <input class="input" id="subPick" list="subList" placeholder="Type a subcontractor name…" autocomplete="off" />
+        <datalist id="subList"></datalist>
+      </div>
+
+      <div class="panel" id="subDetail">
+        <div class="title">Select a subcontractor</div>
+        <div class="hint">Details will appear here.</div>
+        <div class="small">No selection.</div>
+      </div>
+
+      <div style="height:16px"></div>
+      <div class="grid-3" id="subCards"></div>
+      <div class="status" id="subHint"></div>
+    </div>
+
+    <div class="section">
+      <h2>Incidents</h2>
+      <p>Latest incidents shown. Search by subcontractor, project, or incident ID — or pull a specific incident in the detail panel.</p>
+
+      <div class="row">
+        <input class="input" id="q" placeholder="Search incidents (sub, project, ID)" autocomplete="off" />
         <select id="sev">
           <option value="">Severity: All</option>
           <option value="High">High</option>
@@ -104,128 +251,177 @@
         <button id="clear">Clear</button>
       </div>
 
-      <p class="hint" id="hint">Showing latest 5 incidents.</p>
-      <div class="table" id="incidentList"></div>
+      <!-- Incident lookup + detail panel -->
+      <div class="row" style="margin-top:10px;">
+        <label class="small" for="incPick">Incident</label>
+        <input class="input" id="incPick" list="incList" placeholder="Type an Incident ID…" autocomplete="off" />
+        <datalist id="incList"></datalist>
+      </div>
 
-      <p class="hint" style="margin-top:16px">
-        Tip: Keep incident ReportLink values as raw URLs in your sheet; the dashboard will render them as “View report”.
-      </p>
+      <div class="panel" id="incDetail" style="margin-top:12px;">
+        <div class="title">Select an incident</div>
+        <div class="hint">Details will appear here.</div>
+        <div class="small">No selection.</div>
+      </div>
+
+      <div class="inc-list" id="incidentList"></div>
+      <div class="status" id="incHint"></div>
+
+      <div style="margin-top:12px" class="small">
+        Tip: Keep incident ReportLink values as raw URLs in your sheet; the dashboard renders them as “View report”.
+      </div>
     </div>
+
+    <div class="status" id="status"></div>
   </div>
 
 <script>
+/*** CONFIG: your published CSV URLs ***/
 const KPI_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=152373673&single=true&output=csv";
 const SUBS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=466735545&single=true&output=csv";
 const INCIDENTS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=1844704592&single=true&output=csv";
 
+/*** helpers ***/
+const bust = (url) => url + (url.includes("?") ? "&" : "?") + "t=" + Date.now();
+
+function setStatus(msg, isErr=false){
+  const el = document.getElementById("status");
+  el.textContent = msg || "";
+  el.className = "status" + (isErr ? " danger" : "");
+}
+
+function toNumber(x){
+  if (x === null || x === undefined) return 0;
+  const n = parseFloat(String(x).replace(/,/g,"").trim());
+  return Number.isFinite(n) ? n : 0;
+}
+
+function safeText(x){
+  return (x === null || x === undefined) ? "" : String(x);
+}
+
 function parseCSV(text){
+  // simple CSV parser w/ quoted fields support
   const rows = [];
-  let cur = [], val = "", inQ = false;
-  for (let i=0;i<text.length;i++) {
-    const c = text[i], n = text[i+1];
-    if (c === '"' && inQ && n === '"') { val += '"'; i++; continue; }
-    if (c === '"') { inQ = !inQ; continue; }
-    if (c === ',' && !inQ) { cur.push(val); val=""; continue; }
-    if ((c === '\n' || c === '\r') && !inQ) {
-      if (val.length || cur.length) { cur.push(val); rows.push(cur); }
-      val=""; cur=[];
-      if (c === '\r' && n === '\n') i++;
+  let row = [];
+  let cur = "";
+  let inQuotes = false;
+
+  for (let i=0; i<text.length; i++){
+    const c = text[i];
+    const next = text[i+1];
+
+    if (c === '"' ){
+      if (inQuotes && next === '"'){ cur += '"'; i++; }
+      else inQuotes = !inQuotes;
       continue;
     }
-    val += c;
+    if (!inQuotes && c === "," ){
+      row.push(cur); cur = ""; continue;
+    }
+    if (!inQuotes && (c === "\n" || c === "\r")){
+      if (c === "\r" && next === "\n") i++;
+      row.push(cur); rows.push(row);
+      row = []; cur = "";
+      continue;
+    }
+    cur += c;
   }
-  if (val.length || cur.length) { cur.push(val); rows.push(cur); }
-  const header = (rows.shift() || []).map(h => (h||"").trim());
-  return rows
-    .filter(r => r.some(x => (x||"").trim() !== ""))
-    .map(r => Object.fromEntries(header.map((h,idx)=>[h, (r[idx]||"").trim()])));
+  row.push(cur);
+  rows.push(row);
+  return rows.filter(r => r.some(cell => String(cell).trim() !== ""));
 }
 
 async function fetchTable(url){
-  const res = await fetch(url, { cache: "no-store" });
-  if(!res.ok) throw new Error("Failed to fetch: " + url + " ("+res.status+")");
+  const res = await fetch(bust(url), { cache: "no-store" });
+  if (!res.ok) throw new Error("Fetch failed: " + res.status);
   const txt = await res.text();
-  return parseCSV(txt);
+  const grid = parseCSV(txt);
+
+  if (!grid.length) return [];
+  const headers = grid[0].map(h => String(h).trim());
+  const out = [];
+
+  for (let i=1; i<grid.length; i++){
+    const obj = {};
+    for (let j=0; j<headers.length; j++){
+      obj[headers[j] || ("col"+j)] = (grid[i][j] ?? "").trim();
+    }
+    out.push(obj);
+  }
+  return out;
 }
 
-function asNum(x){
-  const n = Number(String(x||"").replace(/,/g,""));
-  return Number.isFinite(n) ? n : 0;
-}
-function fmtInt(n){ return new Intl.NumberFormat().format(n); }
-
-function pillForSeverity(sev){
-  if (sev === "High") return `<span class="pill high">High</span>`;
-  if (!sev) return "";
-  return `<span class="pill">${sev}</span>`;
-}
-
+/*** KPI ***/
 function renderKPIs(kpis){
-  const map = new Map(kpis.map(r => [r.Metric, r.Value]));
-  const items = [
-    ["Total Man-Hours", map.get("Total Man-Hours") || "0"],
-    ["TRIR", map.get("TRIR") || "0"],
-    ["LTIR", map.get("LTIR") || "0"],
-    ["Total Recordables", map.get("Total Recordables") || "0"],
-    ["Active Subcontractors", map.get("Active Subcontractors") || "0"],
-  ];
-  document.getElementById("kpis").innerHTML = items.map(([label,val]) => `
-    <div class="metric">
-      <h2>${val}</h2>
-      <span>${label}</span>
-    </div>
-  `).join("");
+  const map = {};
+  kpis.forEach(r => { map[r.Metric] = r.Value; });
+
+  const kpiEls = document.getElementById("kpis").querySelectorAll(".kpi .val");
+  const totalHours = safeText(map["Total Man-Hours"] ?? "—");
+  const trir = safeText(map["TRIR"] ?? "—");
+  const ltir = safeText(map["LTIR"] ?? "—");
+  const rec = safeText(map["Total Recordables"] ?? "—");
+  const active = safeText(map["Active Subcontractors"] ?? "—");
+
+  kpiEls[0].textContent = totalHours;
+  kpiEls[1].textContent = trir;
+  kpiEls[2].textContent = ltir;
+  kpiEls[3].textContent = rec;
+  kpiEls[4].textContent = active;
 }
 
+/*** SUBS ***/
 let SUBS_ALL = [];
 
-function renderSubDetail(r){
-  const el = document.getElementById("subDetail");
-  if(!r){
-    el.innerHTML = `<h4>Select a subcontractor</h4><p class="meta">Details will appear here.</p><div class="stats"></div>`;
+function normalizeSubsRows(rows){
+  return rows.map(r => {
+    const sub = r.Subcontractor || r.subcontractor || r.Sub || r.SUB || r.Name || r.name || "";
+    const hours = toNumber(r.TotalHours ?? r.Hours ?? r.hours ?? 0);
+    const incidents = toNumber(r.TotalIncidents ?? r.Incidents ?? r.incidents ?? 0);
+    const recordables = toNumber(r.Recordables ?? r.recordables ?? 0);
+    const lost = toNumber(r.LostTime ?? r.Lost ?? r.losttime ?? 0);
+    const trir = safeText(r.TRIR ?? r.trir ?? "");
+    const ltir = safeText(r.LTIR ?? r.ltir ?? "");
+    return {
+      sub: String(sub).trim(),
+      hours,
+      incidents,
+      recordables,
+      lost,
+      trir: (trir === "" ? "" : String(trir)),
+      ltir: (ltir === "" ? "" : String(ltir))
+    };
+  }).filter(x => x.sub && x.sub.toLowerCase() !== "subcontractor");
+}
+
+function renderSubDetail(item){
+  const box = document.getElementById("subDetail");
+  if (!item){
+    box.innerHTML = `
+      <div class="title">Select a subcontractor</div>
+      <div class="hint">Details will appear here.</div>
+      <div class="small">No selection.</div>
+    `;
     return;
   }
-  el.innerHTML = `
-    <h4>${r.sub}</h4>
-    <p class="meta">YTD exposure & rates</p>
-    <div class="stats">
-      Hours: ${fmtInt(r.hours)}<br>
-      Incidents: ${fmtInt(r.inc)}<br>
-      Recordables: ${fmtInt(r.rec)}<br>
-      Lost Time: ${fmtInt(r.lti)}<br>
-      TRIR: <span class="${(Number(r.trir) >= 2 && r.trir !== "") ? "bad":""}">${r.trir || "—"}</span><br>
-      LTIR: <span class="${(Number(r.ltir) >= 1 && r.ltir !== "") ? "bad":""}">${r.ltir || "—"}</span>
+
+  box.innerHTML = `
+    <div class="title">${item.sub}</div>
+    <div class="hint">YTD exposure & rates</div>
+    <div class="kv">
+      <div class="k">Hours</div><div class="v">${item.hours.toLocaleString()}</div>
+      <div class="k">Incidents</div><div class="v">${item.incidents}</div>
+      <div class="k">Recordables</div><div class="v">${item.recordables}</div>
+      <div class="k">Lost Time</div><div class="v">${item.lost}</div>
+      <div class="k">TRIR</div><div class="v">${item.trir || "0"}</div>
+      <div class="k">LTIR</div><div class="v">${item.ltir || "0"}</div>
     </div>
   `;
 }
 
-function renderSubs(subs){
-  SUBS_ALL = subs
-    .filter(r => r.Subcontractor && r.Subcontractor !== "Subcontractor")
-    .map(r => ({
-      sub: r.Subcontractor,
-      hours: asNum(r.Hours),
-      inc: asNum(r.Incidents),
-      rec: asNum(r.Recordables),
-      lti: asNum(r.LostTime),
-      trir: (r.TRIR || "").trim(),
-      ltir: (r.LTIR || "").trim()
-    }));
-
-  const top = [...SUBS_ALL].sort((a,b)=> b.hours - a.hours).slice(0, 9);
-  document.getElementById("subs").innerHTML = top.map(r => `
-    <div class="sub">
-      <h4>${r.sub}</h4>
-      <p class="meta">YTD exposure & rates</p>
-      <div class="stats">
-        Hours: ${fmtInt(r.hours)}<br>
-        Incidents: ${fmtInt(r.inc)}<br>
-        Recordables: ${fmtInt(r.rec)}<br>
-        TRIR: <span class="${(Number(r.trir) >= 2 && r.trir !== "") ? "bad":""}">${r.trir || "—"}</span><br>
-        LTIR: <span class="${(Number(r.ltir) >= 1 && r.ltir !== "") ? "bad":""}">${r.ltir || "—"}</span>
-      </div>
-    </div>
-  `).join("");
+function renderSubs(rows){
+  SUBS_ALL = normalizeSubsRows(rows);
 
   const dl = document.getElementById("subList");
   dl.innerHTML = [...SUBS_ALL]
@@ -233,92 +429,26 @@ function renderSubs(subs){
     .map(r => `<option value="${r.sub}"></option>`)
     .join("");
 
-  const pick = document.getElementById("subPick");
-  if(!pick.dataset.wired){
-    pick.dataset.wired = "1";
-    const apply = () => {
-      const v = (pick.value || "").trim().toLowerCase();
-      const found = SUBS_ALL.find(x => x.sub.toLowerCase() === v);
-      renderSubDetail(found || null);
-    };
-    pick.addEventListener("change", apply);
-    pick.addEventListener("blur", apply);
-    pick.addEventListener("keydown", (e)=>{ if(e.key==="Enter") apply(); });
-  }
-}
-
-function renderIncidentsTable(incidents){
-  const q = document.getElementById("q").value.trim().toLowerCase();
-  const sev = document.getElementById("sev").value;
-
-  let rows = incidents
-    .filter(r => r.IncidentID && r.IncidentID !== "IncidentID");
-
-  if (sev) rows = rows.filter(r => (r.Severity || "") === sev);
-  if (q) {
-    rows = rows.filter(r => (
-      (r.IncidentID||"").toLowerCase().includes(q) ||
-      (r.Subcontractor||"").toLowerCase().includes(q) ||
-      (r.Project||"").toLowerCase().includes(q)
-    ));
-  }
-
-  const cap = (q || sev) ? 10 : 5;
-  const shown = rows.slice(0, cap);
-
-  document.getElementById("hint").textContent =
-    (q || sev)
-      ? `Showing top ${Math.min(cap, rows.length)} matches (capped).`
-      : "Showing latest 5 incidents.";
-
-  document.getElementById("incidentList").innerHTML = shown.map(r => `
-    <div class="row">
-      <div><strong>${r.Date || ""}</strong><div class="meta">${r.IncidentID || ""}</div></div>
-      <div>
-        <strong>${r.Subcontractor || ""}</strong>${pillForSeverity(r.Severity)}
-        <div class="meta">${r.Project || ""}</div>
-      </div>
-      <div>
-        ${r.ReportLink ? `<a class="link" href="${r.ReportLink}" target="_blank" rel="noopener">View report</a>` : `<span class="small">—</span>`}
+  const top = [...SUBS_ALL].sort((a,b)=> b.hours - a.hours).slice(0, 9);
+  const wrap = document.getElementById("subCards");
+  wrap.innerHTML = top.map(r => `
+    <div class="card">
+      <h3>${r.sub}</h3>
+      <div class="meta">YTD exposure & rates</div>
+      <div class="kv">
+        <div class="k">Hours</div><div class="v">${r.hours.toLocaleString()}</div>
+        <div class="k">Incidents</div><div class="v">${r.incidents}</div>
+        <div class="k">Recordables</div><div class="v">${r.recordables}</div>
+        <div class="k">TRIR</div><div class="v">${r.trir || "0"}</div>
+        <div class="k">LTIR</div><div class="v">${r.ltir || "0"}</div>
       </div>
     </div>
   `).join("");
-}
 
-(async function init(){
-  try {
-    const [kpis, subs, inc] = await Promise.all([
-      fetchTable(KPI_CSV),
-      fetchTable(SUBS_CSV),
-      fetchTable(INCIDENTS_CSV)
-    ]);
+  document.getElementById("subHint").textContent =
+    `Showing top ${top.length} by hours. Use lookup to view any of ${SUBS_ALL.length} subcontractors.`;
 
-    renderKPIs(kpis);
-    renderSubs(subs);
-    renderIncidentsTable(inc);
-
-    document.getElementById("q").addEventListener("input", ()=>renderIncidentsTable(inc));
-    document.getElementById("sev").addEventListener("change", ()=>renderIncidentsTable(inc));
-    document.getElementById("clear").addEventListener("click", (e)=>{
-      e.preventDefault();
-      document.getElementById("q").value="";
-      document.getElementById("sev").value="";
-      renderIncidentsTable(inc);
-    });
-  } catch (err) {
-    console.error(err);
-    document.getElementById("kpis").innerHTML = `
-      <div class="metric"><h2>—</h2><span>Data fetch failed</span></div>
-      <div class="metric"><h2>—</h2><span>Check CSV publish links</span></div>
-      <div class="metric"><h2>—</h2><span>Then refresh</span></div>
-      <div class="metric"><h2>—</h2><span></span></div>
-      <div class="metric"><h2>—</h2><span></span></div>
-    `;
-    document.getElementById("subs").innerHTML = "";
-    document.getElementById("incidentList").innerHTML = "";
-    document.getElementById("hint").textContent = "Couldn’t load data. Verify your published CSV links are accessible.";
-  }
-})();
-</script>
-</body>
-</html>
+  const pick = document.getElementById("subPick");
+  if (!pick.dataset.wired){
+    pick.dataset.wired = "1";
+    const apply = () => {
