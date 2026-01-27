@@ -200,6 +200,29 @@
       .grid-3{ grid-template-columns: 1fr; }
       .inc-row{ grid-template-columns: 1fr; }
     }
+  
+    .card.clickable{ cursor:pointer; }
+    .card.clickable:hover{ border-color:#cbd5e1; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+    .card.clickable.active{ outline:2px solid #111827; outline-offset: 0; }
+
+    .panel-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom: 10px;
+    }
+    .btn{
+      cursor:pointer;
+      border:1px solid var(--border);
+      background:#f9fafb;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 13px;
+      color: var(--text);
+    }
+    .btn:hover{ background:#f3f4f6; }
+
   </style>
 </head>
 <body>
@@ -234,7 +257,18 @@
       <div style="height:16px"></div>
       <div class="grid-3" id="subCards"></div>
       <div class="status" id="subHint"></div>
-    </div>
+    
+      <div class="panel" id="subIncPanel" style="display:none;">
+        <div class="panel-head">
+          <div>
+            <div class="title" id="subIncTitle">Incidents —</div>
+            <div class="hint" id="subIncHint">Showing incidents for selected subcontractor.</div>
+          </div>
+          <button class="btn" id="subIncClose" type="button">Close</button>
+        </div>
+        <div id="subIncList"></div>
+      </div>
+</div>
 
     <div class="section">
       <h2>Incidents</h2>
@@ -432,7 +466,7 @@ function renderSubs(rows){
   const top = [...SUBS_ALL].sort((a,b)=> b.hours - a.hours).slice(0, 9);
   const wrap = document.getElementById("subCards");
   wrap.innerHTML = top.map(r => `
-    <div class="card">
+    <div class="card clickable" data-sub="${r.sub}">
       <h3>${r.sub}</h3>
       <div class="meta">YTD exposure & rates</div>
       <div class="kv">
@@ -445,7 +479,16 @@ function renderSubs(rows){
     </div>
   `).join("");
 
-  document.getElementById("subHint").textContent =
+  
+  // Card drill-down (sub -> incidents)
+  [...wrap.querySelectorAll(".card.clickable")].forEach(card=>{
+    card.addEventListener("click", ()=>{
+      const sub = card.dataset.sub || "";
+      setActiveSubCard(sub);
+      openSubIncidentsPanel(sub);
+    });
+  });
+document.getElementById("subHint").textContent =
     `Showing top ${top.length} by hours. Use lookup to view any of ${SUBS_ALL.length} subcontractors.`;
 
   const pick = document.getElementById("subPick");
@@ -464,6 +507,68 @@ function renderSubs(rows){
 
 /*** INCIDENTS ***/
 let INC_ALL = [];
+
+let ACTIVE_SUB = "";
+
+function setActiveSubCard(sub){
+  ACTIVE_SUB = sub || "";
+  document.querySelectorAll("#subCards .card.clickable").forEach(el=>{
+    if ((el.dataset.sub || "") === ACTIVE_SUB) el.classList.add("active");
+    else el.classList.remove("active");
+  });
+}
+
+function openSubIncidentsPanel(sub){
+  const panel = document.getElementById("subIncPanel");
+  const title = document.getElementById("subIncTitle");
+  const hint = document.getElementById("subIncHint");
+  const list = document.getElementById("subIncList");
+
+  const s = (sub || "").trim();
+  title.textContent = s ? `Incidents — ${s}` : "Incidents —";
+  panel.style.display = "block";
+
+  const rows = [...INC_ALL]
+    .filter(r => String(r.Subcontractor || "").trim().toLowerCase() === s.toLowerCase())
+    .sort((a,b)=> String(b.Date||"").localeCompare(String(a.Date||"")));
+
+  hint.textContent = rows.length
+    ? `${rows.length} incident(s) found.`
+    : "No incidents found for this subcontractor.";
+
+  if (!rows.length){
+    list.innerHTML = `<div class="small">No incidents match.</div>`;
+    panel.scrollIntoView({behavior:"smooth", block:"start"});
+    return;
+  }
+
+  // Cap to keep it executive-clean
+  const cap = 25;
+  const shown = rows.slice(0, cap);
+
+  list.innerHTML = shown.map(r => `
+    <div class="inc-row">
+      <div>
+        <strong>${safeText(r.Date) || "—"}</strong>
+        <div class="meta">${safeText(r.IncidentID) || "—"}</div>
+      </div>
+      <div>
+        <strong>${safeText(r.Subcontractor) || "—"} ${pillForSeverity(r.Severity)}</strong>
+        <div class="meta">${safeText(r.Project) || ""}</div>
+      </div>
+      <div style="text-align:right;">
+        ${r.ReportLink ? `<a class="link" href="${r.ReportLink}" target="_blank" rel="noopener">View report</a>` : `<span class="small">—</span>`}
+      </div>
+    </div>
+  `).join("");
+
+  if (rows.length > cap){
+    list.innerHTML += `<div class="small" style="padding-top:10px;">Showing first ${cap}. Refine using the Incidents search below if needed.</div>`;
+  }
+
+  panel.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
 
 function pillForSeverity(sev){
   const s = (sev || "").toLowerCase();
@@ -600,6 +705,13 @@ function renderIncidentsTable(allIncidents){
 
     renderKPIs(kpis);
     renderSubs(subs);
+    // Sub incident panel close
+    const subClose = document.getElementById("subIncClose");
+    subClose.addEventListener("click", ()=>{
+      document.getElementById("subIncPanel").style.display = "none";
+      setActiveSubCard("");
+    });
+
 
     // Incidents: list + lookup/detail
     renderIncidentsTable(inc);
