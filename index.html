@@ -412,6 +412,20 @@ button:hover{ filter: brightness(.98); }
 .panel p{color: rgba(17,17,18,.72) !important;}
 .panel .hint, .panel .small{color: rgba(17,17,18,.62) !important;}
 .card.active{outline:2px solid var(--burgundy) !important; box-shadow:0 10px 30px rgba(0,0,0,.18) !important;}
+/* QUICK VISIBILITY FIX: section headers + helper text inside white panels */
+.section h2,
+.section h3,
+.section .section-title{
+  color: #111112 !important; /* Onyx */
+}
+
+.section p,
+.section .subhead,
+.section .hint,
+.section .helper,
+.section .muted{
+  color: #5d5c5a !important; /* Steel Gray */
+}
 </style>
 </head>
 <body>
@@ -935,5 +949,6 @@ function renderIncidentsTable(allIncidents){
 </script>
 </body>
 </html>
+
 
 
