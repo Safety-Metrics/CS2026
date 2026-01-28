@@ -326,10 +326,7 @@ a.link:hover{
   box-shadow: 0 10px 22px rgba(0,0,0,.08);
 }
 .card.clickable:hover::before,
-.card.active::before{
-  background: var(--brand-red);
-}
-
+.card.active::before{display:none!important;}
 /* Subtle hover on buttons */
 button:hover{ filter: brightness(.98); }
 
@@ -359,7 +356,7 @@ button:hover{ filter: brightness(.98); }
       box-shadow: 0 14px 30px rgba(0,0,0,.14);
     }
     .card.active{
-      border-color: rgba(159,28,31,.95);
+      
       box-shadow: 0 18px 40px rgba(0,0,0,.18);
       position: relative;
     }
@@ -409,6 +406,12 @@ button:hover{ filter: brightness(.98); }
 .kpi .val{ color: var(--cream) !important; }
 .kpi .label{ color: rgba(242,239,235,.70) !important; }
 
+
+/* v4 fixes */
+.panel h2{color: var(--onyx) !important;}
+.panel p{color: rgba(17,17,18,.72) !important;}
+.panel .hint, .panel .small{color: rgba(17,17,18,.62) !important;}
+.card.active{outline:2px solid var(--burgundy) !important; box-shadow:0 10px 30px rgba(0,0,0,.18) !important;}
 </style>
 </head>
 <body>
