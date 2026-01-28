@@ -217,6 +217,64 @@ input{
 .badge.low{ background:#e7f5ec; color:#146c43; }
 .badge.moderate{ background:#fff3cd; color:#856404; }
 .badge.high{ background:#f8d7da; color:#842029; }
+  /* ===== PATCH: fix KPI layout + logo header flow ===== */
+
+/* Keep header centered and clean */
+.brand-header{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding: 18px 0 10px;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  z-index: 5;
+}
+
+/* Logo sizing + subtle animation */
+.brand-logo{
+  height: 54px;
+  width: auto;
+  opacity: .92;
+  filter: drop-shadow(0 10px 22px rgba(0,0,0,.35));
+  transform-origin: center;
+  animation: brandFloat 4.2s ease-in-out infinite;
+}
+
+@keyframes brandFloat{
+  0%, 100% { transform: translateY(0) scale(1); opacity:.92; }
+  50%      { transform: translateY(-2px) scale(1.01); opacity:1; }
+}
+
+/* DO NOT let anything override your KPI grid */
+.kpi-row{
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  margin: 18px 0 26px !important;
+}
+
+.kpi-row .kpi{
+  width: auto !important;
+  min-width: 0 !important;
+}
+
+/* Keep the shell spacing nice under the logo */
+.shell{
+  margin-top: 12px !important;
+}
+
+/* Mobile behavior stays sane */
+@media (max-width: 980px){
+  .kpi-row{
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+@media (max-width: 560px){
+  .kpi-row{
+    grid-template-columns: 1fr !important;
+  }
+}
 </style>
 
 </head>
@@ -747,6 +805,7 @@ function renderIncidentsTable(allIncidents){
 </script>
 </body>
 </html>
+
 
 
 
