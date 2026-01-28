@@ -275,6 +275,62 @@ input{
     grid-template-columns: 1fr !important;
   }
 }
+  /* ===== HARD OVERRIDES: logo sizing + force subcontractor grid back ===== */
+
+/* Make logo actually visible and centered */
+.brand-header{
+  display:flex !important;
+  justify-content:center !important;
+  align-items:center !important;
+  padding: 22px 0 8px !important;
+}
+
+.brand-logo{
+  height: 82px !important;     /* <- adjust this if you want bigger/smaller */
+  width: auto !important;
+  max-width: 520px !important;
+  opacity: .96 !important;
+  filter: drop-shadow(0 10px 22px rgba(0,0,0,.35)) !important;
+  animation: brandFloat 4.2s ease-in-out infinite !important;
+}
+
+@keyframes brandFloat{
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-2px) scale(1.01); }
+}
+
+/* KPI row stays as a row */
+.kpi-row{
+  display:grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+}
+
+/* FORCE subcontractor cards into a 3-column grid again */
+.grid-3{
+  display:grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+}
+
+/* Some code versions wrapped cards in a div with id="subGrid" — force that too */
+#subGrid{
+  display:grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 16px !important;
+}
+
+/* Make sure cards don't stretch weird */
+.card{
+  width: auto !important;
+  min-width: 0 !important;
+}
+
+/* Responsive */
+@media (max-width: 980px){
+  .kpi-row{ grid-template-columns: 1fr 1fr !important; }
+  .grid-3, #subGrid{ grid-template-columns: 1fr !important; }
+}
 </style>
 
 </head>
@@ -805,6 +861,7 @@ function renderIncidentsTable(allIncidents){
 </script>
 </body>
 </html>
+
 
 
 
