@@ -4,873 +4,868 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>2026 Safety Performance</title>
-<style>
-/* ==============================
-   COOPER STEEL – 2026 DASHBOARD
-   Executive / Premium Theme
-   ============================== */
 
-:root{
-  /* Brand colors */
-  --cream: #F2EFEB;
-  --cloud: #CFCDCA;
-  --cooper-red: #9F1C1F;
-  --burgundy: #680C19;
-  --onyx: #111112;
-  --charcoal: #282828;
-  --steel-gray: #5D5C5A;
+  <style>
+    /* ==============================
+      COOPER STEEL – 2026 DASHBOARD
+      Executive / Premium Theme (CLEAN)
+      Badge OFF
+    ============================== */
 
-  /* UI */
-  --card-radius: 16px;
-  --card-shadow: 0 18px 40px rgba(0,0,0,.45);
-  --soft-shadow: 0 6px 20px rgba(0,0,0,.35);
-}
+    :root{
+      /* Brand colors */
+      --cream: #F2EFEB;
+      --cloud: #CFCDCA;
+      --cooper-red: #9F1C1F;
+      --burgundy: #680C19;
+      --onyx: #111112;
+      --charcoal: #282828;
+      --steel-gray: #5D5C5A;
 
-/* ---------- Base ---------- */
-*{ box-sizing: border-box; }
+      /* UI */
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
 
-body{
-  margin:0;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-  background:
-    radial-gradient(1200px 600px at 20% 10%, rgba(159,28,31,.35), transparent 60%),
-    radial-gradient(900px 500px at 80% 20%, rgba(104,12,25,.45), transparent 65%),
-    linear-gradient(180deg, #0c0c0d 0%, #141414 100%);
-  color: var(--cream);
-}
+      --card-shadow: 0 18px 40px rgba(0,0,0,.45);
+      --soft-shadow: 0 10px 28px rgba(0,0,0,.28);
+    }
 
-/* ---------- Logo Header ---------- */
-.brand-header{
-  display:flex;
-  justify-content:center;
-  padding: 36px 0 28px;
-}
+    *{ box-sizing: border-box; }
 
-.brand-badge{
-  background: var(--cream);
-  padding: 16px 26px;
-  border-radius: 14px;
-  box-shadow:
-    0 16px 40px rgba(0,0,0,.5),
-    inset 0 0 0 1px rgba(0,0,0,.08);
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background:
+        radial-gradient(1200px 600px at 20% 10%, rgba(159,28,31,.32), transparent 60%),
+        radial-gradient(900px 500px at 80% 20%, rgba(104,12,25,.38), transparent 65%),
+        linear-gradient(180deg, #0c0c0d 0%, #141414 100%);
+      color: var(--cream);
+    }
 
-  opacity: 0;
-  transform: translateY(-6px) scale(.995);
-  filter: blur(1.5px);
-  animation: logoEnter 700ms cubic-bezier(.22,1,.36,1) forwards;
-}
+    /* ---------- Top Logo Header (Badge OFF) ---------- */
+    header.brand-header{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding: 26px 16px 6px;
+    }
 
-.brand-logo{
-  width: min(760px, 88vw);
-  height: auto;
-  max-width: none;      /* removes the choke collar */
-  display: block;
-  opacity: .98;
-  animation: brandFloat 4.2s ease-in-out infinite;
-}
+    /* Single source of truth for logo sizing */
+    .brand-logo{
+      height: clamp(110px, 10vw, 175px); /* tweak top end if you want bigger */
+      width: auto;
+      display:block;
+      opacity:.98;
+      filter:
+        drop-shadow(0 14px 28px rgba(0,0,0,.45))
+        drop-shadow(0 2px 10px rgba(159,28,31,.18));
+      transform-origin: center;
+      animation: brandFloat 4.2s ease-in-out infinite;
+    }
 
+    @keyframes brandFloat{
+      0%,100% { transform: translateY(0) scale(1); }
+      50%     { transform: translateY(-2px) scale(1.01); }
+    }
 
-@keyframes logoEnter{
-  to{
-    opacity:1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
-}
+    @media (prefers-reduced-motion: reduce){
+      .brand-logo{ animation:none; }
+    }
 
-@media (prefers-reduced-motion: reduce){
-  .brand-badge{
-    animation:none;
-    opacity:1;
-    transform:none;
-    filter:none;
-  }
-}
+    /* ---------- Shell / Container ---------- */
+    .shell{ width: 100%; }
+    .container{
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 22px 80px;
+    }
 
-/* ---------- Main Container ---------- */
-.container{
-  max-width: 1180px;
-  margin: 0 auto;
-  padding: 0 22px 80px;
-}
+    /* ---------- Headings ---------- */
+    h1{
+      margin: 10px 0 6px;
+      font-size: 36px;
+      letter-spacing: -.02em;
+      color: var(--cream);
+    }
 
-/* ---------- Header Text ---------- */
-h1{
-  margin: 0 0 6px;
-  font-size: 36px;
-  letter-spacing: -.02em;
-  color: var(--cream);
-}
+    .subhead{
+      font-size: 14px;
+      color: #d6d3cf;
+      margin-bottom: 26px;
+    }
 
-.subhead{
-  font-size: 14px;
-  color: #d6d3cf;
-  margin-bottom: 26px;
-}
+    /* ---------- KPI Row ---------- */
+    .kpi-row{
+      display:grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0 26px;
+    }
 
-/* ---------- Metric Cards ---------- */
-.kpi-grid{
-  display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
-  gap: 18px;
-  margin-bottom: 32px;
-}
+    .kpi{
+      background: rgba(0,0,0,.45);
+      border-radius: 14px;
+      padding: 16px 16px 14px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+      min-width: 0;
+    }
 
-.kpi{
-  background: rgba(0,0,0,.45);
-  border-radius: 14px;
-  padding: 18px;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
-}
+    .kpi .val{
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--cream);
+      letter-spacing: -.01em;
+      line-height: 1.15;
+    }
 
-.kpi label{
-  font-size: 12px;
-  color: #bfbab5;
-}
+    .kpi .lab{
+      margin-top: 6px;
+      font-size: 12px;
+      color: #bfbab5;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
 
-.kpi strong{
-  display:block;
-  margin-top: 6px;
-  font-size: 22px;
-  color: var(--cream);
-}
+    @media (max-width: 980px){
+      .kpi-row{ grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px){
+      .kpi-row{ grid-template-columns: 1fr; }
+    }
 
-/* ---------- Sections ---------- */
-.section{
-  background: var(--cream);
-  color: var(--onyx);
-  border-radius: 20px;
-  padding: 26px;
-  margin-bottom: 34px;
-  box-shadow: var(--card-shadow);
-}
+    /* ---------- Section cards ---------- */
+    .section{
+      background: var(--cream);
+      color: var(--onyx);
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      margin-bottom: 34px;
+      box-shadow: var(--card-shadow);
+    }
 
-.section h2{
-  margin:0 0 6px;
-  font-size: 20px;
-  color: var(--onyx);
-}
+    .section h2{
+      margin:0 0 6px;
+      font-size: 20px;
+      color: var(--onyx);
+    }
 
-.section p{
-  margin:0 0 18px;
-  font-size: 13px;
-  color: #444;
-}
+    .section p{
+      margin:0 0 18px;
+      font-size: 13px;
+      color: #444;
+    }
 
-/* ---------- Inputs ---------- */
-input, select, button{ font-family: inherit; }
+    /* ---------- Form row / controls ---------- */
+    .row{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-input{
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
-  font-size: 14px;
-}
+    .small{
+      font-size: 12px;
+      color: #555;
+    }
 
-/* ---------- Subcontractor Cards ---------- */
-.cards{
-  display:grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px,1fr));
-  gap: 18px;
-}
+    label.small{
+      font-weight: 600;
+      color: #333;
+    }
 
-.card{
-  background: #f5f3f0;
-  border-radius: var(--card-radius);
-  padding: 18px;
-  box-shadow: var(--soft-shadow);
-  transition: transform .25s ease, box-shadow .25s ease;
-}
+    .input, input, select{
+      font-family: inherit;
+      font-size: 14px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      background: #fff;
+      color: #111;
+      outline: none;
+      min-height: 40px;
+    }
 
-.card:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 22px 50px rgba(0,0,0,.45);
-}
+    input.input{
+      flex: 1 1 320px;
+    }
 
-/* Selected card – FULL border, NO red stripe */
-.card.selected{
-  box-shadow:
-    0 0 0 2px var(--burgundy),
-    0 22px 50px rgba(0,0,0,.55);
-}
+    select{
+      min-width: 160px;
+    }
 
-.card h3{
-  margin:0 0 10px;
-  font-size: 16px;
-  color: var(--onyx);
-}
+    button, .btn{
+      font-family: inherit;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 14px;
+      background: #111;
+      color: #fff;
+      cursor: pointer;
+      min-height: 40px;
+      box-shadow: 0 10px 22px rgba(0,0,0,.18);
+    }
+    button:hover, .btn:hover{ filter: brightness(1.05); }
+    button:active, .btn:active{ transform: translateY(1px); }
 
-.card small{
-  color: #666;
-}
+    /* ---------- Panels ---------- */
+    .panel{
+      background: #f7f5f2;
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: var(--soft-shadow);
+      border: 1px solid rgba(0,0,0,.06);
+    }
 
-/* ---------- Incidents ---------- */
-.incident{
-  padding: 14px 0;
-  border-bottom: 1px solid #ddd;
-}
+    .panel-head{
+      display:flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
 
-.badge{
-  display:inline-block;
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 600;
-}
+    .title{
+      font-weight: 800;
+      letter-spacing: -.01em;
+      color: #111;
+    }
 
-.badge.low{ background:#e7f5ec; color:#146c43; }
-.badge.moderate{ background:#fff3cd; color:#856404; }
-.badge.high{ background:#f8d7da; color:#842029; }
-  /* ===== PATCH: fix KPI layout + logo header flow ===== */
+    .hint{
+      font-size: 12px;
+      color: #666;
+      margin-top: 3px;
+    }
 
-/* Keep header centered and clean */
-.brand-header{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding: 18px 0 10px;
-  margin: 0 auto;
-  width: 100%;
-  position: relative;
-  z-index: 5;
-}
+    /* ---------- Key/Value grid ---------- */
+    .kv{
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px 12px;
+      margin-top: 12px;
+      font-size: 13px;
+    }
 
-/* Logo sizing + subtle animation */
-.brand-logo{
-  height: 160px;
-  width: auto;
-  opacity: .92;
-  filter: drop-shadow(0 10px 22px rgba(0,0,0,.35));
-  transform-origin: center;
-  animation: brandFloat 4.2s ease-in-out infinite;
-}
+    .kv .k{ color: #444; }
+    .kv .v{
+      font-weight: 700;
+      color: #111;
+      text-align:right;
+      white-space: nowrap;
+    }
 
-@keyframes brandFloat{
-  0%, 100% { transform: translateY(0) scale(1); opacity:.92; }
-  50%      { transform: translateY(-2px) scale(1.01); opacity:1; }
-}
+    /* ---------- Subcontractor Cards Grid ---------- */
+    .grid-3{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    @media (max-width: 980px){
+      .grid-3{ grid-template-columns: 1fr; }
+    }
 
-/* DO NOT let anything override your KPI grid */
-.kpi-row{
-  display: grid !important;
-  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-  gap: 14px !important;
-  margin: 18px 0 26px !important;
-}
+    .card{
+      background: #f5f3f0;
+      border-radius: var(--radius-md);
+      padding: 18px;
+      box-shadow: var(--soft-shadow);
+      transition: transform .25s ease, box-shadow .25s ease;
+      border: 1px solid rgba(0,0,0,.05);
+    }
 
-.kpi-row .kpi{
-  width: auto !important;
-  min-width: 0 !important;
-}
+    .card:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 22px 50px rgba(0,0,0,.25);
+    }
 
-/* Keep the shell spacing nice under the logo */
-.shell{
-  margin-top: 12px !important;
-}
+    .card h3{
+      margin:0 0 6px;
+      font-size: 16px;
+      color: var(--onyx);
+    }
 
-/* Mobile behavior stays sane */
-@media (max-width: 980px){
-  .kpi-row{
-    grid-template-columns: 1fr 1fr !important;
-  }
-}
-@media (max-width: 560px){
-  .kpi-row{
-    grid-template-columns: 1fr !important;
-  }
-}
-  /* ===== HARD OVERRIDES: logo sizing + force subcontractor grid back ===== */
+    .meta{
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 10px;
+    }
 
-/* Make logo actually visible and centered */
-.brand-header{
-  display:flex !important;
-  justify-content:center !important;
-  align-items:center !important;
-  padding: 22px 0 8px !important;
-}
+    .card.clickable{ cursor: pointer; }
 
-.brand-logo{
-  height: 82px !important;     /* <- adjust this if you want bigger/smaller */
-  width: auto !important;
-  max-width: 520px !important;
-  opacity: .96 !important;
-  filter: drop-shadow(0 10px 22px rgba(0,0,0,.35)) !important;
-  animation: brandFloat 4.2s ease-in-out infinite !important;
-}
+    .card.active{
+      box-shadow:
+        0 0 0 2px var(--burgundy),
+        0 22px 50px rgba(0,0,0,.28);
+    }
 
-@keyframes brandFloat{
-  0%, 100% { transform: translateY(0) scale(1); }
-  50%      { transform: translateY(-2px) scale(1.01); }
-}
+    /* ---------- Incidents ---------- */
+    .inc-list{ margin-top: 10px; }
 
-/* KPI row stays as a row */
-.kpi-row{
-  display:grid !important;
-  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-  gap: 14px !important;
-}
+    .inc-row{
+      display:grid;
+      grid-template-columns: 1fr 1.2fr auto;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(0,0,0,.10);
+      align-items:center;
+    }
+    @media (max-width: 760px){
+      .inc-row{ grid-template-columns: 1fr; }
+    }
 
-/* FORCE subcontractor cards into a 3-column grid again */
-.grid-3{
-  display:grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: 16px !important;
-}
+    .link{
+      color: var(--burgundy);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .link:hover{ text-decoration: underline; }
 
-/* Some code versions wrapped cards in a div with id="subGrid" — force that too */
-#subGrid{
-  display:grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: 16px !important;
-}
+    .pill{
+      display:inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .pill.high{ background:#f8d7da; color:#842029; }
+    .pill.mod { background:#fff3cd; color:#856404; }
+    .pill.low { background:#e7f5ec; color:#146c43; }
 
-/* Make sure cards don't stretch weird */
-.card{
-  width: auto !important;
-  min-width: 0 !important;
-}
-
-/* Responsive */
-@media (max-width: 980px){
-  .kpi-row{ grid-template-columns: 1fr 1fr !important; }
-  .grid-3, #subGrid{ grid-template-columns: 1fr !important; }
-}
-</style>
-
+    /* ---------- Status ---------- */
+    .status{
+      margin-top: 14px;
+      font-size: 12px;
+      color: #6b6b6b;
+    }
+    .status.danger{
+      color: #b42318;
+      font-weight: 700;
+    }
+  </style>
 </head>
+
 <body>
-<header class="brand-header">
-  <img src="coopersteel-logo.png" alt="Cooper Steel" class="brand-logo">
-</header>
+  <header class="brand-header">
+    <img src="coopersteel-logo.png" alt="Cooper Steel" class="brand-logo">
+  </header>
 
-<div class="shell">
-  <div class="container">
+  <div class="shell">
+    <div class="container">
 
-    <h1>2026 Safety Performance</h1>
-    <p class="subhead">Real-time safety metrics across all active projects and subcontractors.</p>
+      <h1>2026 Safety Performance</h1>
+      <p class="subhead">Real-time safety metrics across all active projects and subcontractors.</p>
 
-    <div class="kpi-row" id="kpis">
-      <div class="kpi"><div class="val">—</div><div class="lab">Total Man-Hours</div></div>
-      <div class="kpi"><div class="val">—</div><div class="lab">TRIR</div></div>
-      <div class="kpi"><div class="val">—</div><div class="lab">LTIR</div></div>
-      <div class="kpi"><div class="val">—</div><div class="lab">Total Recordables</div></div>
-      <div class="kpi"><div class="val">—</div><div class="lab">Active Subcontractors</div></div>
-    </div>
-
-    <div class="section">
-      <h2>Subcontractor Performance</h2>
-      <p>Top subcontractors by hours are shown below. Use the lookup to view any subcontractor.</p>
-
-      <div class="row">
-        <label class="small" for="subPick">Subcontractor</label>
-        <input class="input" id="subPick" list="subList" placeholder="Type a subcontractor name…" autocomplete="off" />
-        <datalist id="subList"></datalist>
+      <div class="kpi-row" id="kpis">
+        <div class="kpi"><div class="val">—</div><div class="lab">Total Man-Hours</div></div>
+        <div class="kpi"><div class="val">—</div><div class="lab">TRIR</div></div>
+        <div class="kpi"><div class="val">—</div><div class="lab">LTIR</div></div>
+        <div class="kpi"><div class="val">—</div><div class="lab">Total Recordables</div></div>
+        <div class="kpi"><div class="val">—</div><div class="lab">Active Subcontractors</div></div>
       </div>
 
-      <div class="panel" id="subDetail">
-        <div class="title">Select a subcontractor</div>
-        <div class="hint">Details will appear here.</div>
-        <div class="small">No selection.</div>
-      </div>
+      <div class="section">
+        <h2>Subcontractor Performance</h2>
+        <p>Top subcontractors by hours are shown below. Use the lookup to view any subcontractor.</p>
 
-      <div style="height:16px"></div>
-      <div class="grid-3" id="subCards"></div>
-      <div class="status" id="subHint"></div>
-    
-      <div class="panel" id="subIncPanel" style="display:none;">
-        <div class="panel-head">
-          <div>
-            <div class="title" id="subIncTitle">Incidents —</div>
-            <div class="hint" id="subIncHint">Showing incidents for selected subcontractor.</div>
-          </div>
-          <button class="btn" id="subIncClose" type="button">Close</button>
+        <div class="row">
+          <label class="small" for="subPick">Subcontractor</label>
+          <input class="input" id="subPick" list="subList" placeholder="Type a subcontractor name…" autocomplete="off" />
+          <datalist id="subList"></datalist>
         </div>
-        <div id="subIncList"></div>
-      </div>
-</div>
 
-    <div class="section">
-      <h2>Incidents</h2>
-      <p>Latest incidents shown. Search by subcontractor, project, or incident ID.</p>
+        <div class="panel" id="subDetail" style="margin-top:12px;">
+          <div class="title">Select a subcontractor</div>
+          <div class="hint">Details will appear here.</div>
+          <div class="small">No selection.</div>
+        </div>
 
-      <div class="row">
-        <input class="input" id="q" placeholder="Search incidents (sub, project, ID)" autocomplete="off" />
-        <select id="sev">
-          <option value="">Severity: All</option>
-          <option value="High">High</option>
-          <option value="Moderate">Moderate</option>
-          <option value="Low">Low</option>
-        </select>
-        <button id="clear">Clear</button>
-      </div>
+        <div style="height:16px"></div>
+        <div class="grid-3" id="subCards"></div>
+        <div class="status" id="subHint"></div>
 
-      <!-- Incident lookup + detail panel -->
-      <div class="row" style="margin-top:10px;">
-        <label class="small" for="incPick">Incident</label>
-        <input class="input" id="incPick" list="incList" placeholder="Type an Incident ID…" autocomplete="off" />
-        <datalist id="incList"></datalist>
+        <div class="panel" id="subIncPanel" style="display:none; margin-top:14px;">
+          <div class="panel-head">
+            <div>
+              <div class="title" id="subIncTitle">Incidents —</div>
+              <div class="hint" id="subIncHint">Showing incidents for selected subcontractor.</div>
+            </div>
+            <button class="btn" id="subIncClose" type="button">Close</button>
+          </div>
+          <div id="subIncList"></div>
+        </div>
       </div>
 
-      <div class="panel" id="incDetail" style="margin-top:12px;">
-        <div class="title">Select an incident</div>
-        <div class="hint">Details will appear here.</div>
-        <div class="small">No selection.</div>
+      <div class="section">
+        <h2>Incidents</h2>
+        <p>Latest incidents shown. Search by subcontractor, project, or incident ID.</p>
+
+        <div class="row">
+          <input class="input" id="q" placeholder="Search incidents (sub, project, ID)" autocomplete="off" />
+          <select id="sev">
+            <option value="">Severity: All</option>
+            <option value="High">High</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Low">Low</option>
+          </select>
+          <button id="clear">Clear</button>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <label class="small" for="incPick">Incident</label>
+          <input class="input" id="incPick" list="incList" placeholder="Type an Incident ID…" autocomplete="off" />
+          <datalist id="incList"></datalist>
+        </div>
+
+        <div class="panel" id="incDetail" style="margin-top:12px;">
+          <div class="title">Select an incident</div>
+          <div class="hint">Details will appear here.</div>
+          <div class="small">No selection.</div>
+        </div>
+
+        <div class="inc-list" id="incidentList"></div>
+        <div class="status" id="incHint"></div>
+
+        <div style="margin-top:12px" class="small">
+          Click “View report” to see the incident report details.
+        </div>
       </div>
 
-      <div class="inc-list" id="incidentList"></div>
-      <div class="status" id="incHint"></div>
-
-      <div style="margin-top:12px" class="small">
-        Click “View report” to see the incident report details.
-      </div>
+      <div class="status" id="status"></div>
     </div>
-
-    <div class="status" id="status"></div>
   </div>
 
-<script>
-/*** CONFIG: your published CSV URLs ***/
-const KPI_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=152373673&single=true&output=csv";
-const SUBS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=466735545&single=true&output=csv";
-const INCIDENTS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=1844704592&single=true&output=csv";
+  <script>
+    /*** CONFIG: your published CSV URLs ***/
+    const KPI_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=152373673&single=true&output=csv";
+    const SUBS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=466735545&single=true&output=csv";
+    const INCIDENTS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=1844704592&single=true&output=csv";
 
-/*** helpers ***/
-const bust = (url) => url + (url.includes("?") ? "&" : "?") + "t=" + Date.now();
+    /*** helpers ***/
+    const bust = (url) => url + (url.includes("?") ? "&" : "?") + "t=" + Date.now();
 
-function setStatus(msg, isErr=false){
-  const el = document.getElementById("status");
-  el.textContent = msg || "";
-  el.className = "status" + (isErr ? " danger" : "");
-}
-
-function toNumber(x){
-  if (x === null || x === undefined) return 0;
-  const n = parseFloat(String(x).replace(/,/g,"").trim());
-  return Number.isFinite(n) ? n : 0;
-}
-
-function safeText(x){
-  return (x === null || x === undefined) ? "" : String(x);
-}
-
-function parseCSV(text){
-  // simple CSV parser w/ quoted fields support
-  const rows = [];
-  let row = [];
-  let cur = "";
-  let inQuotes = false;
-
-  for (let i=0; i<text.length; i++){
-    const c = text[i];
-    const next = text[i+1];
-
-    if (c === '"' ){
-      if (inQuotes && next === '"'){ cur += '"'; i++; }
-      else inQuotes = !inQuotes;
-      continue;
+    function setStatus(msg, isErr=false){
+      const el = document.getElementById("status");
+      el.textContent = msg || "";
+      el.className = "status" + (isErr ? " danger" : "");
     }
-    if (!inQuotes && c === "," ){
-      row.push(cur); cur = ""; continue;
+
+    function toNumber(x){
+      if (x === null || x === undefined) return 0;
+      const n = parseFloat(String(x).replace(/,/g,"").trim());
+      return Number.isFinite(n) ? n : 0;
     }
-    if (!inQuotes && (c === "\n" || c === "\r")) {
-      if (c === "\r"  && next === "\n")  i++;
+
+    function safeText(x){
+      return (x === null || x === undefined) ? "" : String(x);
+    }
+
+    function parseCSV(text){
+      const rows = [];
+      let row = [];
+      let cur = "";
+      let inQuotes = false;
+
+      for (let i=0; i<text.length; i++){
+        const c = text[i];
+        const next = text[i+1];
+
+        if (c === '"' ){
+          if (inQuotes && next === '"'){ cur += '"'; i++; }
+          else inQuotes = !inQuotes;
+          continue;
+        }
+        if (!inQuotes && c === "," ){
+          row.push(cur); cur = ""; continue;
+        }
+        if (!inQuotes && (c === "\n" || c === "\r")) {
+          if (c === "\r"  && next === "\n")  i++;
+          row.push(cur);
+          rows.push(row);
+          row = [];
+          cur = "";
+          continue;
+        }
+        cur += c;
+      }
       row.push(cur);
       rows.push(row);
-      row = [];
-      cur = "";
-      continue;
+      return rows.filter(r => r.some(cell => String(cell).trim() !== ""));
     }
-    cur += c;
-  }
-  row.push(cur);
-  rows.push(row);
-  return rows.filter(r => r.some(cell => String(cell).trim() !== ""));
-}
 
-async function fetchTable(url){
-  const res = await fetch(bust(url), { cache: "no-store" });
-  if (!res.ok) throw new Error("Fetch failed: " + res.status);
-  const txt = await res.text();
-  const grid = parseCSV(txt);
+    async function fetchTable(url){
+      const res = await fetch(bust(url), { cache: "no-store" });
+      if (!res.ok) throw new Error("Fetch failed: " + res.status);
+      const txt = await res.text();
+      const grid = parseCSV(txt);
 
-  if (!grid.length) return [];
-  const headers = grid[0].map(h => String(h).trim());
-  const out = [];
+      if (!grid.length) return [];
+      const headers = grid[0].map(h => String(h).trim());
+      const out = [];
 
-  for (let i=1; i<grid.length; i++){
-    const obj = {};
-    for (let j=0; j<headers.length; j++){
-      obj[headers[j] || ("col"+j)] = (grid[i][j] ?? "").trim();
+      for (let i=1; i<grid.length; i++){
+        const obj = {};
+        for (let j=0; j<headers.length; j++){
+          obj[headers[j] || ("col"+j)] = (grid[i][j] ?? "").trim();
+        }
+        out.push(obj);
+      }
+      return out;
     }
-    out.push(obj);
-  }
-  return out;
-}
 
-/*** KPI ***/
-function renderKPIs(kpis){
-  const map = {};
-  kpis.forEach(r => { map[r.Metric] = r.Value; });
+    /*** KPI ***/
+    function renderKPIs(kpis){
+      const map = {};
+      kpis.forEach(r => { map[r.Metric] = r.Value; });
 
-  const kpiEls = document.getElementById("kpis").querySelectorAll(".kpi .val");
-  const totalHours = safeText(map["Total Man-Hours"] ?? "—");
-  const trir = safeText(map["TRIR"] ?? "—");
-  const ltir = safeText(map["LTIR"] ?? "—");
-  const rec = safeText(map["Total Recordables"] ?? "—");
-  const active = safeText(map["Active Subcontractors"] ?? "—");
+      const kpiEls = document.getElementById("kpis").querySelectorAll(".kpi .val");
+      const totalHours = safeText(map["Total Man-Hours"] ?? "—");
+      const trir = safeText(map["TRIR"] ?? "—");
+      const ltir = safeText(map["LTIR"] ?? "—");
+      const rec = safeText(map["Total Recordables"] ?? "—");
+      const active = safeText(map["Active Subcontractors"] ?? "—");
 
-  kpiEls[0].textContent = totalHours;
-  kpiEls[1].textContent = trir;
-  kpiEls[2].textContent = ltir;
-  kpiEls[3].textContent = rec;
-  kpiEls[4].textContent = active;
-}
+      kpiEls[0].textContent = totalHours;
+      kpiEls[1].textContent = trir;
+      kpiEls[2].textContent = ltir;
+      kpiEls[3].textContent = rec;
+      kpiEls[4].textContent = active;
+    }
 
-/*** SUBS ***/
-let SUBS_ALL = [];
+    /*** SUBS ***/
+    let SUBS_ALL = [];
 
-function normalizeSubsRows(rows){
-  return rows.map(r => {
-    const sub = r.Subcontractor || r.subcontractor || r.Sub || r.SUB || r.Name || r.name || "";
-    const hours = toNumber(r.TotalHours ?? r.Hours ?? r.hours ?? 0);
-    const incidents = toNumber(r.TotalIncidents ?? r.Incidents ?? r.incidents ?? 0);
-    const recordables = toNumber(r.Recordables ?? r.recordables ?? 0);
-    const lost = toNumber(r.LostTime ?? r.Lost ?? r.losttime ?? 0);
-    const trir = safeText(r.TRIR ?? r.trir ?? "");
-    const ltir = safeText(r.LTIR ?? r.ltir ?? "");
-    return {
-      sub: String(sub).trim(),
-      hours,
-      incidents,
-      recordables,
-      lost,
-      trir: (trir === "" ? "" : String(trir)),
-      ltir: (ltir === "" ? "" : String(ltir))
-    };
-  }).filter(x => x.sub && x.sub.toLowerCase() !== "subcontractor");
-}
+    function normalizeSubsRows(rows){
+      return rows.map(r => {
+        const sub = r.Subcontractor || r.subcontractor || r.Sub || r.SUB || r.Name || r.name || "";
+        const hours = toNumber(r.TotalHours ?? r.Hours ?? r.hours ?? 0);
+        const incidents = toNumber(r.TotalIncidents ?? r.Incidents ?? r.incidents ?? 0);
+        const recordables = toNumber(r.Recordables ?? r.recordables ?? 0);
+        const lost = toNumber(r.LostTime ?? r.Lost ?? r.losttime ?? 0);
+        const trir = safeText(r.TRIR ?? r.trir ?? "");
+        const ltir = safeText(r.LTIR ?? r.ltir ?? "");
+        return {
+          sub: String(sub).trim(),
+          hours,
+          incidents,
+          recordables,
+          lost,
+          trir: (trir === "" ? "" : String(trir)),
+          ltir: (ltir === "" ? "" : String(ltir))
+        };
+      }).filter(x => x.sub && x.sub.toLowerCase() !== "subcontractor");
+    }
 
-function renderSubDetail(item){
-  const box = document.getElementById("subDetail");
-  if (!item){
-    box.innerHTML = `
-      <div class="title">Select a subcontractor</div>
-      <div class="hint">Details will appear here.</div>
-      <div class="small">No selection.</div>
-    `;
-    return;
-  }
+    function renderSubDetail(item){
+      const box = document.getElementById("subDetail");
+      if (!item){
+        box.innerHTML = `
+          <div class="title">Select a subcontractor</div>
+          <div class="hint">Details will appear here.</div>
+          <div class="small">No selection.</div>
+        `;
+        return;
+      }
 
-  box.innerHTML = `
-    <div class="title">${item.sub}</div>
-    <div class="hint">YTD exposure & rates</div>
-    <div class="kv">
-      <div class="k">Hours</div><div class="v">${item.hours.toLocaleString()}</div>
-      <div class="k">Incidents</div><div class="v">${item.incidents}</div>
-      <div class="k">Recordables</div><div class="v">${item.recordables}</div>
-      <div class="k">Lost Time</div><div class="v">${item.lost}</div>
-      <div class="k">TRIR</div><div class="v">${item.trir || "0"}</div>
-      <div class="k">LTIR</div><div class="v">${item.ltir || "0"}</div>
-    </div>
-  `;
-}
+      box.innerHTML = `
+        <div class="title">${item.sub}</div>
+        <div class="hint">YTD exposure & rates</div>
+        <div class="kv">
+          <div class="k">Hours</div><div class="v">${item.hours.toLocaleString()}</div>
+          <div class="k">Incidents</div><div class="v">${item.incidents}</div>
+          <div class="k">Recordables</div><div class="v">${item.recordables}</div>
+          <div class="k">Lost Time</div><div class="v">${item.lost}</div>
+          <div class="k">TRIR</div><div class="v">${item.trir || "0"}</div>
+          <div class="k">LTIR</div><div class="v">${item.ltir || "0"}</div>
+        </div>
+      `;
+    }
 
-function renderSubs(rows){
-  SUBS_ALL = normalizeSubsRows(rows);
+    function renderSubs(rows){
+      SUBS_ALL = normalizeSubsRows(rows);
 
-  const dl = document.getElementById("subList");
-  dl.innerHTML = [...SUBS_ALL]
-    .sort((a,b)=> a.sub.localeCompare(b.sub))
-    .map(r => `<option value="${r.sub}"></option>`)
-    .join("");
+      const dl = document.getElementById("subList");
+      dl.innerHTML = [...SUBS_ALL]
+        .sort((a,b)=> a.sub.localeCompare(b.sub))
+        .map(r => `<option value="${r.sub}"></option>`)
+        .join("");
 
-  const top = [...SUBS_ALL].sort((a,b)=> b.hours - a.hours).slice(0, 9);
-  const wrap = document.getElementById("subCards");
-  wrap.innerHTML = top.map(r => `
-    <div class="card clickable" data-sub="${r.sub}">
-      <h3>${r.sub}</h3>
-      <div class="meta">YTD exposure & rates</div>
-      <div class="kv">
-        <div class="k">Hours</div><div class="v">${r.hours.toLocaleString()}</div>
-        <div class="k">Incidents</div><div class="v">${r.incidents}</div>
-        <div class="k">Recordables</div><div class="v">${r.recordables}</div>
-        <div class="k">TRIR</div><div class="v">${r.trir || "0"}</div>
-        <div class="k">LTIR</div><div class="v">${r.ltir || "0"}</div>
-      </div>
-    </div>
-  `).join("");
+      const top = [...SUBS_ALL].sort((a,b)=> b.hours - a.hours).slice(0, 9);
+      const wrap = document.getElementById("subCards");
+      wrap.innerHTML = top.map(r => `
+        <div class="card clickable" data-sub="${r.sub}">
+          <h3>${r.sub}</h3>
+          <div class="meta">YTD exposure & rates</div>
+          <div class="kv">
+            <div class="k">Hours</div><div class="v">${r.hours.toLocaleString()}</div>
+            <div class="k">Incidents</div><div class="v">${r.incidents}</div>
+            <div class="k">Recordables</div><div class="v">${r.recordables}</div>
+            <div class="k">TRIR</div><div class="v">${r.trir || "0"}</div>
+            <div class="k">LTIR</div><div class="v">${r.ltir || "0"}</div>
+          </div>
+        </div>
+      `).join("");
 
-  
-  // Card drill-down (sub -> incidents)
-  [...wrap.querySelectorAll(".card.clickable")].forEach(card=>{
-    card.addEventListener("click", ()=>{
-      const sub = card.dataset.sub || "";
-      setActiveSubCard(sub);
-      openSubIncidentsPanel(sub);
-    });
-  });
-document.getElementById("subHint").textContent =
-    `Showing top ${top.length} by hours. Use lookup to view any of ${SUBS_ALL.length} subcontractors.`;
+      [...wrap.querySelectorAll(".card.clickable")].forEach(card=>{
+        card.addEventListener("click", ()=>{
+          const sub = card.dataset.sub || "";
+          setActiveSubCard(sub);
+          openSubIncidentsPanel(sub);
+        });
+      });
 
-  const pick = document.getElementById("subPick");
-  if (!pick.dataset.wired){
-    pick.dataset.wired = "1";
-    const apply = () => {
-      const v = (pick.value || "").trim().toLowerCase();
-      const found = SUBS_ALL.find(x => x.sub.toLowerCase() === v);
-      renderSubDetail(found || null);
-    };
-    pick.addEventListener("change", apply);
-    pick.addEventListener("blur", apply);
-    pick.addEventListener("keydown", (e)=>{ if (e.key === "Enter") apply(); });
-  }
-}
+      document.getElementById("subHint").textContent =
+        `Showing top ${top.length} by hours. Use lookup to view any of ${SUBS_ALL.length} subcontractors.`;
 
-/*** INCIDENTS ***/
-let INC_ALL = [];
+      const pick = document.getElementById("subPick");
+      if (!pick.dataset.wired){
+        pick.dataset.wired = "1";
+        const apply = () => {
+          const v = (pick.value || "").trim().toLowerCase();
+          const found = SUBS_ALL.find(x => x.sub.toLowerCase() === v);
+          renderSubDetail(found || null);
+        };
+        pick.addEventListener("change", apply);
+        pick.addEventListener("blur", apply);
+        pick.addEventListener("keydown", (e)=>{ if (e.key === "Enter") apply(); });
+      }
+    }
 
-let ACTIVE_SUB = "";
+    /*** INCIDENTS ***/
+    let INC_ALL = [];
+    let ACTIVE_SUB = "";
 
-function setActiveSubCard(sub){
-  ACTIVE_SUB = sub || "";
-  document.querySelectorAll("#subCards .card.clickable").forEach(el=>{
-    if ((el.dataset.sub || "") === ACTIVE_SUB) el.classList.add("active");
-    else el.classList.remove("active");
-  });
-}
+    function setActiveSubCard(sub){
+      ACTIVE_SUB = sub || "";
+      document.querySelectorAll("#subCards .card.clickable").forEach(el=>{
+        if ((el.dataset.sub || "") === ACTIVE_SUB) el.classList.add("active");
+        else el.classList.remove("active");
+      });
+    }
 
-function openSubIncidentsPanel(sub){
-  const panel = document.getElementById("subIncPanel");
-  const title = document.getElementById("subIncTitle");
-  const hint = document.getElementById("subIncHint");
-  const list = document.getElementById("subIncList");
+    function openSubIncidentsPanel(sub){
+      const panel = document.getElementById("subIncPanel");
+      const title = document.getElementById("subIncTitle");
+      const hint = document.getElementById("subIncHint");
+      const list = document.getElementById("subIncList");
 
-  const s = (sub || "").trim();
-  title.textContent = s ? `Incidents — ${s}` : "Incidents —";
-  panel.style.display = "block";
+      const s = (sub || "").trim();
+      title.textContent = s ? `Incidents — ${s}` : "Incidents —";
+      panel.style.display = "block";
 
-  const rows = [...INC_ALL]
-    .filter(r => String(r.Subcontractor || "").trim().toLowerCase() === s.toLowerCase())
-    .sort((a,b)=> String(b.Date||"").localeCompare(String(a.Date||"")));
+      const rows = [...INC_ALL]
+        .filter(r => String(r.Subcontractor || "").trim().toLowerCase() === s.toLowerCase())
+        .sort((a,b)=> String(b.Date||"").localeCompare(String(a.Date||"")));
 
-  hint.textContent = rows.length
-    ? `${rows.length} incident(s) found.`
-    : "No incidents found for this subcontractor.";
+      hint.textContent = rows.length ? `${rows.length} incident(s) found.` : "No incidents found for this subcontractor.";
 
-  if (!rows.length){
-    list.innerHTML = `<div class="small">No incidents match.</div>`;
-    return;
-  }
+      if (!rows.length){
+        list.innerHTML = `<div class="small">No incidents match.</div>`;
+        return;
+      }
 
-  // Cap to keep it executive-clean
-  const cap = 25;
-  const shown = rows.slice(0, cap);
+      const cap = 25;
+      const shown = rows.slice(0, cap);
 
-  list.innerHTML = shown.map(r => `
-    <div class="inc-row">
-      <div>
-        <strong>${safeText(r.Date) || "—"}</strong>
-        <div class="meta">${safeText(r.IncidentID) || "—"}</div>
-      </div>
-      <div>
-        <strong>${safeText(r.Subcontractor) || "—"} ${pillForSeverity(r.Severity)}</strong>
-        <div class="meta">${safeText(r.Project) || ""}</div>
-      </div>
-      <div style="text-align:right;">
-        ${r.ReportLink ? `<a class="link" href="${r.ReportLink}" target="_blank" rel="noopener">View report</a>` : `<span class="small">—</span>`}
-      </div>
-    </div>
-  `).join("");
+      list.innerHTML = shown.map(r => `
+        <div class="inc-row">
+          <div>
+            <strong>${safeText(r.Date) || "—"}</strong>
+            <div class="meta">${safeText(r.IncidentID) || "—"}</div>
+          </div>
+          <div>
+            <strong>${safeText(r.Subcontractor) || "—"} ${pillForSeverity(r.Severity)}</strong>
+            <div class="meta">${safeText(r.Project) || ""}</div>
+          </div>
+          <div style="text-align:right;">
+            ${r.ReportLink ? `<a class="link" href="${r.ReportLink}" target="_blank" rel="noopener">View report</a>` : `<span class="small">—</span>`}
+          </div>
+        </div>
+      `).join("");
 
-  if (rows.length > cap){
-    list.innerHTML += `<div class="small" style="padding-top:10px;">Showing first ${cap}. Refine using the Incidents search below if needed.</div>`;
-  }
+      if (rows.length > cap){
+        list.innerHTML += `<div class="small" style="padding-top:10px;">Showing first ${cap}. Refine using the Incidents search below if needed.</div>`;
+      }
+    }
 
-}
+    function pillForSeverity(sev){
+      const s = (sev || "").toLowerCase();
+      if (s === "high") return `<span class="pill high">High</span>`;
+      if (s === "moderate") return `<span class="pill mod">Moderate</span>`;
+      if (s === "low") return `<span class="pill low">Low</span>`;
+      return "";
+    }
 
+    function normalizeIncidentRows(rows){
+      return rows.map(r => ({
+        Date: r.Date || r.date || "",
+        IncidentID: r.IncidentID || r.IncidentId || r.ID || r.Id || "",
+        Subcontractor: r.Subcontractor || r.subcontractor || r.Sub || "",
+        Project: r.Project || r.project || "",
+        Severity: r.Severity || r.severity || "",
+        ReportLink: r.ReportLink || r.reportlink || r.Link || ""
+      })).filter(x => x.IncidentID && String(x.IncidentID).trim().toLowerCase() !== "incidentid");
+    }
 
-function pillForSeverity(sev){
-  const s = (sev || "").toLowerCase();
-  if (s === "high") return `<span class="pill high">High</span>`;
-  if (s === "moderate") return `<span class="pill mod">Moderate</span>`;
-  if (s === "low") return `<span class="pill low">Low</span>`;
-  return "";
-}
+    function renderIncidentDetail(item){
+      const box = document.getElementById("incDetail");
+      if(!item){
+        box.innerHTML = `
+          <div class="title">Select an incident</div>
+          <div class="hint">Details will appear here.</div>
+          <div class="small">No selection.</div>
+        `;
+        return;
+      }
 
-function normalizeIncidentRows(rows){
-  return rows.map(r => ({
-    Date: r.Date || r.date || "",
-    IncidentID: r.IncidentID || r.IncidentId || r.ID || r.Id || "",
-    Subcontractor: r.Subcontractor || r.subcontractor || r.Sub || "",
-    Project: r.Project || r.project || "",
-    Severity: r.Severity || r.severity || "",
-    ReportLink: r.ReportLink || r.reportlink || r.Link || ""
-  })).filter(x => x.IncidentID && String(x.IncidentID).trim().toLowerCase() !== "incidentid");
-}
+      box.innerHTML = `
+        <div class="title">${safeText(item.IncidentID) || "—"}</div>
+        <div class="hint">${safeText(item.Date) || ""} • ${safeText(item.Severity) || "—"} • ${safeText(item.Subcontractor) || "—"}</div>
+        <div class="kv">
+          <div class="k">Project</div><div class="v">${safeText(item.Project) || "—"}</div>
+          <div class="k">Subcontractor</div><div class="v">${safeText(item.Subcontractor) || "—"}</div>
+          <div class="k">Severity</div><div class="v">${safeText(item.Severity) || "—"}</div>
+          <div class="k">Date</div><div class="v">${safeText(item.Date) || "—"}</div>
+        </div>
+        <div style="margin-top:12px;">
+          ${item.ReportLink
+            ? `<a class="link" href="${item.ReportLink}" target="_blank" rel="noopener">View report</a>`
+            : `<span class="small">No report link</span>`}
+        </div>
+      `;
+    }
 
-function renderIncidentDetail(item){
-  const box = document.getElementById("incDetail");
-  if(!item){
-    box.innerHTML = `
-      <div class="title">Select an incident</div>
-      <div class="hint">Details will appear here.</div>
-      <div class="small">No selection.</div>
-    `;
-    return;
-  }
+    function renderIncidentsLookup(rows){
+      INC_ALL = normalizeIncidentRows(rows);
 
-  box.innerHTML = `
-    <div class="title">${safeText(item.IncidentID) || "—"}</div>
-    <div class="hint">${safeText(item.Date) || ""} • ${safeText(item.Severity) || "—"} • ${safeText(item.Subcontractor) || "—"}</div>
-    <div class="kv">
-      <div class="k">Project</div><div class="v">${safeText(item.Project) || "—"}</div>
-      <div class="k">Subcontractor</div><div class="v">${safeText(item.Subcontractor) || "—"}</div>
-      <div class="k">Severity</div><div class="v">${safeText(item.Severity) || "—"}</div>
-      <div class="k">Date</div><div class="v">${safeText(item.Date) || "—"}</div>
-    </div>
-    <div style="margin-top:12px;">
-      ${item.ReportLink
-        ? `<a class="link" href="${item.ReportLink}" target="_blank" rel="noopener">View report</a>`
-        : `<span class="small">No report link</span>`}
-    </div>
-  `;
-}
+      const dl = document.getElementById("incList");
+      dl.innerHTML = [...INC_ALL]
+        .sort((a,b)=> String(a.IncidentID).localeCompare(String(b.IncidentID)))
+        .map(r => `<option value="${safeText(r.IncidentID)}"></option>`)
+        .join("");
 
-function renderIncidentsLookup(rows){
-  INC_ALL = normalizeIncidentRows(rows);
+      const pick = document.getElementById("incPick");
+      if(!pick.dataset.wired){
+        pick.dataset.wired = "1";
+        const apply = () => {
+          const v = (pick.value || "").trim().toLowerCase();
+          const found = INC_ALL.find(x => String(x.IncidentID || "").trim().toLowerCase() === v);
+          renderIncidentDetail(found || null);
+        };
+        pick.addEventListener("change", apply);
+        pick.addEventListener("blur", apply);
+        pick.addEventListener("keydown", (e)=>{ if(e.key==="Enter") apply(); });
+      }
+    }
+    function renderIncidentsTable(allIncidents){
+      const q = document.getElementById("q").value.trim().toLowerCase();
+      const sev = document.getElementById("sev").value;
 
-  const dl = document.getElementById("incList");
-  dl.innerHTML = [...INC_ALL]
-    .sort((a,b)=> String(a.IncidentID).localeCompare(String(b.IncidentID)))
-    .map(r => `<option value="${safeText(r.IncidentID)}"></option>`)
-    .join("");
+      let rows = normalizeIncidentRows(allIncidents);
 
-  const pick = document.getElementById("incPick");
-  if(!pick.dataset.wired){
-    pick.dataset.wired = "1";
-    const apply = () => {
-      const v = (pick.value || "").trim().toLowerCase();
-      const found = INC_ALL.find(x => String(x.IncidentID || "").trim().toLowerCase() === v);
-      renderIncidentDetail(found || null);
-    };
-    pick.addEventListener("change", apply);
-    pick.addEventListener("blur", apply);
-    pick.addEventListener("keydown", (e)=>{ if(e.key==="Enter") apply(); });
-  }
-}
+      if (sev) rows = rows.filter(r => (r.Severity || "") === sev);
 
-function renderIncidentsTable(allIncidents){
-  const q = document.getElementById("q").value.trim().toLowerCase();
-  const sev = document.getElementById("sev").value;
+      if (q){
+        rows = rows.filter(r => (
+          String(r.IncidentID || "").toLowerCase().includes(q) ||
+          String(r.Subcontractor || "").toLowerCase().includes(q) ||
+          String(r.Project || "").toLowerCase().includes(q)
+        ));
+      }
 
-  let rows = normalizeIncidentRows(allIncidents);
+      rows.sort((a,b)=>{
+        const da = Date.parse(a.Date) || 0;
+        const db = Date.parse(b.Date) || 0;
+        return db - da;
+      });
 
-  if (sev) rows = rows.filter(r => (r.Severity || "") === sev);
+      const cap = (q || sev) ? 10 : 5;
+      const shown = rows.slice(0, cap);
 
-  if (q){
-    rows = rows.filter(r => (
-      String(r.IncidentID || "").toLowerCase().includes(q) ||
-      String(r.Subcontractor || "").toLowerCase().includes(q) ||
-      String(r.Project || "").toLowerCase().includes(q)
-    ));
-  }
+      document.getElementById("incHint").textContent =
+        (q || sev)
+          ? `Showing top ${Math.min(cap, rows.length)} matches (capped).`
+          : "Showing latest 5 incidents.";
 
-  rows.sort((a,b)=>{
-    const da = Date.parse(a.Date) || 0;
-    const db = Date.parse(b.Date) || 0;
-    return db - da;
-  });
+      const list = document.getElementById("incidentList");
+      if (!shown.length){
+        list.innerHTML = `<div class="small" style="padding:12px 0;">No incidents match your filters.</div>`;
+        return;
+      }
 
-  const cap = (q || sev) ? 10 : 5;
-  const shown = rows.slice(0, cap);
+      list.innerHTML = shown.map(r => `
+        <div class="inc-row">
+          <div>
+            <strong>${safeText(r.Date) || "—"}</strong>
+            <div class="meta">${safeText(r.IncidentID) || "—"}</div>
+          </div>
+          <div>
+            <strong>${safeText(r.Subcontractor) || "—"} ${pillForSeverity(r.Severity)}</strong>
+            <div class="meta">${safeText(r.Project) || ""}</div>
+          </div>
+          <div style="text-align:right;">
+            ${r.ReportLink
+              ? `<a class="link" href="${r.ReportLink}" target="_blank" rel="noopener">View report</a>`
+              : `<span class="small">—</span>`}
+          </div>
+        </div>
+      `).join("");
+    }
 
-  document.getElementById("incHint").textContent =
-    (q || sev)
-      ? `Showing top ${Math.min(cap, rows.length)} matches (capped).`
-      : "Showing latest 5 incidents.";
+    /*** init ***/
+    (async function init(){
+      try {
+        setStatus("Loading data…");
+        const [kpis, subs, inc] = await Promise.all([
+          fetchTable(KPI_CSV),
+          fetchTable(SUBS_CSV),
+          fetchTable(INCIDENTS_CSV)
+        ]);
 
-  const list = document.getElementById("incidentList");
-  if (!shown.length){
-    list.innerHTML = `<div class="small" style="padding:12px 0;">No incidents match your filters.</div>`;
-    return;
-  }
+        renderKPIs(kpis);
+        renderSubs(subs);
 
-  list.innerHTML = shown.map(r => `
-    <div class="inc-row">
-      <div>
-        <strong>${safeText(r.Date) || "—"}</strong>
-        <div class="meta">${safeText(r.IncidentID) || "—"}</div>
-      </div>
-      <div>
-        <strong>${safeText(r.Subcontractor) || "—"} ${pillForSeverity(r.Severity)}</strong>
-        <div class="meta">${safeText(r.Project) || ""}</div>
-      </div>
-      <div style="text-align:right;">
-        ${r.ReportLink ? `<a class="link" href="${r.ReportLink}" target="_blank" rel="noopener">View report</a>` : `<span class="small">—</span>`}
-      </div>
-    </div>
-  `).join("");
-}
+        // Sub incident panel close
+        const subClose = document.getElementById("subIncClose");
+        subClose.addEventListener("click", ()=>{
+          document.getElementById("subIncPanel").style.display = "none";
+          setActiveSubCard("");
+        });
 
-/*** init ***/
-(async function init(){
-  try {
-    setStatus("Loading data…");
-    const [kpis, subs, inc] = await Promise.all([
-      fetchTable(KPI_CSV),
-      fetchTable(SUBS_CSV),
-      fetchTable(INCIDENTS_CSV)
-    ]);
+        // Incidents: list + lookup/detail
+        renderIncidentsTable(inc);
+        renderIncidentsLookup(inc);
 
-    renderKPIs(kpis);
-    renderSubs(subs);
-    // Sub incident panel close
-    const subClose = document.getElementById("subIncClose");
-    subClose.addEventListener("click", ()=>{
-      document.getElementById("subIncPanel").style.display = "none";
-      setActiveSubCard("");
-    });
+        // Auto-select most recent incident into detail panel
+        const latest = normalizeIncidentRows(inc).sort((a,b)=>{
+          const da = Date.parse(a.Date) || 0;
+          const db = Date.parse(b.Date) || 0;
+          return db - da;
+        })[0];
+        if (latest) renderIncidentDetail(latest);
 
+        document.getElementById("q").addEventListener("input", ()=>renderIncidentsTable(inc));
+        document.getElementById("sev").addEventListener("change", ()=>renderIncidentsTable(inc));
+        document.getElementById("clear").addEventListener("click", (e)=>{
+          e.preventDefault();
+          document.getElementById("q").value = "";
+          document.getElementById("sev").value = "";
+          renderIncidentsTable(inc);
+        });
 
-    // Incidents: list + lookup/detail
-    renderIncidentsTable(inc);
-    renderIncidentsLookup(inc);
-
-    // Optional: auto-select most recent incident into detail panel
-    // (keeps panel from looking empty on load)
-    const latest = normalizeIncidentRows(inc).sort((a,b)=>{
-      const da = Date.parse(a.Date) || 0;
-      const db = Date.parse(b.Date) || 0;
-      return db - da;
-    })[0];
-    if (latest) renderIncidentDetail(latest);
-
-    document.getElementById("q").addEventListener("input", ()=>renderIncidentsTable(inc));
-    document.getElementById("sev").addEventListener("change", ()=>renderIncidentsTable(inc));
-    document.getElementById("clear").addEventListener("click", (e)=>{
-      e.preventDefault();
-      document.getElementById("q").value = "";
-      document.getElementById("sev").value = "";
-      renderIncidentsTable(inc);
-    });
-
-    setStatus("");
-  } catch (err){
-    console.error(err);
-    setStatus("Data fetch failed. Check CSV publish links, then refresh.", true);
-    document.getElementById("subHint").textContent = "Could not load subcontractor data. Verify your published SUBS CSV.";
-    document.getElementById("incHint").textContent = "Could not load incidents. Verify your published INCIDENTS CSV.";
-  }
-})();
-</script>
+        setStatus("");
+      } catch (err){
+        console.error(err);
+        setStatus("Data fetch failed. Check CSV publish links, then refresh.", true);
+        document.getElementById("subHint").textContent =
+          "Could not load subcontractor data. Verify your published SUBS CSV.";
+        document.getElementById("incHint").textContent =
+          "Could not load incidents. Verify your published INCIDENTS CSV.";
+      }
+    })();
+  </script>
 </body>
 </html>
 
-
-
-
-
-
-
-
-
+    
