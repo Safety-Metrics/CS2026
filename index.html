@@ -4,432 +4,230 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>2026 Safety Performance</title>
-  <style>
-    :root{
-      --cream:#F2EFEB;
-      --cloud:#CFCDCA;
-      --cooperred:#9F1C1F;
-      --burgundy:#680C19;
-      --onyx:#111112;
-      --charcoal:#282828;
-      --steel:#5D5C5A;
+<style>
+/* ==============================
+   COOPER STEEL – 2026 DASHBOARD
+   Executive / Premium Theme
+   ============================== */
 
-      --bg: var(--onyx);
-      --panel: rgba(17,17,18,.72);
-      --panel2: rgba(40,40,40,.55);
-      --card: rgba(242,239,235,.96);
-      --card2: rgba(242,239,235,.88);
-      --text:#111112;
-      --muted:#5D5C5A;
-      --border: rgba(207,205,202,.45);
-      --shadow: 0 12px 30px rgba(0,0,0,.22);
-      --shadowSoft: 0 6px 18px rgba(0,0,0,.16);
-      --radius: 14px;
-      --radiusSm: 10px;
-      --max: 1100px;
-
-      /* Optional: drop a background image into your repo (recommended) */
-      --heroImage: url('coopersteel-logo.png');
-    }
-    *{ box-sizing:border-box; }
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color: var(--text);
-      background:
-        radial-gradient(1200px 700px at 15% 10%, rgba(159,28,31,.35), transparent 60%),
-        radial-gradient(900px 600px at 85% 25%, rgba(104,12,25,.28), transparent 55%),
-        linear-gradient(180deg, rgba(17,17,18,.92), rgba(17,17,18,.92)),
-        var(--heroImage);
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-    }
-    .shell{
-      max-width: var(--max);
-      margin: 26px auto 40px;
-      border-radius: 22px;
-      border: 1px solid rgba(207,205,202,.18);
-      background: linear-gradient(180deg, var(--panel), var(--panel2));
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      overflow: hidden;
-    }
-    .container{
-      padding: 34px 18px 74px;
-    }
-    h1{font-size:32px;margin:0 0 6px;letter-spacing:-.02em;color:var(--cream)}
-    .subhead{color:rgba(242,239,235,.72);margin:0 0 18px;font-size:13px}
-    .kpi-row{
-      display:grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
-      gap: 18px;
-      margin: 18px 0 34px;
-    }
-    .kpi{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px 16px 14px;
-      box-shadow: var(--shadow);
-      min-height: 76px;
-    }
-    .kpi .val{
-      font-size: 26px;
-      font-weight: 700;
-      line-height: 1.05;
-      letter-spacing:-.02em;
-    }
-    .kpi .lab{
-      margin-top: 8px;
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .section{
-      margin-top: 28px;
-    }
-    .section h2{ font-size: 18px; margin: 0 0 6px; letter-spacing:-.01em; color: var(--cream); }
-    .section p{ margin: 0 0 14px; color: rgba(242,239,235,.70); font-size: 13px; }
-    .row{
-      display:flex;
-      gap: 14px;
-      flex-wrap: wrap;
-      align-items:center;
-    }
-    .input, select, button{
-      border:1px solid var(--border);
-      background:#fff;
-      border-radius: 10px;
-      padding: 9px 10px;
-      font-size: 13px;
-      color: var(--text);
-      outline: none;
-    }
-    .input{
-      min-width: 280px;
-    }
-    button{
-      cursor:pointer;
-    }
-    button:hover{ filter: brightness(.98); }
-
-    .grid-3{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
-    }
-    .card{
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-      box-shadow: var(--shadow);
-      min-height: 140px;
-    }
-    .card h3{
-      margin: 0 0 8px;
-      font-size: 14px;
-      letter-spacing:-.01em;
-    }
-    .meta{
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-    .kv{
-      margin-top: 10px;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px 10px;
-      font-size: 12px;
-    }
-    .kv .k{ color: var(--muted); }
-    .kv .v{ font-weight: 600; text-align:right; }
-
-    .panel{
-      margin-top: 14px;
-      background:var(--card);
-      border:1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-      box-shadow: var(--shadow);
-    }
-    .panel .title{
-      font-weight: 700;
-      font-size: 14px;
-      margin: 0 0 4px;
-    }
-    .panel .hint{
-      color: var(--muted);
-      font-size: 12px;
-      margin: 0 0 12px;
-    }
-
-    .inc-list{
-      margin-top: 14px;
-      border-top: 1px solid var(--border);
-    }
-    .inc-row{
-      display:grid;
-      grid-template-columns: 160px 1fr 120px;
-      gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
-      align-items:center;
-    }
-    .inc-row strong{
-      display:block;
-      font-size: 13px;
-      margin-bottom: 2px;
-    }
-    .pill{
-      display:inline-block;
-      border:1px solid var(--border);
-      border-radius: 999px;
-      padding: 2px 8px;
-      font-size: 11px;
-      color: var(--muted);
-      margin-left: 8px;
-      vertical-align: middle;
-    }
-    .pill.high{ border-color:#fca5a5; color:#b91c1c; }
-    .pill.mod{ border-color:#fde68a; color:#92400e; }
-    .pill.low{ border-color:#bbf7d0; color:#166534; }
-    a.link{
-      color: #111827;
-      text-decoration: underline;
-      font-size: 12px;
-    }
-    .small{
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .status{
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--muted);
-    }
-    .danger{ color:#b91c1c; }
-    @media (max-width: 980px){
-      .kpi-row{ grid-template-columns: 1fr 1fr; }
-      .grid-3{ grid-template-columns: 1fr; }
-      .inc-row{ grid-template-columns: 1fr; }
-    }
-  
-    .card.clickable{ cursor:pointer; }
-    .card.clickable:hover{ border-color:#cbd5e1; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
-    .card.clickable.active{ outline:2px solid #111827; outline-offset: 0; }
-
-    .panel-head{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom: 10px;
-    }
-    .btn{
-      cursor:pointer;
-      border:1px solid var(--border);
-      background:#f9fafb;
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-size: 13px;
-      color: var(--text);
-    }
-    .btn:hover{ background:#f3f4f6; }
-
-  
-/* === Cooper-style theme overrides === */
 :root{
-      --cream:#F2EFEB;
-      --cloud:#CFCDCA;
-      --cooperred:#9F1C1F;
-      --burgundy:#680C19;
-      --onyx:#111112;
-      --charcoal:#282828;
-      --steel:#5D5C5A;
+  /* Brand colors */
+  --cream: #F2EFEB;
+  --cloud: #CFCDCA;
+  --cooper-red: #9F1C1F;
+  --burgundy: #680C19;
+  --onyx: #111112;
+  --charcoal: #282828;
+  --steel-gray: #5D5C5A;
 
-      --bg: var(--onyx);
-      --panel: rgba(17,17,18,.72);
-      --panel2: rgba(40,40,40,.55);
-      --card: rgba(242,239,235,.96);
-      --card2: rgba(242,239,235,.88);
-      --text:#111112;
-      --muted:#5D5C5A;
-      --border: rgba(207,205,202,.45);
-      --shadow: 0 12px 30px rgba(0,0,0,.22);
-      --shadowSoft: 0 6px 18px rgba(0,0,0,.16);
-      --radius: 14px;
-      --radiusSm: 10px;
-      --max: 1100px;
+  /* UI */
+  --card-radius: 16px;
+  --card-shadow: 0 18px 40px rgba(0,0,0,.45);
+  --soft-shadow: 0 6px 20px rgba(0,0,0,.35);
+}
 
-      /* Optional: drop a background image into your repo (recommended) */
-      --heroImage: url('bg.jpg');
-    }
+/* ---------- Base ---------- */
+*{ box-sizing: border-box; }
 
 body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color: var(--text);
-      background:
-        radial-gradient(1200px 700px at 15% 10%, rgba(159,28,31,.35), transparent 60%),
-        radial-gradient(900px 600px at 85% 25%, rgba(104,12,25,.28), transparent 55%),
-        linear-gradient(180deg, rgba(17,17,18,.92), rgba(17,17,18,.92)),
-        var(--heroImage);
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-    }
+  margin:0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  background:
+    radial-gradient(1200px 600px at 20% 10%, rgba(159,28,31,.35), transparent 60%),
+    radial-gradient(900px 500px at 80% 20%, rgba(104,12,25,.45), transparent 65%),
+    linear-gradient(180deg, #0c0c0d 0%, #141414 100%);
+  color: var(--cream);
+}
 
-.section{
-  background: linear-gradient(180deg,#ffffff 0%, #fafafa 100%);
-  border:1px solid var(--border);
+/* ---------- Logo Header ---------- */
+.brand-header{
+  display:flex;
+  justify-content:center;
+  padding: 36px 0 28px;
+}
+
+.brand-badge{
+  background: var(--cream);
+  padding: 16px 26px;
+  border-radius: 14px;
+  box-shadow:
+    0 16px 40px rgba(0,0,0,.5),
+    inset 0 0 0 1px rgba(0,0,0,.08);
+
+  opacity: 0;
+  transform: translateY(-6px) scale(.995);
+  filter: blur(1.5px);
+  animation: logoEnter 700ms cubic-bezier(.22,1,.36,1) forwards;
+}
+
+.brand-logo{
+  max-width: 320px;
+  width: 100%;
+  display:block;
+}
+
+@keyframes logoEnter{
+  to{
+    opacity:1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .brand-badge{
+    animation:none;
+    opacity:1;
+    transform:none;
+    filter:none;
+  }
+}
+
+/* ---------- Main Container ---------- */
+.container{
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 22px 80px;
+}
+
+/* ---------- Header Text ---------- */
+h1{
+  margin: 0 0 6px;
+  font-size: 36px;
+  letter-spacing: -.02em;
+  color: var(--cream);
+}
+
+.subhead{
+  font-size: 14px;
+  color: #d6d3cf;
+  margin-bottom: 26px;
+}
+
+/* ---------- Metric Cards ---------- */
+.kpi-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+  gap: 18px;
+  margin-bottom: 32px;
+}
+
+.kpi{
+  background: rgba(0,0,0,.45);
   border-radius: 14px;
   padding: 18px;
-  box-shadow: 0 2px 10px rgba(0,0,0,.06);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
 }
 
-a.link{
-  color: var(--steel-ink);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: color .15s ease, border-color .15s ease;
-}
-a.link:hover{
-  color: var(--brand-red);
-  border-color: var(--brand-red);
+.kpi label{
+  font-size: 12px;
+  color: #bfbab5;
 }
 
-.input:focus, select:focus, button:focus{
-  outline: none;
-  border-color: var(--brand-red);
-  box-shadow: 0 0 0 2px rgba(177,18,38,.15);
+.kpi strong{
+  display:block;
+  margin-top: 6px;
+  font-size: 22px;
+  color: var(--cream);
 }
 
-.card.clickable{
-  cursor: pointer;
-  position: relative;
-  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
-}
-.card.clickable::before{
-  content:"";
-  position:absolute;
-  left:0; top:0; bottom:0;
-  width:3px;
-  background: transparent;
-  border-radius: 14px 0 0 14px;
-  transition: background .15s ease;
-}
-.card.clickable:hover{
-  transform: translateY(-1px);
-  box-shadow: 0 10px 22px rgba(0,0,0,.08);
-}
-.card.clickable:hover::before,
-.card.active::before{display:none!important;}
-/* Subtle hover on buttons */
-button:hover{ filter: brightness(.98); }
-
-    /* Cooper-style accents */
-    a, .link{ color: var(--cooperred); }
-    a:hover, .link:hover{ color: #c02a2e; }
-
-    .kpis{ display:grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 14px; margin-top: 18px; }
-    .kpi{
-      border-radius: var(--radius);
-      padding: 14px 14px 12px;
-      background: rgba(17,17,18,.22);
-      border: 1px solid rgba(207,205,202,.18);
-      box-shadow: var(--shadowSoft);
-    }
-    .kpi .v{ color: var(--cream); }
-    .kpi .k{ color: rgba(242,239,235,.68); }
-
-    .card{
-      background: var(--card);
-      border: 1px solid rgba(207,205,202,.45);
-      border-radius: var(--radius);
-      box-shadow: 0 10px 22px rgba(0,0,0,.10);
-    }
-    .card:hover{
-      border-color: rgba(159,28,31,.55);
-      box-shadow: 0 14px 30px rgba(0,0,0,.14);
-    }
-    .card.active{
-      
-      box-shadow: 0 18px 40px rgba(0,0,0,.18);
-      position: relative;
-    }
-    .card.active:before{display:none;}
-
-    input, select{
-      background: rgba(242,239,235,.98);
-      border: 1px solid rgba(207,205,202,.75);
-      border-radius: 10px;
-      padding: 9px 10px;
-      font-size: 13px;
-      outline: none;
-    }
-    input:focus, select:focus{
-      border-color: rgba(159,28,31,.9);
-      box-shadow: 0 0 0 3px rgba(159,28,31,.18);
-    }
-
-    button{
-      cursor:pointer;
-      border: 1px solid rgba(207,205,202,.70);
-      border-radius: 10px;
-      background: rgba(242,239,235,.96);
-      padding: 9px 14px;
-      font-size: 13px;
-      color: var(--onyx);
-    }
-    button:hover{
-      border-color: rgba(159,28,31,.75);
-      box-shadow: 0 0 0 3px rgba(159,28,31,.12);
-    }
-
-    .pill{
-      border-radius: 999px;
-      border: 1px solid rgba(207,205,202,.75);
-    }
-    .pill.high{ border-color: rgba(159,28,31,.85); color: var(--cooperred); background: rgba(159,28,31,.10); }
-    .pill.moderate{ border-color: rgba(104,12,25,.70); color: var(--burgundy); background: rgba(104,12,25,.10); }
-    .pill.low{ border-color: rgba(93,92,90,.65); color: var(--steel); background: rgba(93,92,90,.10); }
-
-    .divider{ border-top: 1px solid rgba(242,239,235,.16); margin: 26px 0; }
-
-  
-
-/* KPI text visibility */
-.kpi{ color: rgba(242,239,235,.85) !important; }
-.kpi .val{ color: var(--cream) !important; }
-.kpi .label{ color: rgba(242,239,235,.70) !important; }
-
-
-/* v4 fixes */
-.panel h2{color: var(--onyx) !important;}
-.panel p{color: rgba(17,17,18,.72) !important;}
-.panel .hint, .panel .small{color: rgba(17,17,18,.62) !important;}
-.card.active{outline:2px solid var(--burgundy) !important; box-shadow:0 10px 30px rgba(0,0,0,.18) !important;}
-/* QUICK VISIBILITY FIX: section headers + helper text inside white panels */
-.section h2,
-.section h3,
-.section .section-title{
-  color: #111112 !important; /* Onyx */
+/* ---------- Sections ---------- */
+.section{
+  background: var(--cream);
+  color: var(--onyx);
+  border-radius: 20px;
+  padding: 26px;
+  margin-bottom: 34px;
+  box-shadow: var(--card-shadow);
 }
 
-.section p,
-.section .subhead,
-.section .hint,
-.section .helper,
-.section .muted{
-  color: #5d5c5a !important; /* Steel Gray */
+.section h2{
+  margin:0 0 6px;
+  font-size: 20px;
+  color: var(--onyx);
 }
+
+.section p{
+  margin:0 0 18px;
+  font-size: 13px;
+  color: #444;
+}
+
+/* ---------- Inputs ---------- */
+input, select, button{ font-family: inherit; }
+
+input{
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+/* ---------- Subcontractor Cards ---------- */
+.cards{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px,1fr));
+  gap: 18px;
+}
+
+.card{
+  background: #f5f3f0;
+  border-radius: var(--card-radius);
+  padding: 18px;
+  box-shadow: var(--soft-shadow);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 22px 50px rgba(0,0,0,.45);
+}
+
+/* Selected card – FULL border, NO red stripe */
+.card.selected{
+  box-shadow:
+    0 0 0 2px var(--burgundy),
+    0 22px 50px rgba(0,0,0,.55);
+}
+
+.card h3{
+  margin:0 0 10px;
+  font-size: 16px;
+  color: var(--onyx);
+}
+
+.card small{
+  color: #666;
+}
+
+/* ---------- Incidents ---------- */
+.incident{
+  padding: 14px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.badge{
+  display:inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.badge.low{ background:#e7f5ec; color:#146c43; }
+.badge.moderate{ background:#fff3cd; color:#856404; }
+.badge.high{ background:#f8d7da; color:#842029; }
 </style>
+
 </head>
 <body>
-  <div class="shell"><div class="container">
+<header class="brand-header">
+  <img src="coopersteel-logo.png" alt="Cooper Steel" class="brand-logo">
+</header>
+
+<div class="shell">
+  <div class="container">
+
     <h1>2026 Safety Performance</h1>
     <p class="subhead">Real-time safety metrics across all active projects and subcontractors.</p>
 
@@ -949,6 +747,7 @@ function renderIncidentsTable(allIncidents){
 </script>
 </body>
 </html>
+
 
 
 
