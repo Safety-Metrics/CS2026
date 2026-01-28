@@ -542,14 +542,12 @@ function parseCSV(text){
     if (!inQuotes && c === "," ){
       row.push(cur); cur = ""; continue;
     }
-    if (!inQuotes && (c === "
-" || c === "
-")){
-      if (c === "
-" && next === "
-") i++;
-      row.push(cur); rows.push(row);
-      row = []; cur = "";
+    if (!inQuotes && (c === "\n" || c === "\r")) {
+      if (c === "\r"  && next === "\n")  i++;
+      row.push(cur);
+      rows.push(row);
+      row = [];
+      cur = "";
       continue;
     }
     cur += c;
@@ -937,4 +935,5 @@ function renderIncidentsTable(allIncidents){
 </script>
 </body>
 </html>
+
 
