@@ -6,37 +6,61 @@
   <title>2026 Safety Performance</title>
   <style>
     :root{
-      --bg:#ffffff;
-      --text:#111827;
-      --muted:#6b7280;
-      --border:#e5e7eb;
-      --card:#ffffff;
-      --shadow: 0 1px 2px rgba(0,0,0,.04);
-      --radius: 12px;
-      --max: 1040px;
+      --cream:#F2EFEB;
+      --cloud:#CFCDCA;
+      --cooperred:#9F1C1F;
+      --burgundy:#680C19;
+      --onyx:#111112;
+      --charcoal:#282828;
+      --steel:#5D5C5A;
+
+      --bg: var(--onyx);
+      --panel: rgba(17,17,18,.72);
+      --panel2: rgba(40,40,40,.55);
+      --card: rgba(242,239,235,.96);
+      --card2: rgba(242,239,235,.88);
+      --text:#111112;
+      --muted:#5D5C5A;
+      --border: rgba(207,205,202,.45);
+      --shadow: 0 12px 30px rgba(0,0,0,.22);
+      --shadowSoft: 0 6px 18px rgba(0,0,0,.16);
+      --radius: 14px;
+      --radiusSm: 10px;
+      --max: 1100px;
+
+      /* Optional: drop a background image into your repo (recommended) */
+      --heroImage: url('bg.jpg');
     }
     *{ box-sizing:border-box; }
     body{
       margin:0;
       font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color:var(--text);
-      background:var(--bg);
+      color: var(--text);
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(159,28,31,.35), transparent 60%),
+        radial-gradient(900px 600px at 85% 25%, rgba(104,12,25,.28), transparent 55%),
+        linear-gradient(180deg, rgba(17,17,18,.92), rgba(17,17,18,.92)),
+        var(--heroImage);
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    .shell{
+      max-width: var(--max);
+      margin: 26px auto 40px;
+      border-radius: 22px;
+      border: 1px solid rgba(207,205,202,.18);
+      background: linear-gradient(180deg, var(--panel), var(--panel2));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      overflow: hidden;
     }
     .container{
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 44px 18px 80px;
+      padding: 34px 18px 74px;
     }
-    h1{
-      font-size: 34px;
-      margin: 0 0 6px;
-      letter-spacing:-.02em;
-    }
-    .subhead{
-      color: var(--muted);
-      margin: 0 0 28px;
-      font-size: 14px;
-    }
+    h1{ font-size: 34px; margin: 0 0 6px; letter-spacing:-.02em; color: var(--cream); }
+    .subhead{ color: rgba(242,239,235,.78); margin: 0 0 22px; font-size: 14px; }
     .kpi-row{
       display:grid;
       grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -65,16 +89,8 @@
     .section{
       margin-top: 28px;
     }
-    .section h2{
-      font-size: 18px;
-      margin: 0 0 6px;
-      letter-spacing:-.01em;
-    }
-    .section p{
-      margin: 0 0 14px;
-      color: var(--muted);
-      font-size: 13px;
-    }
+    .section h2{ font-size: 18px; margin: 0 0 6px; letter-spacing:-.01em; color: var(--cream); }
+    .section p{ margin: 0 0 14px; color: rgba(242,239,235,.70); font-size: 13px; }
     .row{
       display:flex;
       gap: 14px;
@@ -226,15 +242,45 @@
   
 /* === Cooper-style theme overrides === */
 :root{
-  --brand-red:#b11226;
-  --steel-bg1:#f9fafb;
-  --steel-bg2:#eef2f7;
-  --steel-ink:#0f172a;
-}
+      --cream:#F2EFEB;
+      --cloud:#CFCDCA;
+      --cooperred:#9F1C1F;
+      --burgundy:#680C19;
+      --onyx:#111112;
+      --charcoal:#282828;
+      --steel:#5D5C5A;
+
+      --bg: var(--onyx);
+      --panel: rgba(17,17,18,.72);
+      --panel2: rgba(40,40,40,.55);
+      --card: rgba(242,239,235,.96);
+      --card2: rgba(242,239,235,.88);
+      --text:#111112;
+      --muted:#5D5C5A;
+      --border: rgba(207,205,202,.45);
+      --shadow: 0 12px 30px rgba(0,0,0,.22);
+      --shadowSoft: 0 6px 18px rgba(0,0,0,.16);
+      --radius: 14px;
+      --radiusSm: 10px;
+      --max: 1100px;
+
+      /* Optional: drop a background image into your repo (recommended) */
+      --heroImage: url('bg.jpg');
+    }
 
 body{
-  background: linear-gradient(180deg,var(--steel-bg1) 0%, var(--steel-bg2) 100%);
-}
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(159,28,31,.35), transparent 60%),
+        radial-gradient(900px 600px at 85% 25%, rgba(104,12,25,.28), transparent 55%),
+        linear-gradient(180deg, rgba(17,17,18,.92), rgba(17,17,18,.92)),
+        var(--heroImage);
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
 
 .section{
   background: linear-gradient(180deg,#ffffff 0%, #fafafa 100%);
@@ -286,10 +332,88 @@ a.link:hover{
 
 /* Subtle hover on buttons */
 button:hover{ filter: brightness(.98); }
-</style>
+
+    /* Cooper-style accents */
+    a, .link{ color: var(--cooperred); }
+    a:hover, .link:hover{ color: #c02a2e; }
+
+    .kpis{ display:grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 14px; margin-top: 18px; }
+    .kpi{
+      border-radius: var(--radius);
+      padding: 14px 14px 12px;
+      background: rgba(17,17,18,.22);
+      border: 1px solid rgba(207,205,202,.18);
+      box-shadow: var(--shadowSoft);
+    }
+    .kpi .v{ color: var(--cream); }
+    .kpi .k{ color: rgba(242,239,235,.68); }
+
+    .card{
+      background: var(--card);
+      border: 1px solid rgba(207,205,202,.45);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 22px rgba(0,0,0,.10);
+    }
+    .card:hover{
+      border-color: rgba(159,28,31,.55);
+      box-shadow: 0 14px 30px rgba(0,0,0,.14);
+    }
+    .card.active{
+      border-color: rgba(159,28,31,.95);
+      box-shadow: 0 18px 40px rgba(0,0,0,.18);
+      position: relative;
+    }
+    .card.active:before{
+      content:"";
+      position:absolute;
+      left:0; top:0; bottom:0;
+      width: 4px;
+      background: linear-gradient(180deg, var(--cooperred), var(--burgundy));
+      border-top-left-radius: var(--radius);
+      border-bottom-left-radius: var(--radius);
+    }
+
+    input, select{
+      background: rgba(242,239,235,.98);
+      border: 1px solid rgba(207,205,202,.75);
+      border-radius: 10px;
+      padding: 9px 10px;
+      font-size: 13px;
+      outline: none;
+    }
+    input:focus, select:focus{
+      border-color: rgba(159,28,31,.9);
+      box-shadow: 0 0 0 3px rgba(159,28,31,.18);
+    }
+
+    button{
+      cursor:pointer;
+      border: 1px solid rgba(207,205,202,.70);
+      border-radius: 10px;
+      background: rgba(242,239,235,.96);
+      padding: 9px 14px;
+      font-size: 13px;
+      color: var(--onyx);
+    }
+    button:hover{
+      border-color: rgba(159,28,31,.75);
+      box-shadow: 0 0 0 3px rgba(159,28,31,.12);
+    }
+
+    .pill{
+      border-radius: 999px;
+      border: 1px solid rgba(207,205,202,.75);
+    }
+    .pill.high{ border-color: rgba(159,28,31,.85); color: var(--cooperred); background: rgba(159,28,31,.10); }
+    .pill.moderate{ border-color: rgba(104,12,25,.70); color: var(--burgundy); background: rgba(104,12,25,.10); }
+    .pill.low{ border-color: rgba(93,92,90,.65); color: var(--steel); background: rgba(93,92,90,.10); }
+
+    .divider{ border-top: 1px solid rgba(242,239,235,.16); margin: 26px 0; }
+
+  </style>
 </head>
 <body>
-  <div class="container">
+  <div class="shell"><div class="container">
     <h1>2026 Safety Performance</h1>
     <p class="subhead">Real-time safety metrics across all active projects and subcontractors.</p>
 
