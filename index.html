@@ -363,15 +363,7 @@ button:hover{ filter: brightness(.98); }
       box-shadow: 0 18px 40px rgba(0,0,0,.18);
       position: relative;
     }
-    .card.active:before{
-      content:"";
-      position:absolute;
-      left:0; top:0; bottom:0;
-      width: 4px;
-      background: linear-gradient(180deg, var(--cooperred), var(--burgundy));
-      border-top-left-radius: var(--radius);
-      border-bottom-left-radius: var(--radius);
-    }
+    .card.active:before{display:none;}
 
     input, select{
       background: rgba(242,239,235,.98);
@@ -410,7 +402,14 @@ button:hover{ filter: brightness(.98); }
 
     .divider{ border-top: 1px solid rgba(242,239,235,.16); margin: 26px 0; }
 
-  </style>
+  
+
+/* KPI text visibility */
+.kpi{ color: rgba(242,239,235,.85) !important; }
+.kpi .val{ color: var(--cream) !important; }
+.kpi .label{ color: rgba(242,239,235,.70) !important; }
+
+</style>
 </head>
 <body>
   <div class="shell"><div class="container">
@@ -540,8 +539,12 @@ function parseCSV(text){
     if (!inQuotes && c === "," ){
       row.push(cur); cur = ""; continue;
     }
-    if (!inQuotes && (c === "\n" || c === "\r")){
-      if (c === "\r" && next === "\n") i++;
+    if (!inQuotes && (c === "
+" || c === "
+")){
+      if (c === "
+" && next === "
+") i++;
       row.push(cur); rows.push(row);
       row = []; cur = "";
       continue;
@@ -725,7 +728,6 @@ function openSubIncidentsPanel(sub){
 
   if (!rows.length){
     list.innerHTML = `<div class="small">No incidents match.</div>`;
-    panel.scrollIntoView({behavior:"smooth", block:"start"});
     return;
   }
 
@@ -753,7 +755,6 @@ function openSubIncidentsPanel(sub){
     list.innerHTML += `<div class="small" style="padding-top:10px;">Showing first ${cap}. Refine using the Incidents search below if needed.</div>`;
   }
 
-  panel.scrollIntoView({behavior:"smooth", block:"start"});
 }
 
 
@@ -931,7 +932,6 @@ function renderIncidentsTable(allIncidents){
   }
 })();
 </script>
-
 </body>
 </html>
 
