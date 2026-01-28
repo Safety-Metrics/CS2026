@@ -50,7 +50,18 @@
       align-items:center;
       padding: 26px 16px 6px;
     }
-
+   
+    /* Glow wrapper – SAFE red aura (no PNG sampling) */
+    .logo-glow{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius: 999px;
+      box-shadow:
+        0 0 34px rgba(159,28,31,.18),
+        0 0 68px rgba(159,28,31,.10);
+    }
+    
     /* Single source of truth for logo sizing */
     .brand-logo{
       height: clamp(110px, 10vw, 255px); /* tweak top end if you want bigger */
@@ -869,6 +880,7 @@
 </html>
 
     
+
 
 
 
