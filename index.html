@@ -48,18 +48,23 @@
       display:flex;
       justify-content:center;
       align-items:center;
-      padding: 26px 16px 6px;
+      padding: 26px 16px 8px;
     }
-   
-    /* Glow wrapper – SAFE red aura (no PNG sampling) */
-    .logo-glow{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      border-radius: 999px;
-      box-shadow:
-        0 0 34px rgba(159,28,31,.18),
-        0 0 68px rgba(159,28,31,.10);
+   /* base logo */
+    .brand-logo{
+      height: clamp(110px, 10vw, 255px);
+      width: auto;
+      display:block;
+      opacity:.98;
+      transform-origin: center;
+      animation: brandFloat 4.2s ease-in-out infinite;
+   }
+    
+    /* shape-hugging glow */
+    .brand-logo.glow{
+      filter:
+        drop-shadow(0 0 14px rgba(159,28,31,.22))
+        drop-shadow(0 0 34px rgba(159,28,31,.14));
     }
     
     /* Single source of truth for logo sizing */
@@ -880,6 +885,7 @@
 </html>
 
     
+
 
 
 
