@@ -61,10 +61,14 @@ body{
 }
 
 .brand-logo{
-  max-width: 320px;
-  width: 100%;
-  display:block;
+  width: min(760px, 88vw);
+  height: auto;
+  max-width: none;      /* removes the choke collar */
+  display: block;
+  opacity: .98;
+  animation: brandFloat 4.2s ease-in-out infinite;
 }
+
 
 @keyframes logoEnter{
   to{
@@ -861,6 +865,7 @@ function renderIncidentsTable(allIncidents){
 </script>
 </body>
 </html>
+
 
 
 
