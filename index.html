@@ -200,25 +200,23 @@
     }
 
     .ticker-track{
-  display:flex;
-  gap: 18px;
-  white-space: nowrap;
-  will-change: transform;
+      display:flex;
+      gap: 18px;
+      white-space: nowrap;
+      will-change: transform;
+      animation: tickerMove 26s linear infinite;
+      padding-left: 16px;
+    }
 
-  /* key: move exactly one-set width (in px), provided by JS */
-  animation: tickerMove var(--tickerSpeed, 26s) linear infinite;
-  transform: translate3d(0,0,0);
-}
+    /* Pause on hover (your requirement) */
+    .ticker:hover .ticker-track{
+      animation-play-state: paused;
+    }
 
-/* Pause on hover */
-.ticker:hover .ticker-track{
-  animation-play-state: paused;
-}
-
-@keyframes tickerMove{
-  from { transform: translate3d(0,0,0); }
-  to   { transform: translate3d(calc(-1 * var(--tickerSetWidth, 1000px)), 0, 0); }
-}
+    @keyframes tickerMove{
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
 
     .tick{
       display:flex;
@@ -682,30 +680,6 @@
     }
 
     /*** IOI TICKER ***/
-    function calibrateTicker(){
-  const track = document.getElementById("tickerTrack");
-  const ticker = document.getElementById("ioiTicker");
-  if (!track || !ticker) return;
-
-  // Wait for layout/fonts so widths are correct
-  requestAnimationFrame(() => {
-    const total = track.scrollWidth;
-    if (!total) return;
-
-    // We render items + items, so one set is half the total width
-    const setWidth = Math.floor(total / 2);
-
-    // Set the exact pixel distance the animation should travel
-    track.style.setProperty("--tickerSetWidth", setWidth + "px");
-
-    // Optional: auto-speed based on content length (prevents too-fast/too-slow)
-    // pxPerSecond = how fast the tape moves; tune this
-    const pxPerSecond = 90;
-    const seconds = Math.max(14, Math.min(40, setWidth / pxPerSecond));
-    track.style.setProperty("--tickerSpeed", seconds + "s");
-  });
-}
-
     function fmt(n, d=2){
       const num = parseFloat(n);
       if (!Number.isFinite(num)) return safeText(n) || "—";
@@ -737,22 +711,11 @@
 
     function renderIOITicker(ioiRow){
       const track = document.getElementById("tickerTrack");
-      if (!track) return;
-      
+
       if (!ioiRow){
         track.innerHTML = `<div class="tick"><span class="sym">IOI</span><span class="val">No data</span><span class="chg flat">• —</span></div>`;
         return;
       }
-
-      // Build one full "set" of ticker items (one pass)
-  const items = buildIOITickerItems(ioiRow); // <-- this must exist and return a string of .tick blocks
-      
-        // Duplicate for seamless loop (we already do items + items)
-track.innerHTML = items + items;
-
-// ✅ Calibrate pixel-perfect distance so there is no snap on loop
-calibrateTicker();
-}
 
       // Expected PUB_IOI headers:
       // EWIR_30, EWIR_DELTA, RISK_CONC_30, RISK_CONC_DELTA, MOMENTUM_30, MOMENTUM_DELTA, TOP_RISK_SUB_30
@@ -785,7 +748,7 @@ calibrateTicker();
 
       // Optional: if fewer items, speed up a bit
       // (we can tune later if you want it faster/slower)
-
+    }
 
     async function loadIOI(){
       try{
@@ -828,32 +791,29 @@ calibrateTicker();
     }
 
     function renderSubDetail(item){
-  const box = document.getElementById("subDetail");
-  if (!box) return;
+      const box = document.getElementById("subDetail");
+      if (!item){
+        box.innerHTML = `
+          <div class="title">Select a subcontractor</div>
+          <div class="hint">Details will appear here.</div>
+          <div class="small">No selection.</div>
+        `;
+        return;
+      }
 
-  if (!item){
-    box.innerHTML = `
-      <div class="title">Select a subcontractor</div>
-      <div class="hint">Details will appear here.</div>
-      <div class="small">No selection.</div>
-    `;
-    return;
-  }
-
-  box.innerHTML = `
-    <div class="title">${item.sub}</div>
-    <div class="hint">YTD exposure & rates</div>
-    <div class="kv">
-      <div class="k">Hours</div><div class="v">${item.hours.toLocaleString()}</div>
-      <div class="k">Incidents</div><div class="v">${item.incidents}</div>
-      <div class="k">Recordables</div><div class="v">${item.recordables}</div>
-      <div class="k">Lost Time</div><div class="v">${item.lost}</div>
-      <div class="k">TRIR</div><div class="v">${item.trir || "0"}</div>
-      <div class="k">LTIR</div><div class="v">${item.ltir || "0"}</div>
-    </div>
-  `;
-}
-
+      box.innerHTML = `
+        <div class="title">${item.sub}</div>
+        <div class="hint">YTD exposure & rates</div>
+        <div class="kv">
+          <div class="k">Hours</div><div class="v">${item.hours.toLocaleString()}</div>
+          <div class="k">Incidents</div><div class="v">${item.incidents}</div>
+          <div class="k">Recordables</div><div class="v">${item.recordables}</div>
+          <div class="k">Lost Time</div><div class="v">${item.lost}</div>
+          <div class="k">TRIR</div><div class="v">${item.trir || "0"}</div>
+          <div class="k">LTIR</div><div class="v">${item.ltir || "0"}</div>
+        </div>
+      `;
+    }
 
     function renderSubs(rows){
       SUBS_ALL = normalizeSubsRows(rows);
@@ -1141,7 +1101,3 @@ calibrateTicker();
   </script>
 </body>
 </html>
-
-
-
-
