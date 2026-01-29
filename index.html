@@ -52,20 +52,19 @@
 
     /* Single source of truth for logo sizing */
     .brand-logo{
-      height: clamp(110px, 10vw, 175px);
-      width: auto;
-      display:block;
-      opacity:.98;
+  height: clamp(110px, 10vw, 175px);
+  width: auto;
+  display:block;
 
-      /* ✅ "Glow follows the logo shape" = drop-shadow, not box-shadow */
-      filter:
-        drop-shadow(0 10px 22px rgba(0,0,0,.35))
-        drop-shadow(0 0 18px rgba(159,28,31,.22))
-        drop-shadow(0 0 38px rgba(159,28,31,.12));
+  filter:
+    drop-shadow(0 2px 3px rgba(255,255,255,.25))   /* edge clarity */
+    drop-shadow(0 0 22px rgba(159,28,31,.55))      /* Cooper red glow */
+    drop-shadow(0 0 44px rgba(159,28,31,.25))      /* feathered bleed */
+    drop-shadow(0 16px 34px rgba(0,0,0,.45));
 
-      transform-origin: center;
-      animation: brandFloat 4.2s ease-in-out infinite;
-    }
+  animation: brandFloat 4.2s ease-in-out infinite;
+}
+
 
     @keyframes brandFloat{
       0%,100% { transform: translateY(0) scale(1); }
@@ -1593,3 +1592,4 @@
   </script>
 </body>
 </html>
+
