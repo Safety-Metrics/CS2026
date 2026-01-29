@@ -828,29 +828,32 @@ calibrateTicker();
     }
 
     function renderSubDetail(item){
-      const box = document.getElementById("subDetail");
-      if (!item){
-        box.innerHTML = `
-          <div class="title">Select a subcontractor</div>
-          <div class="hint">Details will appear here.</div>
-          <div class="small">No selection.</div>
-        `;
-        return;
-      }
+  const box = document.getElementById("subDetail");
+  if (!box) return;
 
-      box.innerHTML = `
-        <div class="title">${item.sub}</div>
-        <div class="hint">YTD exposure & rates</div>
-        <div class="kv">
-          <div class="k">Hours</div><div class="v">${item.hours.toLocaleString()}</div>
-          <div class="k">Incidents</div><div class="v">${item.incidents}</div>
-          <div class="k">Recordables</div><div class="v">${item.recordables}</div>
-          <div class="k">Lost Time</div><div class="v">${item.lost}</div>
-          <div class="k">TRIR</div><div class="v">${item.trir || "0"}</div>
-          <div class="k">LTIR</div><div class="v">${item.ltir || "0"}</div>
-        </div>
-      `;
-    }
+  if (!item){
+    box.innerHTML = `
+      <div class="title">Select a subcontractor</div>
+      <div class="hint">Details will appear here.</div>
+      <div class="small">No selection.</div>
+    `;
+    return;
+  }
+
+  box.innerHTML = `
+    <div class="title">${item.sub}</div>
+    <div class="hint">YTD exposure & rates</div>
+    <div class="kv">
+      <div class="k">Hours</div><div class="v">${item.hours.toLocaleString()}</div>
+      <div class="k">Incidents</div><div class="v">${item.incidents}</div>
+      <div class="k">Recordables</div><div class="v">${item.recordables}</div>
+      <div class="k">Lost Time</div><div class="v">${item.lost}</div>
+      <div class="k">TRIR</div><div class="v">${item.trir || "0"}</div>
+      <div class="k">LTIR</div><div class="v">${item.ltir || "0"}</div>
+    </div>
+  `;
+}
+
 
     function renderSubs(rows){
       SUBS_ALL = normalizeSubsRows(rows);
@@ -1138,6 +1141,7 @@ calibrateTicker();
   </script>
 </body>
 </html>
+
 
 
 
