@@ -167,6 +167,256 @@
       color: rgba(214,211,207,.75);
     }
 
+    /* ---------- IOI Explainer (Panel/Modal) ---------- */
+    .ioi-actions{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .ioi-info-btn{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: rgba(255,255,255,.06);
+      color: #f1efec;
+      font-weight: 800;
+      letter-spacing: .02em;
+      font-size: 12px;
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.12);
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .ioi-info-btn:hover{ background: rgba(255,255,255,.09); }
+    .ioi-info-btn:active{ transform: translateY(1px); }
+    .ioi-info-btn .dot{
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(159,28,31,.18);
+      color: #ffd7d7;
+      font-size: 12px;
+      font-weight: 900;
+      box-shadow: inset 0 0 0 1px rgba(159,28,31,.28);
+    }
+
+    .ioi-backdrop{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      z-index: 9998;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .18s ease;
+    }
+
+    .ioi-backdrop.open{
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Side panel (executive-friendly, mobile-safe) */
+    .ioi-panel{
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 100%;
+      width: min(520px, 92vw);
+      background:
+        radial-gradient(900px 600px at 15% 10%, rgba(159,28,31,.18), transparent 55%),
+        radial-gradient(700px 420px at 80% 20%, rgba(104,12,25,.18), transparent 60%),
+        linear-gradient(180deg, rgba(14,14,15,1) 0%, rgba(10,10,11,1) 100%);
+      color: var(--cream);
+      border-left: 1px solid rgba(255,255,255,.10);
+      box-shadow: -18px 0 44px rgba(0,0,0,.55);
+      z-index: 9999;
+      transform: translateX(102%);
+      transition: transform .22s ease;
+      display:flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .ioi-panel.open{ transform: translateX(0); }
+
+    .ioi-panel header{
+      padding: 18px 18px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .ioi-panel .ph{
+      min-width: 0;
+    }
+
+    .ioi-panel .ptitle{
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin: 0;
+      color: #efece8;
+    }
+
+    .ioi-panel .psub{
+      margin-top: 6px;
+      font-size: 12px;
+      color: rgba(214,211,207,.78);
+      line-height: 1.35;
+    }
+
+    .ioi-panel .close{
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: #f3f0ec;
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+      font-weight: 900;
+      letter-spacing: .02em;
+      min-height: 38px;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.12);
+    }
+    .ioi-panel .close:hover{ background: rgba(255,255,255,.09); }
+    .ioi-panel .close:active{ transform: translateY(1px); }
+
+    .ioi-panel .body{
+      padding: 14px 18px 18px;
+      overflow:auto;
+    }
+
+    .ioi-note{
+      border-radius: 14px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+      padding: 12px 12px;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.10);
+      margin-bottom: 14px;
+      font-size: 12px;
+      line-height: 1.45;
+      color: rgba(241,239,236,.92);
+    }
+
+    .ioi-note strong{ color: #fff; }
+
+    .ioi-metric{
+      border-radius: 16px;
+      background: rgba(0,0,0,.28);
+      border: 1px solid rgba(255,255,255,.08);
+      padding: 14px 14px 12px;
+      margin-bottom: 12px;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.12);
+    }
+
+    .ioi-metric h4{
+      margin: 0 0 8px;
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #f1efec;
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      flex-wrap: wrap;
+    }
+
+    .ioi-tag{
+      font-size: 11px;
+      font-weight: 900;
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+      color: rgba(241,239,236,.92);
+      letter-spacing: .02em;
+      text-transform:none;
+    }
+
+    .ioi-tag.good{ color:#20c997; background: rgba(32,201,151,.12); border-color: rgba(32,201,151,.22); }
+    .ioi-tag.bad { color:#ff5c5c; background: rgba(255,92,92,.12); border-color: rgba(255,92,92,.22); }
+    .ioi-tag.neutral{ color:#c7c4bf; background: rgba(199,196,191,.10); border-color: rgba(199,196,191,.18); }
+
+    .ioi-lines{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      font-size: 12px;
+      line-height: 1.45;
+      color: rgba(241,239,236,.90);
+    }
+
+    .ioi-lines .k{
+      color: rgba(214,211,207,.82);
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+
+    .ioi-lines code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 11px;
+      background: rgba(0,0,0,.30);
+      border: 1px solid rgba(255,255,255,.10);
+      padding: 2px 6px;
+      border-radius: 10px;
+      color: rgba(241,239,236,.92);
+      white-space: nowrap;
+    }
+
+    .ioi-gates{
+      margin-top: 10px;
+      border-top: 1px dashed rgba(255,255,255,.12);
+      padding-top: 10px;
+      display:grid;
+      gap: 6px;
+      font-size: 12px;
+      color: rgba(241,239,236,.90);
+    }
+
+    .ioi-gates .gate{
+      display:flex;
+      align-items:flex-start;
+      gap: 10px;
+    }
+
+    .ioi-gates .b{
+      font-weight: 900;
+      letter-spacing: .02em;
+      border-radius: 999px;
+      padding: 4px 10px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      min-width: 76px;
+      text-align:center;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.10);
+    }
+    .ioi-gates .b.warn{ color:#ffd27b; background: rgba(246,193,70,.12); border-color: rgba(246,193,70,.24); }
+    .ioi-gates .b.alert{ color:#ffb3b3; background: rgba(255,92,92,.14); border-color: rgba(255,92,92,.26); }
+
+    @media (max-width: 520px){
+      .ioi-title{
+        align-items:flex-start;
+      }
+      .ioi-actions{
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
+
     .ticker{
       position: relative;
       overflow: hidden;
@@ -501,10 +751,99 @@
       <div class="ioi-wrap">
         <div class="ioi-title">
           <h3>Intelligent Operational Indicators</h3>
-          <div class="ioi-sub">Rolling 30-day signal • Hover to pause</div>
+          <div class="ioi-actions">
+            <div class="ioi-sub">Rolling 30-day signal • Hover to pause</div>
+            <button class="ioi-info-btn" id="ioiExplainBtn" type="button" aria-haspopup="dialog" aria-controls="ioiPanel">
+              <span class="dot">i</span> What's this?
+            </button>
+          </div>
         </div>
         <div class="ticker" id="ioiTicker">
           <div class="ticker-track" id="tickerTrack"></div>
+        </div>
+      </div>
+
+      <!-- ✅ IOI EXPLAINER (Executive panel) -->
+      <div class="ioi-backdrop" id="ioiBackdrop" aria-hidden="true"></div>
+      <div class="ioi-panel" id="ioiPanel" role="dialog" aria-modal="true" aria-labelledby="ioiPanelTitle" aria-hidden="true">
+        <header>
+          <div class="ph">
+            <div class="ptitle" id="ioiPanelTitle">Intelligent Operational Indicators</div>
+            <div class="psub">
+              Simple, executive-friendly definitions for the ticker above. These are <strong>rolling 30‑day</strong> signals meant to highlight
+              where attention should go <em>before</em> a serious event happens.
+            </div>
+          </div>
+          <button class="close" id="ioiCloseBtn" type="button" aria-label="Close IOI explainer">Close</button>
+        </header>
+
+        <div class="body">
+          <div class="ioi-note">
+            <strong>How to read the ticker:</strong> The first number is the current 30‑day value. The second number (▲/▼) is the change versus the prior 30‑day window.
+            <br><br>
+            <strong>Important:</strong> “Up” is not always good. Some indicators rising is <strong class="bad">worse</strong> (risk increasing).
+            This panel tells you which direction is good/bad for each indicator.
+          </div>
+
+          <div class="ioi-metric">
+            <h4>EWIR (30D) <span class="ioi-tag bad">Up = Bad</span></h4>
+            <div class="ioi-lines">
+              <div><span class="k">What it means:</span> An exposure‑weighted incident rate for the last 30 days. Think: “How much stuff is happening, adjusted for hours worked.”</div>
+              <div><span class="k">Data origin:</span> <code>PUB_IOI</code> computed from <code>PUB_RECENT_INCIDENTS</code> + hours exposure (from <code>PUB_KPI</code>/<code>PUB_SUBS</code>).</div>
+              <div><span class="k">Value vs Delta:</span> Value = current 30D EWIR. Delta = how much that EWIR moved compared to the previous 30D period.</div>
+            </div>
+            <div class="ioi-gates">
+              <div class="gate"><span class="b warn">Investigate</span>EWIR increases for 2 consecutive refresh cycles (trend), even if the number is “small.”</div>
+              <div class="gate"><span class="b alert">Escalate</span>Large positive delta (sharp jump), or EWIR stays elevated > 30 days.</div>
+            </div>
+          </div>
+
+          <div class="ioi-metric">
+            <h4>RISK CONC (30D) <span class="ioi-tag bad">Up = Bad</span></h4>
+            <div class="ioi-lines">
+              <div><span class="k">What it means:</span> Risk concentration—how clustered incidents are. Higher = problems are piling up in fewer places (one sub/site dragging the system).</div>
+              <div><span class="k">Data origin:</span> <code>PUB_IOI</code> derived from incident distribution in <code>PUB_RECENT_INCIDENTS</code> (by sub/project) and exposure.</div>
+              <div><span class="k">Value vs Delta:</span> Value = current 30D concentration. Delta = movement vs previous 30D period.</div>
+            </div>
+            <div class="ioi-gates">
+              <div class="gate"><span class="b warn">Investigate</span>Positive delta + the same sub/project repeatedly appearing in incidents.</div>
+              <div class="gate"><span class="b alert">Escalate</span>Concentration rising while total volume is flat (means the risk is “sticking” to one area).</div>
+            </div>
+          </div>
+
+          <div class="ioi-metric">
+            <h4>MOMENTUM (30D) <span class="ioi-tag neutral">Context</span></h4>
+            <div class="ioi-lines">
+              <div><span class="k">What it means:</span> A direction‑of‑travel signal. It summarizes whether the overall 30‑day risk picture is improving or worsening.</div>
+              <div><span class="k">Data origin:</span> <code>PUB_IOI</code> (a blended signal from incidents, severity mix, and exposure patterns).</div>
+              <div><span class="k">Value vs Delta:</span> Value = current momentum score. Delta = how the momentum shifted versus the prior 30D.</div>
+            </div>
+            <div class="ioi-gates">
+              <div class="gate"><span class="b warn">Investigate</span>Momentum rising at the same time EWIR or Risk Concentration rises.</div>
+              <div class="gate"><span class="b alert">Escalate</span>Momentum shows a sharp increase (big delta) even if recordables haven’t moved yet.</div>
+            </div>
+          </div>
+
+          <div class="ioi-metric">
+            <h4>TOP RISK SUB (≥500H) <span class="ioi-tag bad">Flag</span></h4>
+            <div class="ioi-lines">
+              <div><span class="k">What it means:</span> The subcontractor with the highest weighted risk signal—only among subs with meaningful exposure (≥500 hours).</div>
+              <div><span class="k">Data origin:</span> Name is surfaced in <code>PUB_IOI</code>, typically based on risk weighting from <code>PUB_SUBS</code> + <code>PUB_RECENT_INCIDENTS</code>.</div>
+              <div><span class="k">Value vs Delta:</span> Value = the subcontractor name. No delta (it’s a label, not a rate).</div>
+            </div>
+            <div class="ioi-gates">
+              <div class="gate"><span class="b warn">Investigate</span>If the same sub repeats week over week: do a focused field verification + coaching.</div>
+              <div class="gate"><span class="b alert">Escalate</span>If that sub also shows rising EWIR / concentration: immediate plan, accountability, and increased oversight.</div>
+            </div>
+          </div>
+
+          <div class="ioi-note">
+            <strong>Quick “good vs bad” cheat sheet:</strong><br>
+            • <strong class="bad">EWIR up</strong> = risk rising (bad).<br>
+            • <strong class="bad">Risk Concentration up</strong> = risk clustering (bad).<br>
+            • <strong>MOMENTUM</strong> = interpret with the other signals (context).<br>
+            • <strong>Top Risk Sub</strong> = where to look first.
+          </div>
         </div>
       </div>
 
@@ -537,6 +876,90 @@
             <button class="btn" id="subIncClose" type="button">Close</button>
           </div>
           <div id="subIncList"></div>
+        </div>
+      </div>
+
+      <!-- ✅ IOI EXPLAINER (Executive panel) -->
+      <div class="ioi-backdrop" id="ioiBackdrop" aria-hidden="true"></div>
+      <div class="ioi-panel" id="ioiPanel" role="dialog" aria-modal="true" aria-labelledby="ioiPanelTitle" aria-hidden="true">
+        <header>
+          <div class="ph">
+            <div class="ptitle" id="ioiPanelTitle">Intelligent Operational Indicators</div>
+            <div class="psub">
+              Simple, executive-friendly definitions for the ticker above. These are <strong>rolling 30‑day</strong> signals meant to highlight
+              where attention should go <em>before</em> a serious event happens.
+            </div>
+          </div>
+          <button class="close" id="ioiCloseBtn" type="button" aria-label="Close IOI explainer">Close</button>
+        </header>
+
+        <div class="body">
+          <div class="ioi-note">
+            <strong>How to read the ticker:</strong> The first number is the current 30‑day value. The second number (▲/▼) is the change versus the prior 30‑day window.
+            <br><br>
+            <strong>Important:</strong> “Up” is not always good. Some indicators rising is <strong class="bad">worse</strong> (risk increasing).
+            This panel tells you which direction is good/bad for each indicator.
+          </div>
+
+          <div class="ioi-metric">
+            <h4>EWIR (30D) <span class="ioi-tag bad">Up = Bad</span></h4>
+            <div class="ioi-lines">
+              <div><span class="k">What it means:</span> An exposure‑weighted incident rate for the last 30 days. Think: “How much stuff is happening, adjusted for hours worked.”</div>
+              <div><span class="k">Data origin:</span> <code>PUB_IOI</code> computed from <code>PUB_RECENT_INCIDENTS</code> + hours exposure (from <code>PUB_KPI</code>/<code>PUB_SUBS</code>).</div>
+              <div><span class="k">Value vs Delta:</span> Value = current 30D EWIR. Delta = how much that EWIR moved compared to the previous 30D period.</div>
+            </div>
+            <div class="ioi-gates">
+              <div class="gate"><span class="b warn">Investigate</span>EWIR increases for 2 consecutive refresh cycles (trend), even if the number is “small.”</div>
+              <div class="gate"><span class="b alert">Escalate</span>Large positive delta (sharp jump), or EWIR stays elevated > 30 days.</div>
+            </div>
+          </div>
+
+          <div class="ioi-metric">
+            <h4>RISK CONC (30D) <span class="ioi-tag bad">Up = Bad</span></h4>
+            <div class="ioi-lines">
+              <div><span class="k">What it means:</span> Risk concentration—how clustered incidents are. Higher = problems are piling up in fewer places (one sub/site dragging the system).</div>
+              <div><span class="k">Data origin:</span> <code>PUB_IOI</code> derived from incident distribution in <code>PUB_RECENT_INCIDENTS</code> (by sub/project) and exposure.</div>
+              <div><span class="k">Value vs Delta:</span> Value = current 30D concentration. Delta = movement vs previous 30D period.</div>
+            </div>
+            <div class="ioi-gates">
+              <div class="gate"><span class="b warn">Investigate</span>Positive delta + the same sub/project repeatedly appearing in incidents.</div>
+              <div class="gate"><span class="b alert">Escalate</span>Concentration rising while total volume is flat (means the risk is “sticking” to one area).</div>
+            </div>
+          </div>
+
+          <div class="ioi-metric">
+            <h4>MOMENTUM (30D) <span class="ioi-tag neutral">Context</span></h4>
+            <div class="ioi-lines">
+              <div><span class="k">What it means:</span> A direction‑of‑travel signal. It summarizes whether the overall 30‑day risk picture is improving or worsening.</div>
+              <div><span class="k">Data origin:</span> <code>PUB_IOI</code> (a blended signal from incidents, severity mix, and exposure patterns).</div>
+              <div><span class="k">Value vs Delta:</span> Value = current momentum score. Delta = how the momentum shifted versus the prior 30D.</div>
+            </div>
+            <div class="ioi-gates">
+              <div class="gate"><span class="b warn">Investigate</span>Momentum rising at the same time EWIR or Risk Concentration rises.</div>
+              <div class="gate"><span class="b alert">Escalate</span>Momentum shows a sharp increase (big delta) even if recordables haven’t moved yet.</div>
+            </div>
+          </div>
+
+          <div class="ioi-metric">
+            <h4>TOP RISK SUB (≥500H) <span class="ioi-tag bad">Flag</span></h4>
+            <div class="ioi-lines">
+              <div><span class="k">What it means:</span> The subcontractor with the highest weighted risk signal—only among subs with meaningful exposure (≥500 hours).</div>
+              <div><span class="k">Data origin:</span> Name is surfaced in <code>PUB_IOI</code>, typically based on risk weighting from <code>PUB_SUBS</code> + <code>PUB_RECENT_INCIDENTS</code>.</div>
+              <div><span class="k">Value vs Delta:</span> Value = the subcontractor name. No delta (it’s a label, not a rate).</div>
+            </div>
+            <div class="ioi-gates">
+              <div class="gate"><span class="b warn">Investigate</span>If the same sub repeats week over week: do a focused field verification + coaching.</div>
+              <div class="gate"><span class="b alert">Escalate</span>If that sub also shows rising EWIR / concentration: immediate plan, accountability, and increased oversight.</div>
+            </div>
+          </div>
+
+          <div class="ioi-note">
+            <strong>Quick “good vs bad” cheat sheet:</strong><br>
+            • <strong class="bad">EWIR up</strong> = risk rising (bad).<br>
+            • <strong class="bad">Risk Concentration up</strong> = risk clustering (bad).<br>
+            • <strong>MOMENTUM</strong> = interpret with the other signals (context).<br>
+            • <strong>Top Risk Sub</strong> = where to look first.
+          </div>
         </div>
       </div>
 
@@ -765,6 +1188,50 @@
         renderIOITicker(null);
       }
     }
+
+
+    /*** IOI EXPLAINER PANEL ***/
+    function openIOIPanel(){
+      const panel = document.getElementById("ioiPanel");
+      const back = document.getElementById("ioiBackdrop");
+      if (!panel || !back) return;
+
+      panel.classList.add("open");
+      back.classList.add("open");
+      panel.setAttribute("aria-hidden", "false");
+      back.setAttribute("aria-hidden", "false");
+
+      // lock body scroll while panel open (mobile especially)
+      document.body.style.overflow = "hidden";
+
+      // focus management (accessibility + keyboard)
+      const close = document.getElementById("ioiCloseBtn");
+      if (close) close.focus();
+    }
+
+    function closeIOIPanel(){
+      const panel = document.getElementById("ioiPanel");
+      const back = document.getElementById("ioiBackdrop");
+      if (!panel || !back) return;
+
+      panel.classList.remove("open");
+      back.classList.remove("open");
+      panel.setAttribute("aria-hidden", "true");
+      back.setAttribute("aria-hidden", "true");
+
+      document.body.style.overflow = "";
+
+      const btn = document.getElementById("ioiExplainBtn");
+      if (btn) btn.focus();
+    }
+
+    function toggleIOIPanel(){
+      const panel = document.getElementById("ioiPanel");
+      if (!panel) return;
+      if (panel.classList.contains("open")) closeIOIPanel();
+      else openIOIPanel();
+    }
+
 
     /*** SUBS ***/
     let SUBS_ALL = [];
@@ -1089,6 +1556,31 @@
 
         // ✅ IOI ticker load (separate call so it doesn't block main UI)
         loadIOI();
+
+        // ✅ IOI explainer wiring (button + backdrop + ESC)
+        const ioiBtn = document.getElementById("ioiExplainBtn");
+        const ioiClose = document.getElementById("ioiCloseBtn");
+        const ioiBack = document.getElementById("ioiBackdrop");
+
+        if (ioiBtn && !ioiBtn.dataset.wired){
+          ioiBtn.dataset.wired = "1";
+          ioiBtn.addEventListener("click", toggleIOIPanel);
+        }
+        if (ioiClose && !ioiClose.dataset.wired){
+          ioiClose.dataset.wired = "1";
+          ioiClose.addEventListener("click", closeIOIPanel);
+        }
+        if (ioiBack && !ioiBack.dataset.wired){
+          ioiBack.dataset.wired = "1";
+          ioiBack.addEventListener("click", closeIOIPanel);
+        }
+
+        document.addEventListener("keydown", (e)=>{
+          if (e.key === "Escape"){
+            const panel = document.getElementById("ioiPanel");
+            if (panel && panel.classList.contains("open")) closeIOIPanel();
+          }
+        });
 
         setStatus("");
       } catch (err){
