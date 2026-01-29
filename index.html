@@ -200,23 +200,25 @@
     }
 
     .ticker-track{
-      display:flex;
-      gap: 18px;
-      white-space: nowrap;
-      will-change: transform;
-      animation: tickerMove 26s linear infinite;
-      padding-left: 16px;
-    }
+  display:flex;
+  gap: 18px;
+  white-space: nowrap;
+  will-change: transform;
 
-    /* Pause on hover (your requirement) */
-    .ticker:hover .ticker-track{
-      animation-play-state: paused;
-    }
+  /* key: move exactly one-set width (in px), provided by JS */
+  animation: tickerMove var(--tickerSpeed, 26s) linear infinite;
+  transform: translate3d(0,0,0);
+}
 
-    @keyframes tickerMove{
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
+/* Pause on hover */
+.ticker:hover .ticker-track{
+  animation-play-state: paused;
+}
+
+@keyframes tickerMove{
+  from { transform: translate3d(0,0,0); }
+  to   { transform: translate3d(calc(-1 * var(--tickerSetWidth, 1000px)), 0, 0); }
+}
 
     .tick{
       display:flex;
@@ -1101,3 +1103,4 @@
   </script>
 </body>
 </html>
+
