@@ -682,6 +682,30 @@
     }
 
     /*** IOI TICKER ***/
+    function calibrateTicker(){
+  const track = document.getElementById("tickerTrack");
+  const ticker = document.getElementById("ioiTicker");
+  if (!track || !ticker) return;
+
+  // Wait for layout/fonts so widths are correct
+  requestAnimationFrame(() => {
+    const total = track.scrollWidth;
+    if (!total) return;
+
+    // We render items + items, so one set is half the total width
+    const setWidth = Math.floor(total / 2);
+
+    // Set the exact pixel distance the animation should travel
+    track.style.setProperty("--tickerSetWidth", setWidth + "px");
+
+    // Optional: auto-speed based on content length (prevents too-fast/too-slow)
+    // pxPerSecond = how fast the tape moves; tune this
+    const pxPerSecond = 90;
+    const seconds = Math.max(14, Math.min(40, setWidth / pxPerSecond));
+    track.style.setProperty("--tickerSpeed", seconds + "s");
+  });
+}
+
     function fmt(n, d=2){
       const num = parseFloat(n);
       if (!Number.isFinite(num)) return safeText(n) || "—";
@@ -713,11 +737,22 @@
 
     function renderIOITicker(ioiRow){
       const track = document.getElementById("tickerTrack");
-
+      if (!track) return;
+      
       if (!ioiRow){
         track.innerHTML = `<div class="tick"><span class="sym">IOI</span><span class="val">No data</span><span class="chg flat">• —</span></div>`;
         return;
       }
+
+      // Build one full "set" of ticker items (one pass)
+  const items = buildIOITickerItems(ioiRow); // <-- this must exist and return a string of .tick blocks
+      
+        // Duplicate for seamless loop (we already do items + items)
+track.innerHTML = items + items;
+
+// ✅ Calibrate pixel-perfect distance so there is no snap on loop
+calibrateTicker();
+}
 
       // Expected PUB_IOI headers:
       // EWIR_30, EWIR_DELTA, RISK_CONC_30, RISK_CONC_DELTA, MOMENTUM_30, MOMENTUM_DELTA, TOP_RISK_SUB_30
@@ -1103,4 +1138,5 @@
   </script>
 </body>
 </html>
+
 
