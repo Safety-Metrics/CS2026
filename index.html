@@ -5,12 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>2026 Safety Performance</title>
 
+  <!-- Optional: helps prevent some injection vectors if hosted with proper headers.
+       (Real CSP should be set as HTTP header by server for best protection.)
+  -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
   <style>
     /* ==============================
       COOPER STEEL – 2026 DASHBOARD
       Executive / Premium Theme (CLEAN)
-      Badge OFF
-      + IOI TICKER (stock tape)
+      IOI ticker + explainer panel
+      Security + Accessibility upgrades
     ============================== */
 
     :root{
@@ -28,13 +33,27 @@
 
       --card-shadow: 0 18px 40px rgba(0,0,0,.45);
       --soft-shadow: 0 10px 28px rgba(0,0,0,.28);
+
+      --glass: rgba(0,0,0,.45);
+      --glass-2: rgba(0,0,0,.28);
+
+      --line: rgba(255,255,255,.10);
+
+      --ok: #20c997;
+      --warn: #ffd27b;
+      --bad: #ff5c5c;
+
+      --muted: rgba(214,211,207,.78);
+
+      --skeleton: rgba(255,255,255,.08);
+      --skeleton-2: rgba(255,255,255,.05);
     }
 
     *{ box-sizing: border-box; }
 
     body{
       margin:0;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       background:
         radial-gradient(1200px 600px at 20% 10%, rgba(159,28,31,.32), transparent 60%),
         radial-gradient(900px 500px at 80% 20%, rgba(104,12,25,.38), transparent 65%),
@@ -42,7 +61,9 @@
       color: var(--cream);
     }
 
-    /* ---------- Top Logo Header (Badge OFF) ---------- */
+    a{ color: inherit; }
+
+    /* ---------- Top Logo Header ---------- */
     header.brand-header{
       display:flex;
       justify-content:center;
@@ -50,21 +71,17 @@
       padding: 26px 16px 6px;
     }
 
-    /* Single source of truth for logo sizing */
     .brand-logo{
-  height: clamp(110px, 10vw, 175px);
-  width: auto;
-  display:block;
-
-  filter:
-    drop-shadow(0 2px 3px rgba(255,255,255,.25))   /* edge clarity */
-    drop-shadow(0 0 22px rgba(159,28,31,.55))      /* Cooper red glow */
-    drop-shadow(0 0 44px rgba(159,28,31,.25))      /* feathered bleed */
-    drop-shadow(0 16px 34px rgba(0,0,0,.45));
-
-  animation: brandFloat 4.2s ease-in-out infinite;
-}
-
+      height: clamp(110px, 10vw, 175px);
+      width: auto;
+      display:block;
+      filter:
+        drop-shadow(0 2px 3px rgba(255,255,255,.25))
+        drop-shadow(0 0 22px rgba(159,28,31,.55))
+        drop-shadow(0 0 44px rgba(159,28,31,.25))
+        drop-shadow(0 16px 34px rgba(0,0,0,.45));
+      animation: brandFloat 4.2s ease-in-out infinite;
+    }
 
     @keyframes brandFloat{
       0%,100% { transform: translateY(0) scale(1); }
@@ -95,6 +112,28 @@
       font-size: 14px;
       color: #d6d3cf;
       margin-bottom: 18px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .updated{
+      font-size: 12px;
+      color: rgba(214,211,207,.70);
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .dot-live{
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(32,201,151,.9);
+      box-shadow: 0 0 0 3px rgba(32,201,151,.16);
     }
 
     /* ---------- KPI Row ---------- */
@@ -136,13 +175,33 @@
       .kpi-row{ grid-template-columns: 1fr; }
     }
 
+    /* ---------- Skeleton ---------- */
+    .skeleton{
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(90deg, var(--skeleton) 0%, var(--skeleton-2) 50%, var(--skeleton) 100%);
+      background-size: 200% 100%;
+      animation: shimmer 1.1s ease-in-out infinite;
+      border-radius: 10px;
+    }
+    @keyframes shimmer{
+      0%{ background-position: 200% 0; }
+      100%{ background-position: -200% 0; }
+    }
+    @media (prefers-reduced-motion: reduce){
+      .skeleton{ animation:none; }
+    }
+
+    .kpi .val.skel{
+      height: 22px;
+      width: 70%;
+    }
+
     /* ===========================
        IOI TICKER (Stock Tape)
     =========================== */
 
-    .ioi-wrap{
-      margin: 10px 0 26px;
-    }
+    .ioi-wrap{ margin: 10px 0 26px; }
 
     .ioi-title{
       display:flex;
@@ -150,6 +209,7 @@
       justify-content: space-between;
       gap: 10px;
       margin: 10px 2px 10px;
+      flex-wrap: wrap;
     }
 
     .ioi-title h3{
@@ -161,18 +221,17 @@
       opacity: .95;
     }
 
-    .ioi-title .ioi-sub{
-      font-size: 12px;
-      color: rgba(214,211,207,.75);
-    }
-
-    /* ---------- IOI Explainer (Panel/Modal) ---------- */
     .ioi-actions{
       display:flex;
       align-items:center;
       gap: 10px;
       flex-wrap: wrap;
       justify-content: flex-end;
+    }
+
+    .ioi-sub{
+      font-size: 12px;
+      color: rgba(214,211,207,.75);
     }
 
     .ioi-info-btn{
@@ -192,7 +251,6 @@
       user-select: none;
       white-space: nowrap;
     }
-
     .ioi-info-btn:hover{ background: rgba(255,255,255,.09); }
     .ioi-info-btn:active{ transform: translateY(1px); }
     .ioi-info-btn .dot{
@@ -209,6 +267,93 @@
       box-shadow: inset 0 0 0 1px rgba(159,28,31,.28);
     }
 
+    .ticker{
+      position: relative;
+      overflow: hidden;
+      border-radius: 14px;
+      background: rgba(0,0,0,.42);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+      padding: 10px 0;
+    }
+
+    .ticker:before,
+    .ticker:after{
+      content:"";
+      position:absolute;
+      top:0;
+      width: 80px;
+      height: 100%;
+      z-index: 2;
+      pointer-events:none;
+    }
+    .ticker:before{
+      left:0;
+      background: linear-gradient(90deg, rgba(12,12,13,1) 0%, rgba(12,12,13,0) 100%);
+      opacity:.35;
+    }
+    .ticker:after{
+      right:0;
+      background: linear-gradient(270deg, rgba(12,12,13,1) 0%, rgba(12,12,13,0) 100%);
+      opacity:.35;
+    }
+
+    .ticker-track{
+      display:flex;
+      gap: 18px;
+      white-space: nowrap;
+      padding-left: 16px;
+      will-change: transform;
+    }
+
+    /* We drive motion via JS to avoid the “-50% assumes exact width” issue. */
+    .tick{
+      display:flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.05);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.05);
+      font-size: 13px;
+      color: #e9e6e2;
+      flex: 0 0 auto;
+    }
+
+    .tick .sym{
+      font-weight: 900;
+      letter-spacing: .02em;
+      color: #f1efec;
+      opacity: .95;
+    }
+    .tick .val{
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .tick .chg{
+      font-weight: 900;
+      letter-spacing: .01em;
+      display:flex;
+      align-items:center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
+    }
+    .chg.up{
+      color: var(--ok);
+      background: rgba(32,201,151,.12);
+    }
+    .chg.down{
+      color: var(--bad);
+      background: rgba(255,92,92,.12);
+    }
+    .chg.flat{
+      color: #c7c4bf;
+      background: rgba(199,196,191,.10);
+    }
+
+    /* ---------- IOI Explainer Panel ---------- */
     .ioi-backdrop{
       position: fixed;
       inset: 0;
@@ -220,13 +365,11 @@
       pointer-events: none;
       transition: opacity .18s ease;
     }
-
     .ioi-backdrop.open{
       opacity: 1;
       pointer-events: auto;
     }
 
-    /* Side panel (executive-friendly, mobile-safe) */
     .ioi-panel{
       position: fixed;
       top: 0;
@@ -247,7 +390,6 @@
       flex-direction: column;
       overflow: hidden;
     }
-
     .ioi-panel.open{ transform: translateX(0); }
 
     .ioi-panel header{
@@ -259,10 +401,6 @@
       gap: 12px;
     }
 
-    .ioi-panel .ph{
-      min-width: 0;
-    }
-
     .ioi-panel .ptitle{
       font-size: 15px;
       font-weight: 900;
@@ -271,7 +409,6 @@
       margin: 0;
       color: #efece8;
     }
-
     .ioi-panel .psub{
       margin-top: 6px;
       font-size: 12px;
@@ -310,8 +447,8 @@
       line-height: 1.45;
       color: rgba(241,239,236,.92);
     }
-
     .ioi-note strong{ color: #fff; }
+    .bad{ color: var(--bad); } /* was referenced in your text but missing in original */
 
     .ioi-metric{
       border-radius: 16px;
@@ -345,9 +482,8 @@
       letter-spacing: .02em;
       text-transform:none;
     }
-
-    .ioi-tag.good{ color:#20c997; background: rgba(32,201,151,.12); border-color: rgba(32,201,151,.22); }
-    .ioi-tag.bad { color:#ff5c5c; background: rgba(255,92,92,.12); border-color: rgba(255,92,92,.22); }
+    .ioi-tag.good{ color: var(--ok); background: rgba(32,201,151,.12); border-color: rgba(32,201,151,.22); }
+    .ioi-tag.bad { color: var(--bad); background: rgba(255,92,92,.12); border-color: rgba(255,92,92,.22); }
     .ioi-tag.neutral{ color:#c7c4bf; background: rgba(199,196,191,.10); border-color: rgba(199,196,191,.18); }
 
     .ioi-lines{
@@ -358,13 +494,11 @@
       line-height: 1.45;
       color: rgba(241,239,236,.90);
     }
-
     .ioi-lines .k{
       color: rgba(214,211,207,.82);
       font-weight: 800;
       letter-spacing: .02em;
     }
-
     .ioi-lines code{
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 11px;
@@ -385,13 +519,11 @@
       font-size: 12px;
       color: rgba(241,239,236,.90);
     }
-
     .ioi-gates .gate{
       display:flex;
       align-items:flex-start;
       gap: 10px;
     }
-
     .ioi-gates .b{
       font-weight: 900;
       letter-spacing: .02em;
@@ -403,116 +535,12 @@
       text-align:center;
       box-shadow: inset 0 0 0 1px rgba(0,0,0,.10);
     }
-    .ioi-gates .b.warn{ color:#ffd27b; background: rgba(246,193,70,.12); border-color: rgba(246,193,70,.24); }
-    .ioi-gates .b.alert{ color:#ffb3b3; background: rgba(255,92,92,.14); border-color: rgba(255,92,92,.26); }
+    .ioi-gates .b.warn{ color: var(--warn); background: rgba(246,193,70,.12); border-color: rgba(246,193,70,.24); }
+    .ioi-gates .b.alert{ color: #ffb3b3; background: rgba(255,92,92,.14); border-color: rgba(255,92,92,.26); }
 
     @media (max-width: 520px){
-      .ioi-title{
-        align-items:flex-start;
-      }
-      .ioi-actions{
-        width: 100%;
-        justify-content: flex-start;
-      }
-    }
-
-    .ticker{
-      position: relative;
-      overflow: hidden;
-      border-radius: 14px;
-      background: rgba(0,0,0,.42);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
-      padding: 10px 0;
-    }
-
-    /* subtle top/bottom fade so ends aren’t harsh */
-    .ticker:before,
-    .ticker:after{
-      content:"";
-      position:absolute;
-      top:0;
-      width: 80px;
-      height: 100%;
-      z-index: 2;
-      pointer-events:none;
-    }
-
-    .ticker:before{
-      left:0;
-      background: linear-gradient(90deg, rgba(12,12,13,1) 0%, rgba(12,12,13,0) 100%);
-      opacity:.35;
-    }
-    .ticker:after{
-      right:0;
-      background: linear-gradient(270deg, rgba(12,12,13,1) 0%, rgba(12,12,13,0) 100%);
-      opacity:.35;
-    }
-
-    .ticker-track{
-      display:flex;
-      gap: 18px;
-      white-space: nowrap;
-      will-change: transform;
-      animation: tickerMove 26s linear infinite;
-      padding-left: 16px;
-    }
-
-    /* Pause on hover (your requirement) */
-    .ticker:hover .ticker-track{
-      animation-play-state: paused;
-    }
-
-    @keyframes tickerMove{
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    .tick{
-      display:flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.05);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.05);
-      font-size: 13px;
-      color: #e9e6e2;
-    }
-
-    .tick .sym{
-      font-weight: 900;
-      letter-spacing: .02em;
-      color: #f1efec;
-      opacity: .95;
-    }
-
-    .tick .val{
-      font-weight: 800;
-      color: #fff;
-    }
-
-    .tick .chg{
-      font-weight: 900;
-      letter-spacing: .01em;
-      display:flex;
-      align-items:center;
-      gap: 6px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
-    }
-
-    .chg.pos{
-      color: #20c997;
-      background: rgba(32,201,151,.12);
-    }
-    .chg.neg{
-      color: #ff5c5c;
-      background: rgba(255,92,92,.12);
-    }
-    .chg.flat{
-      color: #c7c4bf;
-      background: rgba(199,196,191,.10);
+      .ioi-title{ align-items:flex-start; }
+      .ioi-actions{ width: 100%; justify-content: flex-start; }
     }
 
     /* ---------- Section cards ---------- */
@@ -545,15 +573,8 @@
       flex-wrap: wrap;
     }
 
-    .small{
-      font-size: 12px;
-      color: #555;
-    }
-
-    label.small{
-      font-weight: 600;
-      color: #333;
-    }
+    .small{ font-size: 12px; color: #555; }
+    label.small{ font-weight: 600; color: #333; }
 
     .input, input, select{
       font-family: inherit;
@@ -567,13 +588,8 @@
       min-height: 40px;
     }
 
-    input.input{
-      flex: 1 1 320px;
-    }
-
-    select{
-      min-width: 160px;
-    }
+    input.input{ flex: 1 1 320px; }
+    select{ min-width: 160px; }
 
     button, .btn{
       font-family: inherit;
@@ -626,7 +642,6 @@
       margin-top: 12px;
       font-size: 13px;
     }
-
     .kv .k{ color: #444; }
     .kv .v{
       font-weight: 700;
@@ -672,7 +687,6 @@
     }
 
     .card.clickable{ cursor: pointer; }
-
     .card.active{
       box-shadow:
         0 0 0 2px var(--burgundy),
@@ -722,7 +736,19 @@
     }
     .status.danger{
       color: #b42318;
-      font-weight: 700;
+      font-weight: 800;
+    }
+
+    /* ---------- Top status (dark context) ---------- */
+    .status-top{
+      margin-top: 10px;
+      font-size: 12px;
+      color: rgba(214,211,207,.72);
+      min-height: 16px;
+    }
+    .status-top.danger{
+      color: #ffb3b3;
+      font-weight: 900;
     }
   </style>
 </head>
@@ -734,19 +760,24 @@
 
   <div class="shell">
     <div class="container">
-
       <h1>2026 Safety Performance</h1>
-      <p class="subhead">Real-time safety metrics across all active projects and subcontractors.</p>
-
-      <div class="kpi-row" id="kpis">
-        <div class="kpi"><div class="val">—</div><div class="lab">Total Man-Hours</div></div>
-        <div class="kpi"><div class="val">—</div><div class="lab">TRIR</div></div>
-        <div class="kpi"><div class="val">—</div><div class="lab">LTIR</div></div>
-        <div class="kpi"><div class="val">—</div><div class="lab">Total Recordables</div></div>
-        <div class="kpi"><div class="val">—</div><div class="lab">Active Subcontractors</div></div>
+      <div class="subhead">
+        <div>Real-time safety metrics across all active projects and subcontractors.</div>
+        <div class="updated" id="lastUpdated">
+          <span class="dot-live" aria-hidden="true"></span>
+          <span>Last updated: <span id="lastUpdatedText">—</span></span>
+        </div>
       </div>
 
-      <!-- ✅ IOI TICKER (Front and Center, under KPIs) -->
+      <div class="kpi-row" id="kpis" aria-live="polite">
+        <div class="kpi"><div class="val skeleton skel"></div><div class="lab">Total Man-Hours</div></div>
+        <div class="kpi"><div class="val skeleton skel"></div><div class="lab">TRIR</div></div>
+        <div class="kpi"><div class="val skeleton skel"></div><div class="lab">LTIR</div></div>
+        <div class="kpi"><div class="val skeleton skel"></div><div class="lab">Total Recordables</div></div>
+        <div class="kpi"><div class="val skeleton skel"></div><div class="lab">Active Subcontractors</div></div>
+      </div>
+
+      <!-- IOI TICKER -->
       <div class="ioi-wrap">
         <div class="ioi-title">
           <h3>Intelligent Operational Indicators</h3>
@@ -757,19 +788,22 @@
             </button>
           </div>
         </div>
+
         <div class="ticker" id="ioiTicker">
-          <div class="ticker-track" id="tickerTrack"></div>
+          <div class="ticker-track" id="tickerTrack" aria-label="Intelligent Operational Indicators ticker"></div>
         </div>
+
+        <div class="status-top" id="ioiStatus"></div>
       </div>
 
-      <!-- ✅ IOI EXPLAINER (Executive panel) -->
+      <!-- IOI EXPLAINER (single instance, no duplicate IDs) -->
       <div class="ioi-backdrop" id="ioiBackdrop" aria-hidden="true"></div>
       <div class="ioi-panel" id="ioiPanel" role="dialog" aria-modal="true" aria-labelledby="ioiPanelTitle" aria-hidden="true">
         <header>
-          <div class="ph">
+          <div style="min-width:0;">
             <div class="ptitle" id="ioiPanelTitle">Intelligent Operational Indicators</div>
             <div class="psub">
-              Definitions for the ticker above. These are <strong>rolling 30‑day</strong> signals meant to highlight
+              Definitions for the ticker above. These are <strong>rolling 30-day</strong> signals meant to highlight
               where attention should go <em>before</em> a serious event happens.
             </div>
           </div>
@@ -778,7 +812,7 @@
 
         <div class="body">
           <div class="ioi-note">
-            <strong>How to read the ticker:</strong> The first number is the current 30‑day value. The second number (▲/▼) is the change versus the prior 30‑day window.
+            <strong>How to read the ticker:</strong> The first number is the current 30-day value. The second number (▲/▼) is the change versus the prior 30-day window.
             <br><br>
             <strong>Important:</strong> “Up” is not always good. Some indicators rising is <strong class="bad">worse</strong> (risk increasing).
             This panel tells you which direction is good/bad for each indicator.
@@ -787,7 +821,7 @@
           <div class="ioi-metric">
             <h4>EWIR (30D) <span class="ioi-tag bad">Up = Bad</span></h4>
             <div class="ioi-lines">
-              <div><span class="k">What it means:</span> An exposure‑weighted incident rate for the last 30 days. Think: “How much stuff is happening, adjusted for hours worked.”</div>
+              <div><span class="k">What it means:</span> An exposure-weighted incident rate for the last 30 days. Think: “How much stuff is happening, adjusted for hours worked.”</div>
               <div><span class="k">Data origin:</span> <code>PUB_IOI</code> computed from <code>PUB_RECENT_INCIDENTS</code> + hours exposure (from <code>PUB_KPI</code>/<code>PUB_SUBS</code>).</div>
               <div><span class="k">Value vs Delta:</span> Value = current 30D EWIR. Delta = how much that EWIR moved compared to the previous 30D period.</div>
             </div>
@@ -813,7 +847,7 @@
           <div class="ioi-metric">
             <h4>MOMENTUM (30D) <span class="ioi-tag neutral">Context</span></h4>
             <div class="ioi-lines">
-              <div><span class="k">What it means:</span> A direction‑of‑travel signal. It summarizes whether the overall 30‑day risk picture is improving or worsening.</div>
+              <div><span class="k">What it means:</span> A direction-of-travel signal. It summarizes whether the overall 30-day risk picture is improving or worsening.</div>
               <div><span class="k">Data origin:</span> <code>PUB_IOI</code> (a blended signal from incidents, severity mix, and exposure patterns).</div>
               <div><span class="k">Value vs Delta:</span> Value = current momentum score. Delta = how the momentum shifted versus the prior 30D.</div>
             </div>
@@ -846,7 +880,7 @@
         </div>
       </div>
 
-      <div class="section">
+      <div class="section" id="subsSection">
         <h2>Subcontractor Performance</h2>
         <p>Top subcontractors by hours are shown below. Use the lookup to view any subcontractor.</p>
 
@@ -857,9 +891,9 @@
         </div>
 
         <div class="panel" id="subDetail" style="margin-top:12px;">
-          <div class="title">Select a subcontractor</div>
-          <div class="hint">Details will appear here.</div>
-          <div class="small">No selection.</div>
+          <div class="title">Loading subcontractors…</div>
+          <div class="hint">Please wait.</div>
+          <div class="small">—</div>
         </div>
 
         <div style="height:16px"></div>
@@ -878,7 +912,7 @@
         </div>
       </div>
 
-      <div class="section">
+      <div class="section" id="incSection">
         <h2>Incidents</h2>
         <p>Latest incidents shown. Search by subcontractor, project, or incident ID.</p>
 
@@ -890,7 +924,7 @@
             <option value="Moderate">Moderate</option>
             <option value="Low">Low</option>
           </select>
-          <button id="clear">Clear</button>
+          <button id="clear" type="button">Clear</button>
         </div>
 
         <div class="row" style="margin-top:10px;">
@@ -900,9 +934,9 @@
         </div>
 
         <div class="panel" id="incDetail" style="margin-top:12px;">
-          <div class="title">Select an incident</div>
-          <div class="hint">Details will appear here.</div>
-          <div class="small">No selection.</div>
+          <div class="title">Loading incidents…</div>
+          <div class="hint">Please wait.</div>
+          <div class="small">—</div>
         </div>
 
         <div class="inc-list" id="incidentList"></div>
@@ -913,26 +947,57 @@
         </div>
       </div>
 
-      <div class="status" id="status"></div>
+      <div class="status-top" id="topStatus" aria-live="polite"></div>
     </div>
   </div>
 
   <script>
-    /*** CONFIG: your published CSV URLs ***/
-    const KPI_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=152373673&single=true&output=csv";
-    const SUBS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=466735545&single=true&output=csv";
-    const INCIDENTS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=1844704592&single=true&output=csv";
+    /******************************************************************
+     * CONFIG
+     ******************************************************************/
+    const CONFIG = {
+      // Your published CSV URLs:
+      KPI_CSV: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=152373673&single=true&output=csv",
+      SUBS_CSV: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=466735545&single=true&output=csv",
+      INCIDENTS_CSV: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=1844704592&single=true&output=csv",
+      IOI_CSV: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=303885721&single=true&output=csv",
 
-    /* ✅ PASTE YOUR PUB_IOI PUBLISHED CSV LINK HERE */
-    const IOI_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=303885721&single=true&output=csv";
+      // Refresh controls:
+      AUTO_REFRESH_MS: 5 * 60 * 1000, // 5 minutes
+      IOI_REFRESH_MS: 2 * 60 * 1000,  // IOI can refresh more often if desired
 
-    /*** helpers ***/
-    const bust = (url) => url + (url.includes("?") ? "&" : "?") + "t=" + Date.now();
+      // UI controls:
+      TOP_SUBS_COUNT: 9,
+      SUB_INCIDENT_CAP: 25,
+      INCIDENTS_CAP_DEFAULT: 5,
+      INCIDENTS_CAP_FILTERED: 10,
 
-    function setStatus(msg, isErr=false){
-      const el = document.getElementById("status");
+      // Ticker:
+      TICKER_PX_PER_SEC: 55, // speed (px/sec)
+    };
+
+    /******************************************************************
+     * Tiny helpers
+     ******************************************************************/
+    const $ = (id) => document.getElementById(id);
+
+    function setTopStatus(msg, isErr=false){
+      const el = $("topStatus");
       el.textContent = msg || "";
-      el.className = "status" + (isErr ? " danger" : "");
+      el.className = "status-top" + (isErr ? " danger" : "");
+    }
+
+    function setIOIStatus(msg, isErr=false){
+      const el = $("ioiStatus");
+      el.textContent = msg || "";
+      el.className = "status-top" + (isErr ? " danger" : "");
+    }
+
+    function setLastUpdated(ts = new Date()){
+      $("lastUpdatedText").textContent = ts.toLocaleString(undefined, {
+        year: "numeric", month: "short", day: "2-digit",
+        hour: "2-digit", minute: "2-digit"
+      });
     }
 
     function toNumber(x){
@@ -945,6 +1010,47 @@
       return (x === null || x === undefined) ? "" : String(x);
     }
 
+    function fmtNum(n, digits=2){
+      const v = parseFloat(n);
+      if (!Number.isFinite(v)) return safeText(n) || "—";
+      return v.toFixed(digits);
+    }
+
+    function safeUrlMaybe(url){
+      const raw = safeText(url).trim();
+      if (!raw) return "";
+      try{
+        const u = new URL(raw, window.location.href);
+        if (u.protocol === "http:" || u.protocol === "https:") return u.href;
+        return "";
+      }catch{
+        return "";
+      }
+    }
+
+    function parseDateLoose(s){
+      const str = safeText(s).trim();
+      if (!str) return 0;
+      const t = Date.parse(str);
+      if (Number.isFinite(t)) return t;
+
+      // fallback attempt for common mm/dd/yyyy
+      const m = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+      if (m){
+        const mm = Number(m[1]) - 1;
+        const dd = Number(m[2]);
+        const yy = Number(m[3].length === 2 ? ("20" + m[3]) : m[3]);
+        const d = new Date(yy, mm, dd);
+        return d.getTime();
+      }
+      return 0;
+    }
+
+    /******************************************************************
+     * CSV parsing + Data service
+     ******************************************************************/
+    const bust = (url) => url + (url.includes("?") ? "&" : "?") + "t=" + Date.now();
+
     function parseCSV(text){
       const rows = [];
       let row = [];
@@ -955,16 +1061,16 @@
         const c = text[i];
         const next = text[i+1];
 
-        if (c === '"' ){
+        if (c === '"'){
           if (inQuotes && next === '"'){ cur += '"'; i++; }
           else inQuotes = !inQuotes;
           continue;
         }
-        if (!inQuotes && c === "," ){
+        if (!inQuotes && c === ","){
           row.push(cur); cur = ""; continue;
         }
-        if (!inQuotes && (c === "\n" || c === "\r")) {
-          if (c === "\r"  && next === "\n")  i++;
+        if (!inQuotes && (c === "\n" || c === "\r")){
+          if (c === "\r" && next === "\n") i++;
           row.push(cur);
           rows.push(row);
           row = [];
@@ -983,224 +1089,293 @@
       if (!res.ok) throw new Error("Fetch failed: " + res.status);
       const txt = await res.text();
       const grid = parseCSV(txt);
-
       if (!grid.length) return [];
+
       const headers = grid[0].map(h => String(h).trim());
       const out = [];
 
       for (let i=1; i<grid.length; i++){
         const obj = {};
         for (let j=0; j<headers.length; j++){
-          obj[headers[j] || ("col"+j)] = (grid[i][j] ?? "").trim();
+          const key = headers[j] || ("col"+j);
+          obj[key] = (grid[i][j] ?? "").trim();
         }
         out.push(obj);
       }
       return out;
     }
 
-    /*** KPI ***/
+    /******************************************************************
+     * DOM-safe element builders (avoid innerHTML for CSV content)
+     ******************************************************************/
+    function el(tag, attrs = {}, children = []){
+      const node = document.createElement(tag);
+      for (const [k,v] of Object.entries(attrs)){
+        if (k === "class") node.className = v;
+        else if (k === "text") node.textContent = v;
+        else if (k.startsWith("on") && typeof v === "function") node.addEventListener(k.slice(2), v);
+        else node.setAttribute(k, String(v));
+      }
+      for (const c of children){
+        if (c === null || c === undefined) continue;
+        node.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
+      }
+      return node;
+    }
+
+    function clearNode(node){
+      while (node.firstChild) node.removeChild(node.firstChild);
+    }
+
+    /******************************************************************
+     * KPI rendering
+     ******************************************************************/
     function renderKPIs(kpis){
       const map = {};
-      kpis.forEach(r => { map[r.Metric] = r.Value; });
+      for (const r of kpis) map[r.Metric] = r.Value;
 
-      const kpiEls = document.getElementById("kpis").querySelectorAll(".kpi .val");
       const totalHours = safeText(map["Total Man-Hours"] ?? "—");
       const trir = safeText(map["TRIR"] ?? "—");
       const ltir = safeText(map["LTIR"] ?? "—");
       const rec = safeText(map["Total Recordables"] ?? "—");
       const active = safeText(map["Active Subcontractors"] ?? "—");
 
-      kpiEls[0].textContent = totalHours;
-      kpiEls[1].textContent = trir;
-      kpiEls[2].textContent = ltir;
-      kpiEls[3].textContent = rec;
-      kpiEls[4].textContent = active;
+      const kpiEls = $("kpis").querySelectorAll(".kpi .val");
+      const vals = [totalHours, trir, ltir, rec, active];
+
+      vals.forEach((v, i) => {
+        const cell = kpiEls[i];
+        cell.classList.remove("skeleton", "skel");
+        cell.textContent = v;
+      });
     }
 
-    /*** IOI TICKER ***/
-    function fmt(n, d=2){
-      const num = parseFloat(n);
-      if (!Number.isFinite(num)) return safeText(n) || "—";
-      return num.toFixed(d);
-    }
+    /******************************************************************
+     * IOI ticker (JS-driven for seamless loop + pause)
+     ******************************************************************/
+    const Ticker = (() => {
+      let raf = 0;
+      let lastTs = 0;
+      let x = 0;
+      let paused = false;
 
-    function buildTick(label, value, delta, opts = {}){
-      const {
-        decimals = 2,
-        deltaDecimals = 2,
-        polarity = "neutral", // "higher_better" | "higher_worse" | "neutral"
-        tooltip = "",
-        showDelta = true
-      } = opts;
-
-      const d = parseFloat(delta);
-      const hasDelta = Number.isFinite(d);
-
-      // Arrow shows direction of change (purely factual).
-      let arrow = "•";
-      if (hasDelta){
-        if (d > 0) arrow = "▲";
-        else if (d < 0) arrow = "▼";
-      }
-
-      // Color class reflects the metric's polarity (still factual: "increase/decrease"),
-      // not a judgment label in the UI.
-      let cls = "flat";
-      if (hasDelta && polarity !== "neutral"){
-        const isIncrease = d > 0;
-        const isDecrease = d < 0;
-
-        if (polarity === "higher_worse"){
-          if (isIncrease) cls = "neg";      // increase -> worse -> red
-          else if (isDecrease) cls = "pos"; // decrease -> better -> green
-        } else if (polarity === "higher_better"){
-          if (isIncrease) cls = "pos";
-          else if (isDecrease) cls = "neg";
+      function buildTick(label, value, delta){
+        const d = parseFloat(delta);
+        let cls = "flat", arrow = "•", sign = "";
+        if (Number.isFinite(d)){
+          if (d > 0){ cls = "up"; arrow = "▲"; sign = "+"; }
+          else if (d < 0){ cls = "down"; arrow = "▼"; sign = ""; }
         }
+        const deltaTxt = Number.isFinite(d) ? `${arrow} ${sign}${fmtNum(d, 2)}` : "• —";
+
+        const root = el("div", { class: "tick" }, [
+          el("span", { class: "sym", text: label }),
+          el("span", { class: "val", text: value }),
+          el("span", { class: "chg " + cls, text: deltaTxt })
+        ]);
+        return root;
       }
 
-      const deltaTxt = (!showDelta || !hasDelta)
-        ? "• —"
-        : `${arrow} Δ ${d > 0 ? "+" : ""}${fmt(d, deltaDecimals)}`;
-
-      const titleAttr = tooltip ? ` title="${tooltip.replace(/"/g, "&quot;")}"` : "";
-
-      return `
-        <div class="tick"${titleAttr}>
-          <span class="sym">${label}</span>
-          <span class="val">${value}</span>
-          <span class="chg ${cls}">${deltaTxt}</span>
-        </div>
-      `;
-    }
-
-    // Metric config keeps the ticker neutral + consistent without the side panel.
-    const IOI_META = {
-      EWIR: {
-        label: "EWIR (30D)",
-        decimals: 2,
-        deltaDecimals: 2,
-        polarity: "higher_worse",
-        tooltip: "Exposure‑weighted incident rate (rolling 30 days). Value = current 30D. Δ = change vs prior 30D."
-      },
-      RISK_CONC: {
-        label: "RISK CONC (30D)",
-        decimals: 4,
-        deltaDecimals: 4,
-        polarity: "higher_worse",
-        tooltip: "Concentration of incidents (rolling 30 days). Higher = more clustered. Δ = change vs prior 30D."
-      },
-      MOMENTUM: {
-        label: "MOMENTUM (30D)",
-        decimals: 2,
-        deltaDecimals: 2,
-        polarity: "neutral",
-        tooltip: "Direction-of-travel score (rolling 30 days). Value = current score. Δ = change vs prior 30D."
-      },
-      TOP_RISK_SUB: {
-        label: "TOP RISK SUB (≥10,000H)",
-        tooltip: "Subcontractor with the highest 30D risk signal among subs with ≥10,000 hours exposure."
-      }
-    };
-function renderIOITicker(ioiRow){
-      const track = document.getElementById("tickerTrack");
-
-      if (!ioiRow){
-        track.innerHTML = `<div class="tick"><span class="sym">IOI</span><span class="val">No data</span><span class="chg flat">• —</span></div>`;
-        return;
+      function buildStaticTick(label, value){
+        return el("div", { class: "tick" }, [
+          el("span", { class: "sym", text: label }),
+          el("span", { class: "val", text: value || "—" }),
+          el("span", { class: "chg flat", text: "•" })
+        ]);
       }
 
-      // Expected PUB_IOI headers:
-      // EWIR_30, EWIR_DELTA, RISK_CONC_30, RISK_CONC_DELTA, MOMENTUM_30, MOMENTUM_DELTA, TOP_RISK_SUB_30
-      const ewir  = safeText(ioiRow.EWIR_30 || "");
-      const ewirD = safeText(ioiRow.EWIR_DELTA || "");
+      function render(ioiRow){
+        const track = $("tickerTrack");
+        clearNode(track);
 
-      const rc  = safeText(ioiRow.RISK_CONC_30 || "");
-      const rcD = safeText(ioiRow.RISK_CONC_DELTA || "");
-
-      const mom  = safeText(ioiRow.MOMENTUM_30 || "");
-      const momD = safeText(ioiRow.MOMENTUM_DELTA || "");
-
-      const top = safeText(ioiRow.TOP_RISK_SUB_30 || "");
-
-      const items = [
-        buildTick(IOI_META.EWIR.label, fmt(ewir, IOI_META.EWIR.decimals), ewirD, IOI_META.EWIR),
-        buildTick(IOI_META.RISK_CONC.label, fmt(rc, IOI_META.RISK_CONC.decimals), rcD, IOI_META.RISK_CONC),
-        buildTick(IOI_META.MOMENTUM.label, fmt(mom, IOI_META.MOMENTUM.decimals), momD, IOI_META.MOMENTUM),
-        `
-        <div class="tick" title="${IOI_META.TOP_RISK_SUB.tooltip.replace(/"/g, "&quot;")}">
-          <span class="sym">${IOI_META.TOP_RISK_SUB.label}</span>
-          <span class="val">${top || "—"}</span>
-          <span class="chg flat">•</span>
-        </div>
-        `
-      ].join("");
-
-      // Duplicate for seamless loop (animation goes to -50%)
-      track.innerHTML = items + items;
-    }
-    async function loadIOI(){
-      try{
-        // If you haven't pasted IOI_CSV yet, don't explode the page.
-        if (!IOI_CSV || IOI_CSV.includes("PASTE_YOUR_PUB_IOI_CSV_URL_HERE")){
-          renderIOITicker(null);
+        if (!ioiRow){
+          track.appendChild(buildStaticTick("IOI", "No data"));
+          track.appendChild(buildStaticTick("IOI", "No data")); // duplicate for loop
           return;
         }
-        const rows = await fetchTable(IOI_CSV);
-        // PUB_IOI is a single row output (Row 2)
-        renderIOITicker(rows[0] || null);
-      } catch (e){
+
+        const ewir = safeText(ioiRow.EWIR_30 || "");
+        const ewirD = safeText(ioiRow.EWIR_DELTA || "");
+
+        const rc = safeText(ioiRow.RISK_CONC_30 || "");
+        const rcD = safeText(ioiRow.RISK_CONC_DELTA || "");
+
+        const mom = safeText(ioiRow.MOMENTUM_30 || "");
+        const momD = safeText(ioiRow.MOMENTUM_DELTA || "");
+
+        const top = safeText(ioiRow.TOP_RISK_SUB_30 || "");
+
+        const items = [
+          buildTick("EWIR (30D)", fmtNum(ewir,2), ewirD),
+          buildTick("RISK CONC (30D)", fmtNum(rc,4), rcD),
+          buildTick("MOMENTUM (30D)", fmtNum(mom,2), momD),
+          buildStaticTick("TOP RISK SUB (≥10,000H)", top || "—"),
+        ];
+
+        // Duplicate for infinite loop
+        for (const node of items) track.appendChild(node);
+        for (const node of items.map(n => n.cloneNode(true))) track.appendChild(node);
+
+        // Reset animation position
+        x = 0;
+        track.style.transform = "translateX(0px)";
+      }
+
+      function start(){
+        stop();
+        const prefersReduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (prefersReduce) return;
+
+        const track = $("tickerTrack");
+        const wrap = $("ioiTicker");
+        if (!track || !wrap) return;
+
+        wrap.addEventListener("mouseenter", () => paused = true);
+        wrap.addEventListener("mouseleave", () => paused = false);
+
+        const step = (ts) => {
+          if (!lastTs) lastTs = ts;
+          const dt = (ts - lastTs) / 1000;
+          lastTs = ts;
+
+          if (!paused){
+            const speed = CONFIG.TICKER_PX_PER_SEC;
+            x -= speed * dt;
+
+            // Loop logic:
+            // When we've shifted beyond the width of the first half, wrap.
+            const totalW = track.scrollWidth;
+            const halfW = totalW / 2;
+
+            if (Number.isFinite(halfW) && halfW > 0){
+              if (-x >= halfW) x += halfW;
+            }
+
+            track.style.transform = `translateX(${x}px)`;
+          }
+
+          raf = requestAnimationFrame(step);
+        };
+
+        raf = requestAnimationFrame(step);
+      }
+
+      function stop(){
+        if (raf) cancelAnimationFrame(raf);
+        raf = 0;
+        lastTs = 0;
+      }
+
+      return { render, start, stop };
+    })();
+
+    async function loadIOI(){
+      try{
+        setIOIStatus("Loading IOI…");
+        const rows = await fetchTable(CONFIG.IOI_CSV);
+        Ticker.render(rows[0] || null);
+        Ticker.start();
+        setIOIStatus("");
+      }catch (e){
         console.error(e);
-        renderIOITicker(null);
+        Ticker.render(null);
+        setIOIStatus("IOI failed to load. Check PUB_IOI publish link.", true);
       }
     }
 
+    /******************************************************************
+     * IOI Panel (A11y improved: focus trap + restore focus)
+     ******************************************************************/
+    const IOIPanel = (() => {
+      let lastFocus = null;
 
-    /*** IOI EXPLAINER PANEL ***/
-    function openIOIPanel(){
-      const panel = document.getElementById("ioiPanel");
-      const back = document.getElementById("ioiBackdrop");
-      if (!panel || !back) return;
+      function focusables(container){
+        return [...container.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )].filter(el => !el.hasAttribute("disabled") && !el.getAttribute("aria-hidden"));
+      }
 
-      panel.classList.add("open");
-      back.classList.add("open");
-      panel.setAttribute("aria-hidden", "false");
-      back.setAttribute("aria-hidden", "false");
+      function open(){
+        const panel = $("ioiPanel");
+        const back = $("ioiBackdrop");
+        if (!panel || !back) return;
 
-      // lock body scroll while panel open (mobile especially)
-      document.body.style.overflow = "hidden";
+        lastFocus = document.activeElement;
 
-      // focus management (accessibility + keyboard)
-      const close = document.getElementById("ioiCloseBtn");
-      if (close) close.focus();
-    }
+        panel.classList.add("open");
+        back.classList.add("open");
+        panel.setAttribute("aria-hidden", "false");
+        back.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
 
-    function closeIOIPanel(){
-      const panel = document.getElementById("ioiPanel");
-      const back = document.getElementById("ioiBackdrop");
-      if (!panel || !back) return;
+        const btn = $("ioiCloseBtn");
+        if (btn) btn.focus();
+      }
 
-      panel.classList.remove("open");
-      back.classList.remove("open");
-      panel.setAttribute("aria-hidden", "true");
-      back.setAttribute("aria-hidden", "true");
+      function close(){
+        const panel = $("ioiPanel");
+        const back = $("ioiBackdrop");
+        if (!panel || !back) return;
 
-      document.body.style.overflow = "";
+        panel.classList.remove("open");
+        back.classList.remove("open");
+        panel.setAttribute("aria-hidden", "true");
+        back.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
 
-      const btn = document.getElementById("ioiExplainBtn");
-      if (btn) btn.focus();
-    }
+        if (lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
+        else $("ioiExplainBtn")?.focus();
+      }
 
-    function toggleIOIPanel(){
-      const panel = document.getElementById("ioiPanel");
-      if (!panel) return;
-      if (panel.classList.contains("open")) closeIOIPanel();
-      else openIOIPanel();
-    }
+      function toggle(){
+        const panel = $("ioiPanel");
+        if (!panel) return;
+        panel.classList.contains("open") ? close() : open();
+      }
 
+      function wire(){
+        $("ioiExplainBtn")?.addEventListener("click", toggle);
+        $("ioiCloseBtn")?.addEventListener("click", close);
+        $("ioiBackdrop")?.addEventListener("click", close);
 
-    /*** SUBS ***/
+        document.addEventListener("keydown", (e) => {
+          const panel = $("ioiPanel");
+          if (!panel || !panel.classList.contains("open")) return;
+
+          if (e.key === "Escape"){
+            e.preventDefault();
+            close();
+            return;
+          }
+
+          if (e.key === "Tab"){
+            const f = focusables(panel);
+            if (!f.length) return;
+
+            const first = f[0];
+            const last = f[f.length - 1];
+            const active = document.activeElement;
+
+            if (e.shiftKey && active === first){
+              e.preventDefault();
+              last.focus();
+            } else if (!e.shiftKey && active === last){
+              e.preventDefault();
+              first.focus();
+            }
+          }
+        });
+      }
+
+      return { wire, open, close, toggle };
+    })();
+
+    /******************************************************************
+     * Subcontractors
+     ******************************************************************/
     let SUBS_ALL = [];
+    let INC_ALL = [];
+    let ACTIVE_SUB = "";
 
     function normalizeSubsRows(rows){
       return rows.map(r => {
@@ -1217,150 +1392,51 @@ function renderIOITicker(ioiRow){
           incidents,
           recordables,
           lost,
-          trir: (trir === "" ? "" : String(trir)),
-          ltir: (ltir === "" ? "" : String(ltir))
+          trir: trir === "" ? "" : String(trir),
+          ltir: ltir === "" ? "" : String(ltir)
         };
       }).filter(x => x.sub && x.sub.toLowerCase() !== "subcontractor");
     }
 
     function renderSubDetail(item){
-      const box = document.getElementById("subDetail");
+      const box = $("subDetail");
+      clearNode(box);
+
       if (!item){
-        box.innerHTML = `
-          <div class="title">Select a subcontractor</div>
-          <div class="hint">Details will appear here.</div>
-          <div class="small">No selection.</div>
-        `;
+        box.appendChild(el("div", { class: "title", text: "Select a subcontractor" }));
+        box.appendChild(el("div", { class: "hint", text: "Details will appear here." }));
+        box.appendChild(el("div", { class: "small", text: "No selection." }));
         return;
       }
 
-      box.innerHTML = `
-        <div class="title">${item.sub}</div>
-        <div class="hint">YTD exposure & rates</div>
-        <div class="kv">
-          <div class="k">Hours</div><div class="v">${item.hours.toLocaleString()}</div>
-          <div class="k">Incidents</div><div class="v">${item.incidents}</div>
-          <div class="k">Recordables</div><div class="v">${item.recordables}</div>
-          <div class="k">Lost Time</div><div class="v">${item.lost}</div>
-          <div class="k">TRIR</div><div class="v">${item.trir || "0"}</div>
-          <div class="k">LTIR</div><div class="v">${item.ltir || "0"}</div>
-        </div>
-      `;
+      box.appendChild(el("div", { class: "title", text: item.sub }));
+      box.appendChild(el("div", { class: "hint", text: "YTD exposure & rates" }));
+
+      const kv = el("div", { class: "kv" }, [
+        el("div", { class: "k", text: "Hours" }), el("div", { class: "v", text: item.hours.toLocaleString() }),
+        el("div", { class: "k", text: "Incidents" }), el("div", { class: "v", text: String(item.incidents) }),
+        el("div", { class: "k", text: "Recordables" }), el("div", { class: "v", text: String(item.recordables) }),
+        el("div", { class: "k", text: "Lost Time" }), el("div", { class: "v", text: String(item.lost) }),
+        el("div", { class: "k", text: "TRIR" }), el("div", { class: "v", text: item.trir || "0" }),
+        el("div", { class: "k", text: "LTIR" }), el("div", { class: "v", text: item.ltir || "0" }),
+      ]);
+      box.appendChild(kv);
     }
-
-    function renderSubs(rows){
-      SUBS_ALL = normalizeSubsRows(rows);
-
-      const dl = document.getElementById("subList");
-      dl.innerHTML = [...SUBS_ALL]
-        .sort((a,b)=> a.sub.localeCompare(b.sub))
-        .map(r => `<option value="${r.sub}"></option>`)
-        .join("");
-
-      const top = [...SUBS_ALL].sort((a,b)=> b.hours - a.hours).slice(0, 9);
-      const wrap = document.getElementById("subCards");
-      wrap.innerHTML = top.map(r => `
-        <div class="card clickable" data-sub="${r.sub}">
-          <h3>${r.sub}</h3>
-          <div class="meta">YTD exposure & rates</div>
-          <div class="kv">
-            <div class="k">Hours</div><div class="v">${r.hours.toLocaleString()}</div>
-            <div class="k">Incidents</div><div class="v">${r.incidents}</div>
-            <div class="k">Recordables</div><div class="v">${r.recordables}</div>
-            <div class="k">TRIR</div><div class="v">${r.trir || "0"}</div>
-            <div class="k">LTIR</div><div class="v">${r.ltir || "0"}</div>
-          </div>
-        </div>
-      `).join("");
-
-      [...wrap.querySelectorAll(".card.clickable")].forEach(card=>{
-        card.addEventListener("click", ()=>{
-          const sub = card.dataset.sub || "";
-          setActiveSubCard(sub);
-          openSubIncidentsPanel(sub);
-        });
-      });
-
-      document.getElementById("subHint").textContent =
-        `Showing top ${top.length} by hours. Use lookup to view any of ${SUBS_ALL.length} subcontractors.`;
-
-      const pick = document.getElementById("subPick");
-      if (!pick.dataset.wired){
-        pick.dataset.wired = "1";
-        const apply = () => {
-          const v = (pick.value || "").trim().toLowerCase();
-          const found = SUBS_ALL.find(x => x.sub.toLowerCase() === v);
-          renderSubDetail(found || null);
-        };
-        pick.addEventListener("change", apply);
-        pick.addEventListener("blur", apply);
-        pick.addEventListener("keydown", (e)=>{ if (e.key === "Enter") apply(); });
-      }
-    }
-
-    /*** INCIDENTS ***/
-    let INC_ALL = [];
-    let ACTIVE_SUB = "";
 
     function setActiveSubCard(sub){
       ACTIVE_SUB = sub || "";
-      document.querySelectorAll("#subCards .card.clickable").forEach(el=>{
-        if ((el.dataset.sub || "") === ACTIVE_SUB) el.classList.add("active");
-        else el.classList.remove("active");
+      document.querySelectorAll("#subCards .card.clickable").forEach(elm => {
+        if ((elm.dataset.sub || "") === ACTIVE_SUB) elm.classList.add("active");
+        else elm.classList.remove("active");
       });
     }
 
     function pillForSeverity(sev){
       const s = (sev || "").toLowerCase();
-      if (s === "high") return `<span class="pill high">High</span>`;
-      if (s === "moderate") return `<span class="pill mod">Moderate</span>`;
-      if (s === "low") return `<span class="pill low">Low</span>`;
-      return "";
-    }
-
-    function openSubIncidentsPanel(sub){
-      const panel = document.getElementById("subIncPanel");
-      const title = document.getElementById("subIncTitle");
-      const hint = document.getElementById("subIncHint");
-      const list = document.getElementById("subIncList");
-
-      const s = (sub || "").trim();
-      title.textContent = s ? `Incidents — ${s}` : "Incidents —";
-      panel.style.display = "block";
-
-      const rows = [...INC_ALL]
-        .filter(r => String(r.Subcontractor || "").trim().toLowerCase() === s.toLowerCase())
-        .sort((a,b)=> String(b.Date||"").localeCompare(String(a.Date||"")));
-
-      hint.textContent = rows.length ? `${rows.length} incident(s) found.` : "No incidents found for this subcontractor.";
-
-      if (!rows.length){
-        list.innerHTML = `<div class="small">No incidents match.</div>`;
-        return;
-      }
-
-      const cap = 25;
-      const shown = rows.slice(0, cap);
-
-      list.innerHTML = shown.map(r => `
-        <div class="inc-row">
-          <div>
-            <strong>${safeText(r.Date) || "—"}</strong>
-            <div class="meta">${safeText(r.IncidentID) || "—"}</div>
-          </div>
-          <div>
-            <strong>${safeText(r.Subcontractor) || "—"} ${pillForSeverity(r.Severity)}</strong>
-            <div class="meta">${safeText(r.Project) || ""}</div>
-          </div>
-          <div style="text-align:right;">
-            ${r.ReportLink ? `<a class="link" href="${r.ReportLink}" target="_blank" rel="noopener">View report</a>` : `<span class="small">—</span>`}
-          </div>
-        </div>
-      `).join("");
-
-      if (rows.length > cap){
-        list.innerHTML += `<div class="small" style="padding-top:10px;">Showing first ${cap}. Refine using the Incidents search below if needed.</div>`;
-      }
+      if (s === "high") return { cls: "pill high", text: "High" };
+      if (s === "moderate") return { cls: "pill mod", text: "Moderate" };
+      if (s === "low") return { cls: "pill low", text: "Low" };
+      return null;
     }
 
     function normalizeIncidentRows(rows){
@@ -1370,197 +1446,347 @@ function renderIOITicker(ioiRow){
         Subcontractor: r.Subcontractor || r.subcontractor || r.Sub || "",
         Project: r.Project || r.project || "",
         Severity: r.Severity || r.severity || "",
-        ReportLink: r.ReportLink || r.reportlink || r.Link || ""
+        ReportLink: safeUrlMaybe(r.ReportLink || r.reportlink || r.Link || "")
       })).filter(x => x.IncidentID && String(x.IncidentID).trim().toLowerCase() !== "incidentid");
     }
 
-    function renderIncidentDetail(item){
-      const box = document.getElementById("incDetail");
-      if(!item){
-        box.innerHTML = `
-          <div class="title">Select an incident</div>
-          <div class="hint">Details will appear here.</div>
-          <div class="small">No selection.</div>
-        `;
+    function renderSubs(rows){
+      SUBS_ALL = normalizeSubsRows(rows);
+
+      const dl = $("subList");
+      clearNode(dl);
+      [...SUBS_ALL].sort((a,b) => a.sub.localeCompare(b.sub)).forEach(r => {
+        dl.appendChild(el("option", { value: r.sub }));
+      });
+
+      const top = [...SUBS_ALL].sort((a,b)=> b.hours - a.hours).slice(0, CONFIG.TOP_SUBS_COUNT);
+
+      const wrap = $("subCards");
+      clearNode(wrap);
+
+      top.forEach(r => {
+        const card = el("div", { class: "card clickable" });
+        card.dataset.sub = r.sub;
+
+        card.appendChild(el("h3", { text: r.sub }));
+        card.appendChild(el("div", { class: "meta", text: "YTD exposure & rates" }));
+
+        const kv = el("div", { class: "kv" }, [
+          el("div", { class: "k", text: "Hours" }), el("div", { class: "v", text: r.hours.toLocaleString() }),
+          el("div", { class: "k", text: "Incidents" }), el("div", { class: "v", text: String(r.incidents) }),
+          el("div", { class: "k", text: "Recordables" }), el("div", { class: "v", text: String(r.recordables) }),
+          el("div", { class: "k", text: "TRIR" }), el("div", { class: "v", text: r.trir || "0" }),
+          el("div", { class: "k", text: "LTIR" }), el("div", { class: "v", text: r.ltir || "0" }),
+        ]);
+        card.appendChild(kv);
+
+        card.addEventListener("click", () => {
+          setActiveSubCard(r.sub);
+          openSubIncidentsPanel(r.sub);
+        });
+
+        wrap.appendChild(card);
+      });
+
+      $("subHint").textContent = `Showing top ${top.length} by hours. Use lookup to view any of ${SUBS_ALL.length} subcontractors.`;
+
+      // Wire lookup
+      const pick = $("subPick");
+      const apply = () => {
+        const v = (pick.value || "").trim().toLowerCase();
+        const found = SUBS_ALL.find(x => x.sub.toLowerCase() === v);
+        renderSubDetail(found || null);
+      };
+      pick.onchange = apply;
+      pick.onblur = apply;
+      pick.onkeydown = (e) => { if (e.key === "Enter") apply(); };
+
+      // Default detail
+      renderSubDetail(null);
+    }
+
+    function openSubIncidentsPanel(sub){
+      const panel = $("subIncPanel");
+      const title = $("subIncTitle");
+      const hint = $("subIncHint");
+      const list = $("subIncList");
+
+      const s = (sub || "").trim();
+      title.textContent = s ? `Incidents — ${s}` : "Incidents —";
+      panel.style.display = "block";
+
+      const rows = [...INC_ALL]
+        .filter(r => safeText(r.Subcontractor).trim().toLowerCase() === s.toLowerCase())
+        .sort((a,b)=> (parseDateLoose(b.Date) - parseDateLoose(a.Date)));
+
+      hint.textContent = rows.length ? `${rows.length} incident(s) found.` : "No incidents found for this subcontractor.";
+
+      clearNode(list);
+
+      if (!rows.length){
+        list.appendChild(el("div", { class: "small", text: "No incidents match." }));
         return;
       }
 
-      box.innerHTML = `
-        <div class="title">${safeText(item.IncidentID) || "—"}</div>
-        <div class="hint">${safeText(item.Date) || ""} • ${safeText(item.Severity) || "—"} • ${safeText(item.Subcontractor) || "—"}</div>
-        <div class="kv">
-          <div class="k">Project</div><div class="v">${safeText(item.Project) || "—"}</div>
-          <div class="k">Subcontractor</div><div class="v">${safeText(item.Subcontractor) || "—"}</div>
-          <div class="k">Severity</div><div class="v">${safeText(item.Severity) || "—"}</div>
-          <div class="k">Date</div><div class="v">${safeText(item.Date) || "—"}</div>
-        </div>
-        <div style="margin-top:12px;">
-          ${item.ReportLink
-            ? `<a class="link" href="${item.ReportLink}" target="_blank" rel="noopener">View report</a>`
-            : `<span class="small">No report link</span>`}
-        </div>
-      `;
-    }
+      const cap = CONFIG.SUB_INCIDENT_CAP;
+      const shown = rows.slice(0, cap);
 
-    function renderIncidentsLookup(rows){
-      INC_ALL = normalizeIncidentRows(rows);
+      shown.forEach(r => {
+        const row = el("div", { class: "inc-row" });
 
-      const dl = document.getElementById("incList");
-      dl.innerHTML = [...INC_ALL]
-        .sort((a,b)=> String(a.IncidentID).localeCompare(String(b.IncidentID)))
-        .map(r => `<option value="${safeText(r.IncidentID)}"></option>`)
-        .join("");
+        // col 1
+        const c1 = el("div", {}, [
+          el("strong", { text: safeText(r.Date) || "—" }),
+          el("div", { class: "meta", text: safeText(r.IncidentID) || "—" })
+        ]);
 
-      const pick = document.getElementById("incPick");
-      if(!pick.dataset.wired){
-        pick.dataset.wired = "1";
-        const apply = () => {
-          const v = (pick.value || "").trim().toLowerCase();
-          const found = INC_ALL.find(x => String(x.IncidentID || "").trim().toLowerCase() === v);
-          renderIncidentDetail(found || null);
-        };
-        pick.addEventListener("change", apply);
-        pick.addEventListener("blur", apply);
-        pick.addEventListener("keydown", (e)=>{ if(e.key==="Enter") apply(); });
+        // col 2
+        const sev = pillForSeverity(r.Severity);
+        const strong = el("strong", { text: safeText(r.Subcontractor) || "—" });
+        if (sev){
+          strong.appendChild(document.createTextNode(" "));
+          strong.appendChild(el("span", { class: sev.cls, text: sev.text }));
+        }
+        const c2 = el("div", {}, [
+          strong,
+          el("div", { class: "meta", text: safeText(r.Project) || "" })
+        ]);
+
+        // col 3
+        const c3 = el("div", { style: "text-align:right;" });
+        if (r.ReportLink){
+          c3.appendChild(el("a", { class: "link", href: r.ReportLink, target: "_blank", rel: "noopener", text: "View report" }));
+        } else {
+          c3.appendChild(el("span", { class: "small", text: "—" }));
+        }
+
+        row.appendChild(c1);
+        row.appendChild(c2);
+        row.appendChild(c3);
+
+        list.appendChild(row);
+      });
+
+      if (rows.length > cap){
+        list.appendChild(el("div", { class: "small", style: "padding-top:10px;", text: `Showing first ${cap}. Refine using the Incidents search below if needed.` }));
       }
     }
 
-    function renderIncidentsTable(allIncidents){
-      const q = document.getElementById("q").value.trim().toLowerCase();
-      const sev = document.getElementById("sev").value;
+    /******************************************************************
+     * Incidents list + detail + filters
+     ******************************************************************/
+    function renderIncidentDetail(item){
+      const box = $("incDetail");
+      clearNode(box);
 
-      let rows = normalizeIncidentRows(allIncidents);
+      if (!item){
+        box.appendChild(el("div", { class: "title", text: "Select an incident" }));
+        box.appendChild(el("div", { class: "hint", text: "Details will appear here." }));
+        box.appendChild(el("div", { class: "small", text: "No selection." }));
+        return;
+      }
 
-      if (sev) rows = rows.filter(r => (r.Severity || "") === sev);
+      box.appendChild(el("div", { class: "title", text: safeText(item.IncidentID) || "—" }));
+      box.appendChild(el("div", { class: "hint", text: `${safeText(item.Date) || ""} • ${safeText(item.Severity) || "—"} • ${safeText(item.Subcontractor) || "—"}` }));
+
+      const kv = el("div", { class: "kv" }, [
+        el("div", { class: "k", text: "Project" }), el("div", { class: "v", text: safeText(item.Project) || "—" }),
+        el("div", { class: "k", text: "Subcontractor" }), el("div", { class: "v", text: safeText(item.Subcontractor) || "—" }),
+        el("div", { class: "k", text: "Severity" }), el("div", { class: "v", text: safeText(item.Severity) || "—" }),
+        el("div", { class: "k", text: "Date" }), el("div", { class: "v", text: safeText(item.Date) || "—" }),
+      ]);
+      box.appendChild(kv);
+
+      const footer = el("div", { style: "margin-top:12px;" });
+      if (item.ReportLink){
+        footer.appendChild(el("a", { class: "link", href: item.ReportLink, target: "_blank", rel: "noopener", text: "View report" }));
+      } else {
+        footer.appendChild(el("span", { class: "small", text: "No report link" }));
+      }
+      box.appendChild(footer);
+    }
+
+    function renderIncidentsLookup(){
+      const dl = $("incList");
+      clearNode(dl);
+      [...INC_ALL].sort((a,b)=> String(a.IncidentID).localeCompare(String(b.IncidentID))).forEach(r => {
+        dl.appendChild(el("option", { value: safeText(r.IncidentID) }));
+      });
+
+      const pick = $("incPick");
+      const apply = () => {
+        const v = (pick.value || "").trim().toLowerCase();
+        const found = INC_ALL.find(x => safeText(x.IncidentID).trim().toLowerCase() === v);
+        renderIncidentDetail(found || null);
+      };
+      pick.onchange = apply;
+      pick.onblur = apply;
+      pick.onkeydown = (e) => { if (e.key === "Enter") apply(); };
+    }
+
+    function renderIncidentsTable(){
+      const q = $("q").value.trim().toLowerCase();
+      const sev = $("sev").value;
+
+      let rows = [...INC_ALL];
+
+      if (sev) rows = rows.filter(r => safeText(r.Severity) === sev);
 
       if (q){
         rows = rows.filter(r => (
-          String(r.IncidentID || "").toLowerCase().includes(q) ||
-          String(r.Subcontractor || "").toLowerCase().includes(q) ||
-          String(r.Project || "").toLowerCase().includes(q)
+          safeText(r.IncidentID).toLowerCase().includes(q) ||
+          safeText(r.Subcontractor).toLowerCase().includes(q) ||
+          safeText(r.Project).toLowerCase().includes(q)
         ));
       }
 
-      rows.sort((a,b)=>{
-        const da = Date.parse(a.Date) || 0;
-        const db = Date.parse(b.Date) || 0;
-        return db - da;
-      });
+      rows.sort((a,b)=> parseDateLoose(b.Date) - parseDateLoose(a.Date));
 
-      const cap = (q || sev) ? 10 : 5;
+      const cap = (q || sev) ? CONFIG.INCIDENTS_CAP_FILTERED : CONFIG.INCIDENTS_CAP_DEFAULT;
       const shown = rows.slice(0, cap);
 
-      document.getElementById("incHint").textContent =
-        (q || sev)
-          ? `Showing top ${Math.min(cap, rows.length)} matches (capped).`
-          : "Showing latest 5 incidents.";
+      $("incHint").textContent = (q || sev)
+        ? `Showing top ${Math.min(cap, rows.length)} matches (capped).`
+        : `Showing latest ${CONFIG.INCIDENTS_CAP_DEFAULT} incidents.`;
 
-      const list = document.getElementById("incidentList");
+      const list = $("incidentList");
+      clearNode(list);
+
       if (!shown.length){
-        list.innerHTML = `<div class="small" style="padding:12px 0;">No incidents match your filters.</div>`;
+        list.appendChild(el("div", { class: "small", style: "padding:12px 0;", text: "No incidents match your filters." }));
         return;
       }
 
-      list.innerHTML = shown.map(r => `
-        <div class="inc-row">
-          <div>
-            <strong>${safeText(r.Date) || "—"}</strong>
-            <div class="meta">${safeText(r.IncidentID) || "—"}</div>
-          </div>
-          <div>
-            <strong>${safeText(r.Subcontractor) || "—"} ${pillForSeverity(r.Severity)}</strong>
-            <div class="meta">${safeText(r.Project) || ""}</div>
-          </div>
-          <div style="text-align:right;">
-            ${r.ReportLink ? `<a class="link" href="${r.ReportLink}" target="_blank" rel="noopener">View report</a>` : `<span class="small">—</span>`}
-          </div>
-        </div>
-      `).join("");
-    }
+      shown.forEach(r => {
+        const row = el("div", { class: "inc-row" });
 
-    /*** init ***/
-    (async function init(){
-      try {
-        setStatus("Loading data…");
-
-        const [kpis, subs, inc] = await Promise.all([
-          fetchTable(KPI_CSV),
-          fetchTable(SUBS_CSV),
-          fetchTable(INCIDENTS_CSV)
+        const c1 = el("div", {}, [
+          el("strong", { text: safeText(r.Date) || "—" }),
+          el("div", { class: "meta", text: safeText(r.IncidentID) || "—" })
         ]);
 
-        renderKPIs(kpis);
-        renderSubs(subs);
+        const sevP = pillForSeverity(r.Severity);
+        const strong = el("strong", { text: safeText(r.Subcontractor) || "—" });
+        if (sevP){
+          strong.appendChild(document.createTextNode(" "));
+          strong.appendChild(el("span", { class: sevP.cls, text: sevP.text }));
+        }
+        const c2 = el("div", {}, [
+          strong,
+          el("div", { class: "meta", text: safeText(r.Project) || "" })
+        ]);
+
+        const c3 = el("div", { style: "text-align:right;" });
+        if (r.ReportLink){
+          c3.appendChild(el("a", { class: "link", href: r.ReportLink, target: "_blank", rel: "noopener", text: "View report" }));
+        } else {
+          c3.appendChild(el("span", { class: "small", text: "—" }));
+        }
+
+        row.appendChild(c1);
+        row.appendChild(c2);
+        row.appendChild(c3);
+
+        list.appendChild(row);
+      });
+    }
+
+    function autoSelectLatestIncident(){
+      const latest = [...INC_ALL].sort((a,b)=> parseDateLoose(b.Date) - parseDateLoose(a.Date))[0];
+      if (latest) renderIncidentDetail(latest);
+      else renderIncidentDetail(null);
+    }
+
+    /******************************************************************
+     * Load pipeline (section-level resilience)
+     ******************************************************************/
+    async function loadAll(){
+      setTopStatus("Loading data…");
+      try{
+        const [kpis, subs, inc] = await Promise.all([
+          fetchTable(CONFIG.KPI_CSV).catch(e => (console.error(e), null)),
+          fetchTable(CONFIG.SUBS_CSV).catch(e => (console.error(e), null)),
+          fetchTable(CONFIG.INCIDENTS_CSV).catch(e => (console.error(e), null)),
+        ]);
+
+        // KPI
+        if (kpis) renderKPIs(kpis);
+        else {
+          setTopStatus("KPI failed to load. Check PUB_KPI publish link.", true);
+          // remove skeleton but show fallback
+          const kpiEls = $("kpis").querySelectorAll(".kpi .val");
+          kpiEls.forEach(elm => { elm.classList.remove("skeleton","skel"); elm.textContent = "—"; });
+        }
+
+        // Subs
+        if (subs){
+          renderSubs(subs);
+        } else {
+          $("subDetail").innerHTML = '<div class="title">Subcontractors failed to load.</div><div class="hint">Check SUBS CSV publish link.</div><div class="small">—</div>';
+          $("subHint").textContent = "Could not load subcontractor data.";
+        }
 
         // Incidents
-        renderIncidentsTable(inc);
-        renderIncidentsLookup(inc);
-
-        // Auto-select latest incident into detail panel
-        const latest = normalizeIncidentRows(inc).sort((a,b)=>{
-          const da = Date.parse(a.Date) || 0;
-          const db = Date.parse(b.Date) || 0;
-          return db - da;
-        })[0];
-        if (latest) renderIncidentDetail(latest);
-
-        // Sub incident panel close
-        const subClose = document.getElementById("subIncClose");
-        subClose.addEventListener("click", ()=>{
-          document.getElementById("subIncPanel").style.display = "none";
-          setActiveSubCard("");
-        });
-
-        document.getElementById("q").addEventListener("input", ()=>renderIncidentsTable(inc));
-        document.getElementById("sev").addEventListener("change", ()=>renderIncidentsTable(inc));
-        document.getElementById("clear").addEventListener("click", (e)=>{
-          e.preventDefault();
-          document.getElementById("q").value = "";
-          document.getElementById("sev").value = "";
-          renderIncidentsTable(inc);
-        });
-
-        // ✅ IOI ticker load (separate call so it doesn't block main UI)
-        loadIOI();
-
-        // ✅ IOI explainer wiring (button + backdrop + ESC)
-        const ioiBtn = document.getElementById("ioiExplainBtn");
-        const ioiClose = document.getElementById("ioiCloseBtn");
-        const ioiBack = document.getElementById("ioiBackdrop");
-
-        if (ioiBtn && !ioiBtn.dataset.wired){
-          ioiBtn.dataset.wired = "1";
-          ioiBtn.addEventListener("click", toggleIOIPanel);
-        }
-        if (ioiClose && !ioiClose.dataset.wired){
-          ioiClose.dataset.wired = "1";
-          ioiClose.addEventListener("click", closeIOIPanel);
-        }
-        if (ioiBack && !ioiBack.dataset.wired){
-          ioiBack.dataset.wired = "1";
-          ioiBack.addEventListener("click", closeIOIPanel);
+        if (inc){
+          INC_ALL = normalizeIncidentRows(inc);
+          renderIncidentsLookup();
+          renderIncidentsTable();
+          autoSelectLatestIncident();
+        } else {
+          $("incDetail").innerHTML = '<div class="title">Incidents failed to load.</div><div class="hint">Check INCIDENTS CSV publish link.</div><div class="small">—</div>';
+          $("incHint").textContent = "Could not load incidents.";
         }
 
-        document.addEventListener("keydown", (e)=>{
-          if (e.key === "Escape"){
-            const panel = document.getElementById("ioiPanel");
-            if (panel && panel.classList.contains("open")) closeIOIPanel();
-          }
-        });
-
-        setStatus("");
-      } catch (err){
+        setLastUpdated(new Date());
+        setTopStatus("");
+      }catch (err){
         console.error(err);
-        setStatus("Data fetch failed. Check CSV publish links, then refresh.", true);
-        document.getElementById("subHint").textContent = "Could not load subcontractor data. Verify your published SUBS CSV.";
-        document.getElementById("incHint").textContent = "Could not load incidents. Verify your published INCIDENTS CSV.";
+        setTopStatus("Data fetch failed. Check CSV publish links, then refresh.", true);
       }
+    }
+
+    /******************************************************************
+     * Wiring + Auto refresh
+     ******************************************************************/
+    function wireUI(){
+      // close sub incidents
+      $("subIncClose").addEventListener("click", () => {
+        $("subIncPanel").style.display = "none";
+        setActiveSubCard("");
+      });
+
+      // incident filters
+      $("q").addEventListener("input", renderIncidentsTable);
+      $("sev").addEventListener("change", renderIncidentsTable);
+      $("clear").addEventListener("click", () => {
+        $("q").value = "";
+        $("sev").value = "";
+        renderIncidentsTable();
+      });
+
+      IOIPanel.wire();
+    }
+
+    function startRefreshLoops(){
+      // Main refresh
+      if (CONFIG.AUTO_REFRESH_MS > 0){
+        setInterval(() => loadAll(), CONFIG.AUTO_REFRESH_MS);
+      }
+      // IOI refresh (separate, doesn't block)
+      if (CONFIG.IOI_REFRESH_MS > 0){
+        setInterval(() => loadIOI(), CONFIG.IOI_REFRESH_MS);
+      }
+    }
+
+    /******************************************************************
+     * INIT
+     ******************************************************************/
+    (async function init(){
+      wireUI();
+      await loadAll();
+      await loadIOI();
+      startRefreshLoops();
     })();
   </script>
 </body>
 </html>
-
-
-
-
-
