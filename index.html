@@ -502,11 +502,11 @@
       box-shadow: inset 0 0 0 1px rgba(255,255,255,.08);
     }
 
-    .chg.up{
+    .chg.pos{
       color: #20c997;
       background: rgba(32,201,151,.12);
     }
-    .chg.down{
+    .chg.neg{
       color: #ff5c5c;
       background: rgba(255,92,92,.12);
     }
@@ -878,90 +878,6 @@
         </div>
       </div>
 
-      <!-- ✅ IOI EXPLAINER (Executive panel) -->
-      <div class="ioi-backdrop" id="ioiBackdrop" aria-hidden="true"></div>
-      <div class="ioi-panel" id="ioiPanel" role="dialog" aria-modal="true" aria-labelledby="ioiPanelTitle" aria-hidden="true">
-        <header>
-          <div class="ph">
-            <div class="ptitle" id="ioiPanelTitle">Intelligent Operational Indicators</div>
-            <div class="psub">
-              Simple, executive-friendly definitions for the ticker above. These are <strong>rolling 30‑day</strong> signals meant to highlight
-              where attention should go <em>before</em> a serious event happens.
-            </div>
-          </div>
-          <button class="close" id="ioiCloseBtn" type="button" aria-label="Close IOI explainer">Close</button>
-        </header>
-
-        <div class="body">
-          <div class="ioi-note">
-            <strong>How to read the ticker:</strong> The first number is the current 30‑day value. The second number (▲/▼) is the change versus the prior 30‑day window.
-            <br><br>
-            <strong>Important:</strong> “Up” is not always good. Some indicators rising is <strong class="bad">worse</strong> (risk increasing).
-            This panel tells you which direction is good/bad for each indicator.
-          </div>
-
-          <div class="ioi-metric">
-            <h4>EWIR (30D) <span class="ioi-tag bad">Up = Bad</span></h4>
-            <div class="ioi-lines">
-              <div><span class="k">What it means:</span> An exposure‑weighted incident rate for the last 30 days. Think: “How much stuff is happening, adjusted for hours worked.”</div>
-              <div><span class="k">Data origin:</span> <code>PUB_IOI</code> computed from <code>PUB_RECENT_INCIDENTS</code> + hours exposure (from <code>PUB_KPI</code>/<code>PUB_SUBS</code>).</div>
-              <div><span class="k">Value vs Delta:</span> Value = current 30D EWIR. Delta = how much that EWIR moved compared to the previous 30D period.</div>
-            </div>
-            <div class="ioi-gates">
-              <div class="gate"><span class="b warn">Investigate</span>EWIR increases for 2 consecutive refresh cycles (trend), even if the number is “small.”</div>
-              <div class="gate"><span class="b alert">Escalate</span>Large positive delta (sharp jump), or EWIR stays elevated > 30 days.</div>
-            </div>
-          </div>
-
-          <div class="ioi-metric">
-            <h4>RISK CONC (30D) <span class="ioi-tag bad">Up = Bad</span></h4>
-            <div class="ioi-lines">
-              <div><span class="k">What it means:</span> Risk concentration—how clustered incidents are. Higher = problems are piling up in fewer places (one sub/site dragging the system).</div>
-              <div><span class="k">Data origin:</span> <code>PUB_IOI</code> derived from incident distribution in <code>PUB_RECENT_INCIDENTS</code> (by sub/project) and exposure.</div>
-              <div><span class="k">Value vs Delta:</span> Value = current 30D concentration. Delta = movement vs previous 30D period.</div>
-            </div>
-            <div class="ioi-gates">
-              <div class="gate"><span class="b warn">Investigate</span>Positive delta + the same sub/project repeatedly appearing in incidents.</div>
-              <div class="gate"><span class="b alert">Escalate</span>Concentration rising while total volume is flat (means the risk is “sticking” to one area).</div>
-            </div>
-          </div>
-
-          <div class="ioi-metric">
-            <h4>MOMENTUM (30D) <span class="ioi-tag neutral">Context</span></h4>
-            <div class="ioi-lines">
-              <div><span class="k">What it means:</span> A direction‑of‑travel signal. It summarizes whether the overall 30‑day risk picture is improving or worsening.</div>
-              <div><span class="k">Data origin:</span> <code>PUB_IOI</code> (a blended signal from incidents, severity mix, and exposure patterns).</div>
-              <div><span class="k">Value vs Delta:</span> Value = current momentum score. Delta = how the momentum shifted versus the prior 30D.</div>
-            </div>
-            <div class="ioi-gates">
-              <div class="gate"><span class="b warn">Investigate</span>Momentum rising at the same time EWIR or Risk Concentration rises.</div>
-              <div class="gate"><span class="b alert">Escalate</span>Momentum shows a sharp increase (big delta) even if recordables haven’t moved yet.</div>
-            </div>
-          </div>
-
-          <div class="ioi-metric">
-            <h4>TOP RISK SUB (≥10,000H) <span class="ioi-tag bad">Flag</span></h4>
-            <div class="ioi-lines">
-              <div><span class="k">What it means:</span> The subcontractor with the highest weighted risk signal—only among subs with meaningful exposure (≥10,000 hours).</div>
-              <div><span class="k">Data origin:</span> Name is surfaced in <code>PUB_IOI</code>, typically based on risk weighting from <code>PUB_SUBS</code> + <code>PUB_RECENT_INCIDENTS</code>.</div>
-              <div><span class="k">Value vs Delta:</span> Value = the subcontractor name. No delta (it’s a label, not a rate).</div>
-            </div>
-            <div class="ioi-gates">
-              <div class="gate"><span class="b warn">Investigate</span>If the same sub repeats week over week: do a focused field verification + coaching.</div>
-              <div class="gate"><span class="b alert">Escalate</span>If that sub also shows rising EWIR / concentration: immediate plan, accountability, and increased oversight.</div>
-            </div>
-          </div>
-
-          <div class="ioi-note">
-            <strong>Quick “good vs bad” cheat sheet:</strong><br>
-            • <strong class="bad">EWIR up</strong> = risk rising (bad).<br>
-            • <strong class="bad">Risk Concentration up</strong> = risk clustering (bad).<br>
-            • <strong>MOMENTUM</strong> = interpret with the other signals (context).<br>
-            • <strong>Top Risk Sub</strong> = where to look first.
-          </div>
-        </div>
-      </div>
-
       <div class="section">
         <h2>Incidents</h2>
         <p>Latest incidents shown. Search by subcontractor, project, or incident ID.</p>
@@ -1108,30 +1024,85 @@
       return num.toFixed(d);
     }
 
-    function buildTick(label, value, delta){
+    function buildTick(label, value, delta, opts = {}){
+      const {
+        decimals = 2,
+        deltaDecimals = 2,
+        polarity = "neutral", // "higher_better" | "higher_worse" | "neutral"
+        tooltip = "",
+        showDelta = true
+      } = opts;
+
       const d = parseFloat(delta);
-      let cls = "flat", arrow = "•", sign = "";
-      if (Number.isFinite(d)){
-        if (d > 0){ cls = "up"; arrow = "▲"; sign = "+"; }
-        else if (d < 0){ cls = "down"; arrow = "▼"; sign = ""; }
-      } else {
-        delta = "";
+      const hasDelta = Number.isFinite(d);
+
+      // Arrow shows direction of change (purely factual).
+      let arrow = "•";
+      if (hasDelta){
+        if (d > 0) arrow = "▲";
+        else if (d < 0) arrow = "▼";
       }
 
-      const deltaTxt = (delta === "" || delta === null || delta === undefined)
-        ? ""
-        : `${arrow} ${sign}${fmt(d,2)}`;
+      // Color class reflects the metric's polarity (still factual: "increase/decrease"),
+      // not a judgment label in the UI.
+      let cls = "flat";
+      if (hasDelta && polarity !== "neutral"){
+        const isIncrease = d > 0;
+        const isDecrease = d < 0;
+
+        if (polarity === "higher_worse"){
+          if (isIncrease) cls = "neg";      // increase -> worse -> red
+          else if (isDecrease) cls = "pos"; // decrease -> better -> green
+        } else if (polarity === "higher_better"){
+          if (isIncrease) cls = "pos";
+          else if (isDecrease) cls = "neg";
+        }
+      }
+
+      const deltaTxt = (!showDelta || !hasDelta)
+        ? "• —"
+        : `${arrow} Δ ${d > 0 ? "+" : ""}${fmt(d, deltaDecimals)}`;
+
+      const titleAttr = tooltip ? ` title="${tooltip.replace(/"/g, "&quot;")}"` : "";
 
       return `
-        <div class="tick">
+        <div class="tick"${titleAttr}>
           <span class="sym">${label}</span>
           <span class="val">${value}</span>
-          <span class="chg ${cls}">${deltaTxt || "• —"}</span>
+          <span class="chg ${cls}">${deltaTxt}</span>
         </div>
       `;
     }
 
-    function renderIOITicker(ioiRow){
+    // Metric config keeps the ticker neutral + consistent without the side panel.
+    const IOI_META = {
+      EWIR: {
+        label: "EWIR (30D)",
+        decimals: 2,
+        deltaDecimals: 2,
+        polarity: "higher_worse",
+        tooltip: "Exposure‑weighted incident rate (rolling 30 days). Value = current 30D. Δ = change vs prior 30D."
+      },
+      RISK_CONC: {
+        label: "RISK CONC (30D)",
+        decimals: 4,
+        deltaDecimals: 4,
+        polarity: "higher_worse",
+        tooltip: "Concentration of incidents (rolling 30 days). Higher = more clustered. Δ = change vs prior 30D."
+      },
+      MOMENTUM: {
+        label: "MOMENTUM (30D)",
+        decimals: 2,
+        deltaDecimals: 2,
+        polarity: "neutral",
+        tooltip: "Direction-of-travel score (rolling 30 days). Value = current score. Δ = change vs prior 30D."
+      },
+      TOP_RISK_SUB: {
+        label: "TOP RISK SUB (≥10,000H)",
+        tooltip: "Subcontractor with the highest 30D risk signal among subs with ≥10,000 hours exposure."
+      }
+    };
+function renderIOITicker(ioiRow){
       const track = document.getElementById("tickerTrack");
 
       if (!ioiRow){
@@ -1141,24 +1112,24 @@
 
       // Expected PUB_IOI headers:
       // EWIR_30, EWIR_DELTA, RISK_CONC_30, RISK_CONC_DELTA, MOMENTUM_30, MOMENTUM_DELTA, TOP_RISK_SUB_30
-      const ewir = safeText(ioiRow.EWIR_30 || "");
+      const ewir  = safeText(ioiRow.EWIR_30 || "");
       const ewirD = safeText(ioiRow.EWIR_DELTA || "");
 
-      const rc = safeText(ioiRow.RISK_CONC_30 || "");
+      const rc  = safeText(ioiRow.RISK_CONC_30 || "");
       const rcD = safeText(ioiRow.RISK_CONC_DELTA || "");
 
-      const mom = safeText(ioiRow.MOMENTUM_30 || "");
+      const mom  = safeText(ioiRow.MOMENTUM_30 || "");
       const momD = safeText(ioiRow.MOMENTUM_DELTA || "");
 
       const top = safeText(ioiRow.TOP_RISK_SUB_30 || "");
 
       const items = [
-        buildTick("EWIR (30D)", fmt(ewir,2), ewirD),
-        buildTick("RISK CONC (30D)", fmt(rc,4), rcD),
-        buildTick("MOMENTUM (30D)", fmt(mom,2), momD),
+        buildTick(IOI_META.EWIR.label, fmt(ewir, IOI_META.EWIR.decimals), ewirD, IOI_META.EWIR),
+        buildTick(IOI_META.RISK_CONC.label, fmt(rc, IOI_META.RISK_CONC.decimals), rcD, IOI_META.RISK_CONC),
+        buildTick(IOI_META.MOMENTUM.label, fmt(mom, IOI_META.MOMENTUM.decimals), momD, IOI_META.MOMENTUM),
         `
-        <div class="tick">
-          <span class="sym">TOP RISK SUB (≥10,000H)</span>
+        <div class="tick" title="${IOI_META.TOP_RISK_SUB.tooltip.replace(/"/g, "&quot;")}">
+          <span class="sym">${IOI_META.TOP_RISK_SUB.label}</span>
           <span class="val">${top || "—"}</span>
           <span class="chg flat">•</span>
         </div>
@@ -1167,11 +1138,7 @@
 
       // Duplicate for seamless loop (animation goes to -50%)
       track.innerHTML = items + items;
-
-      // Optional: if fewer items, speed up a bit
-      // (we can tune later if you want it faster/slower)
     }
-
     async function loadIOI(){
       try{
         // If you haven't pasted IOI_CSV yet, don't explode the page.
