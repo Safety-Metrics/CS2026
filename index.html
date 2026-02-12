@@ -959,6 +959,48 @@
       margin-right: 6px;
     }
 
+
+    /* ===========================
+       TIME WINDOW TOGGLE
+    =========================== */
+    .window-toggle{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 12px 0 12px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(0,0,0,.35);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+    }
+    .win-btn{
+      appearance:none;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: var(--cream);
+      font-weight: 900;
+      letter-spacing: .06em;
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      cursor:pointer;
+      user-select:none;
+      text-transform: uppercase;
+    }
+    .win-btn:hover{ background: rgba(255,255,255,.10); }
+    .win-btn.active{
+      background: rgba(159,28,31,.22);
+      border-color: rgba(159,28,31,.35);
+      box-shadow: inset 0 0 0 1px rgba(159,28,31,.18);
+    }
+    .win-meta{
+      margin-left:auto;
+      font-size: 12px;
+      color: rgba(214,211,207,.78);
+      white-space: nowrap;
+    }
+
   </style>
 </head>
 
@@ -981,31 +1023,21 @@
         <div class="kpi"><div class="val">—</div><div class="lab">Active Subcontractors</div></div>
       </div>
 
-      <!-- ✅ IOI TICKER (Front and Center, under KPIs) -->
-      <div class="ioi-wrap">
-        <div class="ioi-title">
-          <h3>Intelligent Operational Indicators</h3>
-          <div class="ioi-actions">
-            <div class="ioi-sub">Rolling 30-day signal • Hover to pause</div>
-            <button class="ioi-info-btn" id="ioiExplainBtn" type="button" aria-haspopup="dialog" aria-controls="ioiPanel">
-              <span class="dot">i</span> What's this?
-            </button>
-          </div>
-        </div>
-        <div class="ticker" id="ioiTicker">
-          <div class="ticker-track" id="tickerTrack"></div>
-        </div>
+      <!-- ✅ TIME WINDOW TOGGLE (Executive view) -->
+      <div class="window-toggle" role="group" aria-label="Telemetry window">
+        <button class="win-btn active" type="button" data-window="30" id="win30">30D</button>
+        <button class="win-btn" type="button" data-window="60" id="win60">60D</button>
+        <button class="win-btn" type="button" data-window="YTD" id="winYTD">YTD</button>
+        <div class="win-meta" id="winMeta">Window: —</div>
       </div>
 
-
-      
-      <!-- ✅ IOI INSIGHTS (30D telemetry — neutral, factual) -->
+      <!-- ✅ IOI INSIGHTS (telemetry — neutral, factual) -->
       <div class="ioi-insights" id="ioiInsights" aria-label="IOI details">
         <div class="ioi-insight-grid">
 
           <div class="ioi-card" id="ioiCardWindow">
             <div class="ioi-card-h">
-              <div class="k">Last 30 Days</div>
+              <div class="k" id="ioiWindowTitle">Last 30 Days</div>
               <div class="meta" id="ioiWindowLabel">Window</div>
             </div>
             <div class="ioi-card-b">
@@ -1023,7 +1055,7 @@
           <div class="ioi-card" id="ioiCardTopSubs">
             <div class="ioi-card-h">
               <div class="k">Top Subcontractors</div>
-              <div class="meta">30D incidents</div>
+              <div class="meta" id="ioiWindowMeta">Window incidents</div>
             </div>
             <div class="ioi-card-b">
               <div class="mini-table" id="tTopSubsTable">—</div>
@@ -1037,7 +1069,7 @@
           <div class="ioi-card" id="ioiCardTopProjects">
             <div class="ioi-card-h">
               <div class="k">Top Projects</div>
-              <div class="meta">30D incidents</div>
+              <div class="meta" id="ioiWindowMeta">Window incidents</div>
             </div>
             <div class="ioi-card-b">
               <div class="mini-table" id="tTopProjectsTable">—</div>
@@ -1054,9 +1086,9 @@
               <div class="meta">Subs w/ meaningful exposure</div>
             </div>
             <div class="ioi-card-b">
-              <div class="row"><div class="label">Top sub (30D incidents)</div><div class="value" id="tTop10kSub">—</div></div>
+              <div class="row"><div class="label">Top sub (window incidents)</div><div class="value" id="tTop10kSub">—</div></div>
               <div class="row"><div class="label">Hours (YTD)</div><div class="value" id="tTop10kHours">—</div></div>
-              <div class="row"><div class="label">30D incidents (that sub)</div><div class="value" id="tTop10kInc">—</div></div>
+              <div class="row"><div class="label">Window incidents (that sub)</div><div class="value" id="tTop10kInc">—</div></div>
               <div class="row"><div class="label">Data source</div><div class="value">SUBS + INCIDENTS</div></div>
             </div>
             <div class="ioi-card-f">
@@ -1366,7 +1398,7 @@
       document.body.style.overflow = "";
 
       // return focus to explainer button if exists, otherwise nothing
-      const btn = document.getElementById("ioiExplainBtn");
+      const btn = document.getElementById("win30");
       if (btn) btn.focus();
     }
 
@@ -1435,7 +1467,7 @@
     }
 
     
-function computeTelemetryLast30(incNorm, subsAll){
+function computeTelemetryWindow(incNorm, subsAll, window){
       const parsed = (d)=>{
         const t = Date.parse(d);
         return isNaN(t) ? null : new Date(t);
@@ -1443,11 +1475,27 @@ function computeTelemetryLast30(incNorm, subsAll){
 
       const dates = incNorm.map(x => parsed(x.Date)).filter(Boolean);
       const end = dates.length ? new Date(Math.max(...dates.map(d=>d.getTime()))) : new Date();
-      const start = new Date(end.getTime() - 30*24*60*60*1000);
+      end.setHours(23,59,59,999);
+
+      let start;
+      let label;
+
+      if (String(window).toUpperCase() === "YTD"){
+        start = new Date(end.getFullYear(), 0, 1);
+        start.setHours(0,0,0,0);
+        label = "YTD";
+      } else {
+        const days = Math.max(1, Number(window) || 30);
+        start = new Date(end);
+        start.setDate(start.getDate() - (days - 1));
+        start.setHours(0,0,0,0);
+        label = `${days}D`;
+      }
 
       const inWin = incNorm.filter(x=>{
         const d = parsed(x.Date);
         if(!d) return false;
+        d.setHours(12,0,0,0); // normalize midday to avoid DST edge weirdness
         return d >= start && d <= end;
       });
 
@@ -1492,18 +1540,19 @@ function computeTelemetryLast30(incNorm, subsAll){
       const topArea = topAreas[0] || null;
       const topAreaShare = topArea && total ? (topArea.count/total) : null;
 
-      // ≥10k filter using SUBS (YTD hours) + 30D incident counts
+      // ≥10k filter using SUBS (YTD hours) + window incident counts
       const subs10k = (subsAll||[])
         .filter(s => (Number(s.hours)||0) >= 10000)
         .map(s => {
           const c = bySub.get(s.sub) || 0;
-          return { sub: s.sub, hours: Number(s.hours)||0, inc30: c };
+          return { sub: s.sub, hours: Number(s.hours)||0, incWin: c };
         })
-        .sort((a,b)=> b.inc30 - a.inc30 || b.hours - a.hours);
+        .sort((a,b)=> b.incWin - a.incWin || b.hours - a.hours);
 
       const top10k = subs10k[0] || null;
 
       return {
+        windowLabel: label,
         start, end, total,
         sev,
         topSubs,
@@ -1531,8 +1580,8 @@ function computeTelemetryLast30(incNorm, subsAll){
               <tr>
                 <td class="mono">${i+1}</td>
                 <td>${safeText(r.name||r.sub||"—")}</td>
-                <td class="mono">${r.count ?? r.inc30 ?? 0}</td>
-                <td class="mono">${total ? fmtPct(((r.count ?? r.inc30 ?? 0)/total)) : "—"}</td>
+                <td class="mono">${r.count ?? r.incWin ?? 0}</td>
+                <td class="mono">${total ? fmtPct(((r.count ?? r.incWin ?? 0)/total)) : "—"}</td>
               </tr>
             `).join("")}
           </tbody>
@@ -1564,7 +1613,6 @@ function computeTelemetryLast30(incNorm, subsAll){
         if(tTop10kSub) tTop10kSub.textContent = "—";
         if(tTop10kHours) tTop10kHours.textContent = "—";
         if(tTop10kInc) tTop10kInc.textContent = "—";
-        renderTelemetryTicker(null);
         return;
       }
 
@@ -1582,7 +1630,7 @@ function computeTelemetryLast30(incNorm, subsAll){
       if(tele.top10k){
         if(tTop10kSub) tTop10kSub.textContent = tele.top10k.sub || "—";
         if(tTop10kHours) tTop10kHours.textContent = fmt(tele.top10k.hours,0);
-        if(tTop10kInc) tTop10kInc.textContent = String(tele.top10k.inc30 ?? 0);
+        if(tTop10kInc) tTop10kInc.textContent = String(tele.top10k.incWin ?? 0);
       } else {
         if(tTop10kSub) tTop10kSub.textContent = "—";
         if(tTop10kHours) tTop10kHours.textContent = "—";
@@ -1591,9 +1639,6 @@ function computeTelemetryLast30(incNorm, subsAll){
 
       // Drivers modal wiring
       wireTelemetryDrivers(tele);
-
-      // Ticker
-      renderTelemetryTicker(tele);
     }
 
     function openTelePanel(title, sub, bodyHtml){
@@ -1645,20 +1690,20 @@ function computeTelemetryLast30(incNorm, subsAll){
 
       once(btnArea, ()=>{
         const body = buildMiniTable(tele.topAreas, tele.total);
-        openTelePanel("Area distribution", "Sub • Project (30D)", body);
+        openTelePanel("Area distribution", "Sub • Project (Window)", body);
       });
       once(btnSubs, ()=>{
         const body = buildMiniTable(tele.topSubs, tele.total);
-        openTelePanel("Subcontractor distribution", "Counts by subcontractor (30D)", body);
+        openTelePanel("Subcontractor distribution", "Counts by subcontractor (Window)", body);
       });
       once(btnProj, ()=>{
         const body = buildMiniTable(tele.topProjects, tele.total);
-        openTelePanel("Project distribution", "Counts by project (30D)", body);
+        openTelePanel("Project distribution", "Counts by project (Window)", body);
       });
       once(btn10k, ()=>{
-        const rows = (tele.subs10k||[]).slice(0,10).map((r)=>({name:r.sub, count:r.inc30}));
+        const rows = (tele.subs10k||[]).slice(0,10).map((r)=>({name:r.sub, count:r.incWin}));
         const body = buildMiniTable(rows, tele.total) + `<div class="small">Hours shown in card (YTD from SUBS).</div>`;
-        openTelePanel("≥10,000 hours filter", "Top subs by 30D incidents (filtered)", body);
+        openTelePanel("≥10,000 hours filter", "Top subs by window incidents (filtered)", body);
       });
 
       if(close && !close.dataset.wired){
@@ -1677,27 +1722,11 @@ function computeTelemetryLast30(incNorm, subsAll){
       }, { once: true });
     }
 
-function renderTelemetryTicker(tele){
-      const track = document.getElementById("tickerTrack");
-      if (!track) return;
-
-      const tick = (label, value) => `
-        <div class="tick">
-          <span class="sym">${safeText(label)}</span>
-          <span class="val">${safeText(value)}</span>
-          <span class="chg flat">•</span>
-        </div>
-      `;
-
-      if (!tele){
-        track.innerHTML = tick("IOI", "No data") + tick("IOI", "No data");
-        return;
-      }
 
       const topSub = tele.topSubs && tele.topSubs[0] ? `${tele.topSubs[0].name} (${tele.topSubs[0].count})` : "—";
       const topProj = tele.topProjects && tele.topProjects[0] ? `${tele.topProjects[0].name} (${tele.topProjects[0].count})` : "—";
       const topShare = tele.topAreaShare !== null ? fmtPct(tele.topAreaShare) : "—";
-      const top10k = tele.top10k ? `${tele.top10k.sub} (${tele.top10k.inc30})` : "—";
+      const top10k = tele.top10k ? `${tele.top10k.sub} (${tele.top10k.incWin})` : "—";
 
       const items = [
         tick("INCIDENTS (30D)", String(tele.total ?? 0)),
@@ -1709,50 +1738,7 @@ function renderTelemetryTicker(tele){
 
       track.innerHTML = items + items;
     }
-/*** IOI EXPLAINER PANEL ***/
-    function openIOIPanel(){
-      const panel = document.getElementById("ioiPanel");
-      const back = document.getElementById("ioiBackdrop");
-      if (!panel || !back) return;
-
-      panel.classList.add("open");
-      back.classList.add("open");
-      panel.setAttribute("aria-hidden", "false");
-      back.setAttribute("aria-hidden", "false");
-
-      // lock body scroll while panel open (mobile especially)
-      document.body.style.overflow = "hidden";
-
-      // focus management (accessibility + keyboard)
-      const close = document.getElementById("ioiCloseBtn");
-      if (close) close.focus();
-    }
-
-    function closeIOIPanel(){
-      const panel = document.getElementById("ioiPanel");
-      const back = document.getElementById("ioiBackdrop");
-      if (!panel || !back) return;
-
-      panel.classList.remove("open");
-      back.classList.remove("open");
-      panel.setAttribute("aria-hidden", "true");
-      back.setAttribute("aria-hidden", "true");
-
-      document.body.style.overflow = "";
-
-      const btn = document.getElementById("ioiExplainBtn");
-      if (btn) btn.focus();
-    }
-
-    function toggleIOIPanel(){
-      const panel = document.getElementById("ioiPanel");
-      if (!panel) return;
-      if (panel.classList.contains("open")) closeIOIPanel();
-      else openIOIPanel();
-    }
-
-
-    /*** SUBS ***/
+/*** SUBS ***/
     let SUBS_ALL = [];
 
     function normalizeSubsRows(rows){
@@ -2076,31 +2062,53 @@ function renderTelemetryTicker(tele){
           renderIncidentsTable(inc);
         });
 
-        // ✅ 30D Telemetry (ticker + IOI cards) from INCIDENTS + SUBS
-        const telemetry = computeTelemetryLast30(INC_NORM, SUBS_ALL);
-        renderTelemetry(telemetry);
+        // ✅ Telemetry (windowed) from INCIDENTS + SUBS
+        let ACTIVE_WINDOW = 30; // 30 | 60 | "YTD"
 
-        // ✅ IOI explainer wiring (button + backdrop + ESC)
-        const ioiBtn = document.getElementById("ioiExplainBtn");
-        const ioiClose = document.getElementById("ioiCloseBtn");
-        const ioiBack = document.getElementById("ioiBackdrop");
+        function setActiveWindow(win){
+          ACTIVE_WINDOW = win;
 
-        if (ioiBtn && !ioiBtn.dataset.wired){
-          ioiBtn.dataset.wired = "1";
-          ioiBtn.addEventListener("click", toggleIOIPanel);
-        }
-        if (ioiClose && !ioiClose.dataset.wired){
-          ioiClose.dataset.wired = "1";
-          ioiClose.addEventListener("click", closeIOIPanel);
-        }
-        if (ioiBack && !ioiBack.dataset.wired){
-          ioiBack.dataset.wired = "1";
-          ioiBack.addEventListener("click", closeIOIPanel);
+          // button state
+          document.querySelectorAll(".win-btn").forEach(b=>b.classList.remove("active"));
+          const btn = (win === 30) ? document.getElementById("win30")
+                    : (win === 60) ? document.getElementById("win60")
+                    : document.getElementById("winYTD");
+          if (btn) btn.classList.add("active");
+
+          updateTelemetry();
         }
 
-        document.addEventListener("keydown", (e)=>{
-          if (e.key === "Escape"){
-            const panel = document.getElementById("ioiPanel");
+        function updateTelemetry(){
+          const win = (ACTIVE_WINDOW === "YTD") ? "YTD" : ACTIVE_WINDOW;
+          const tele = computeTelemetryWindow(INC_NORM, SUBS_ALL, win);
+          renderTelemetry(tele);
+
+          // update labels
+          const title = document.getElementById("ioiWindowTitle");
+          const meta = document.getElementById("ioiWindowMeta");
+          const wm = document.getElementById("winMeta");
+          const winLabel = (ACTIVE_WINDOW === "YTD") ? "YTD" : `${ACTIVE_WINDOW}D`;
+
+          if (title) title.textContent = (ACTIVE_WINDOW === "YTD") ? "Year to Date" : `Last ${ACTIVE_WINDOW} Days`;
+          if (meta) meta.textContent = "Window incidents";
+          if (wm) wm.textContent = `Window: ${tele.start.toLocaleDateString()} → ${tele.end.toLocaleDateString()} (${winLabel})`;
+        }
+
+        // Wire toggle buttons (once)
+        document.querySelectorAll(".win-btn").forEach(btn=>{
+          if (btn.dataset.wired === "1") return;
+          btn.dataset.wired = "1";
+          btn.addEventListener("click", ()=>{
+            const w = btn.getAttribute("data-window");
+            if (!w) return;
+            if (w === "YTD") setActiveWindow("YTD");
+            else setActiveWindow(Number(w) || 30);
+          });
+        });
+
+        // initial render
+        setActiveWindow(30);
+
             if (panel && panel.classList.contains("open")) closeIOIPanel();
           }
         });
