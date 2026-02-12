@@ -1723,20 +1723,7 @@ function computeTelemetryWindow(incNorm, subsAll, window){
     }
 
 
-      const topSub = tele.topSubs && tele.topSubs[0] ? `${tele.topSubs[0].name} (${tele.topSubs[0].count})` : "—";
-      const topProj = tele.topProjects && tele.topProjects[0] ? `${tele.topProjects[0].name} (${tele.topProjects[0].count})` : "—";
-      const topShare = tele.topAreaShare !== null ? fmtPct(tele.topAreaShare) : "—";
-      const top10k = tele.top10k ? `${tele.top10k.sub} (${tele.top10k.incWin})` : "—";
-
-      const items = [
-        tick("INCIDENTS (30D)", String(tele.total ?? 0)),
-        tick("TOP SUB (30D)", topSub),
-        tick("TOP PROJECT (30D)", topProj),
-        tick("TOP AREA SHARE", topShare),
-        tick("≥10,000H TOP SUB", top10k),
-      ].join("");
-
-      track.innerHTML = items + items;
+     
     
 /*** SUBS ***/
     let SUBS_ALL = [];
@@ -2124,6 +2111,7 @@ function computeTelemetryWindow(incNorm, subsAll, window){
   </script>
 </body>
 </html>
+
 
 
 
