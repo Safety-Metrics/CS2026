@@ -1048,7 +1048,6 @@
               <div class="row"><div class="label">Concentration (top area share)</div><div class="value" id="tConcShare">—</div></div>
             </div>
             <div class="ioi-card-f">
-              <button class="btn" id="btnDriversArea" type="button">Drivers</button>
               <span class="muted">Distribution & shares</span>
             </div>
           </div>
@@ -1062,7 +1061,6 @@
               <div class="mini-table" id="tTopSubsTable">—</div>
             </div>
             <div class="ioi-card-f">
-              <button class="btn" id="btnDriversSubs" type="button">Drivers</button>
               <span class="muted">Counts by subcontractor</span>
             </div>
           </div>
@@ -1076,7 +1074,6 @@
               <div class="mini-table" id="tTopProjectsTable">—</div>
             </div>
             <div class="ioi-card-f">
-              <button class="btn" id="btnDriversProjects" type="button">Drivers</button>
               <span class="muted">Counts by project</span>
             </div>
           </div>
@@ -1093,29 +1090,12 @@
               <div class="row"><div class="label">Data source</div><div class="value">SUBS + INCIDENTS</div></div>
             </div>
             <div class="ioi-card-f">
-              <button class="btn" id="btnDrivers10k" type="button">Drivers</button>
               <span class="muted">Filtered ranking</span>
             </div>
           </div>
 
         </div>
       </div>
-
-      
-      <!-- ✅ Telemetry Drivers Panel -->
-      <div class="ioi-backdrop" id="teleBack" aria-hidden="true"></div>
-      <aside class="ioi-panel" id="telePanel" aria-hidden="true">
-        <div class="ioi-panel-header">
-          <div>
-            <div class="ioi-panel-title" id="teleTitle">Drivers</div>
-            <div class="ioi-panel-sub" id="teleSub">30-day distribution</div>
-          </div>
-          <button class="ioi-close" id="teleClose" type="button" aria-label="Close">×</button>
-        </div>
-        <div class="ioi-panel-body" id="teleBody">
-          <div class="small">No data.</div>
-        </div>
-      </aside>
 <div class="section">
         <h2>Subcontractor Performance</h2>
         <p>Top subcontractors by hours are shown below. Use the lookup to view any subcontractor.</p>
@@ -1638,89 +1618,7 @@ function computeTelemetryWindow(incNorm, subsAll, window){
         if(tTop10kInc) tTop10kInc.textContent = "—";
       }
 
-      // Drivers modal wiring
-      wireTelemetryDrivers(tele);
     }
-
-    function openTelePanel(title, sub, bodyHtml){
-      const panel = document.getElementById("telePanel");
-      const back = document.getElementById("teleBack");
-      const t = document.getElementById("teleTitle");
-      const s = document.getElementById("teleSub");
-      const b = document.getElementById("teleBody");
-      if(!panel || !back || !t || !s || !b) return;
-
-      t.textContent = title || "Drivers";
-      s.textContent = sub || "";
-      b.innerHTML = bodyHtml || `<div class="small">No data.</div>`;
-
-      panel.classList.add("open");
-      back.classList.add("open");
-      panel.setAttribute("aria-hidden","false");
-      back.setAttribute("aria-hidden","false");
-      document.body.style.overflow = "hidden";
-      const close = document.getElementById("teleClose");
-      if(close) close.focus();
-    }
-
-    function closeTelePanel(){
-      const panel = document.getElementById("telePanel");
-      const back = document.getElementById("teleBack");
-      if(!panel || !back) return;
-      panel.classList.remove("open");
-      back.classList.remove("open");
-      panel.setAttribute("aria-hidden","true");
-      back.setAttribute("aria-hidden","true");
-      document.body.style.overflow = "";
-    }
-
-    function wireTelemetryDrivers(tele){
-      const btnArea = document.getElementById("btnDriversArea");
-      const btnSubs = document.getElementById("btnDriversSubs");
-      const btnProj = document.getElementById("btnDriversProjects");
-      const btn10k = document.getElementById("btnDrivers10k");
-      const close = document.getElementById("teleClose");
-      const back = document.getElementById("teleBack");
-
-      const once = (el, fn)=>{
-        if(!el) return;
-        if(el.dataset.wired === "1") return;
-        el.dataset.wired = "1";
-        el.addEventListener("click", fn);
-      };
-
-      once(btnArea, ()=>{
-        const body = buildMiniTable(tele.topAreas, tele.total);
-        openTelePanel("Area distribution", "Sub • Project (Window)", body);
-      });
-      once(btnSubs, ()=>{
-        const body = buildMiniTable(tele.topSubs, tele.total);
-        openTelePanel("Subcontractor distribution", "Counts by subcontractor (Window)", body);
-      });
-      once(btnProj, ()=>{
-        const body = buildMiniTable(tele.topProjects, tele.total);
-        openTelePanel("Project distribution", "Counts by project (Window)", body);
-      });
-      once(btn10k, ()=>{
-        const rows = (tele.subs10k||[]).slice(0,10).map((r)=>({name:r.sub, count:r.incWin}));
-        const body = buildMiniTable(rows, tele.total) + `<div class="small">Hours shown in card (YTD from SUBS).</div>`;
-        openTelePanel("≥10,000 hours filter", "Top subs by window incidents (filtered)", body);
-      });
-
-      if(close && !close.dataset.wired){
-        close.dataset.wired = "1";
-        close.addEventListener("click", closeTelePanel);
-      }
-      if(back && !back.dataset.wired){
-        back.dataset.wired = "1";
-        back.addEventListener("click", closeTelePanel);
-      }
-      document.addEventListener("keydown", (e)=>{
-        if(e.key === "Escape"){
-          const panel = document.getElementById("telePanel");
-          if(panel && panel.classList.contains("open")) closeTelePanel();
-        }
-      }, { once: true });
     }
 
 
