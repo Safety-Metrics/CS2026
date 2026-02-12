@@ -1002,141 +1002,6 @@
       white-space: nowrap;
     }
 
-
-    /* ===========================
-       EXECUTIVE ANSWER BAR
-    =========================== */
-    .answer-bar{
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      margin: 14px 0 10px;
-      padding: 12px 14px;
-      border-radius: 16px;
-      background: rgba(0,0,0,.48);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.08), 0 10px 28px rgba(0,0,0,.30);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      display:flex;
-      align-items:flex-start;
-      justify-content: space-between;
-      gap: 12px;
-    }
-    .ab-title{
-      font-weight: 900;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      font-size: 11px;
-      color: rgba(242,239,235,.85);
-      margin-bottom: 6px;
-    }
-    .ab-items{
-      display:flex;
-      flex-wrap: wrap;
-      gap: 10px 14px;
-      align-items:center;
-    }
-    .ab-item{
-      display:inline-flex;
-      align-items:baseline;
-      gap: 8px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.08);
-      box-shadow: inset 0 0 0 1px rgba(0,0,0,.12);
-      white-space: nowrap;
-    }
-    .ab-k{
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      color: rgba(214,211,207,.72);
-    }
-    .ab-v{
-      font-size: 12px;
-      font-weight: 800;
-      color: rgba(242,239,235,.95);
-      max-width: 320px;
-      overflow:hidden;
-      text-overflow: ellipsis;
-    }
-    .ab-right{
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      flex-wrap: wrap;
-      justify-content:flex-end;
-    }
-    .ab-btn{
-      appearance:none;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.08);
-      color: var(--cream);
-      font-weight: 900;
-      letter-spacing: .06em;
-      font-size: 12px;
-      padding: 9px 12px;
-      border-radius: 12px;
-      cursor:pointer;
-      user-select:none;
-      text-transform: uppercase;
-      min-height: 40px;
-    }
-    .ab-btn:hover{ background: rgba(255,255,255,.12); }
-    .ab-btn:active{ transform: translateY(1px); }
-    .ab-btn.ghost{
-      background: rgba(159,28,31,.14);
-      border-color: rgba(159,28,31,.26);
-    }
-
-    .mini-link{
-      appearance:none;
-      border:none;
-      background: transparent;
-      color: rgba(255,255,255,.92);
-      padding: 0;
-      cursor:pointer;
-      font: inherit;
-      text-align:left;
-      text-decoration: underline;
-      text-decoration-color: rgba(255,255,255,.25);
-      text-underline-offset: 2px;
-    }
-    .mini-link:hover{ text-decoration-color: rgba(255,255,255,.65); }
-
-    /* ===========================
-       PRINT / EXPORT MODE
-    =========================== */
-    @media print{
-      body{
-        background: #fff !important;
-        color: #000 !important;
-      }
-      header.brand-header{ padding: 0 0 8px !important; }
-      .brand-logo{ filter:none !important; animation:none !important; height: 90px !important; }
-      .answer-bar{
-        position: static !important;
-        background: #fff !important;
-        color: #000 !important;
-        box-shadow: none !important;
-        border: 1px solid #ddd !important;
-      }
-      .ab-k, .ab-v, .ab-title{ color:#000 !important; }
-      .ab-item{ background:#fff !important; border: 1px solid #ddd !important; box-shadow:none !important; }
-      .ab-right, .win-btn, .btn, button, .ioi-backdrop, .ioi-panel { display:none !important; }
-      .window-toggle{ display:none !important; }
-      .section{
-        box-shadow: none !important;
-        border: 1px solid #e5e5e5 !important;
-      }
-      .card:hover{ transform:none !important; box-shadow:none !important; }
-      a.link{ color:#000 !important; }
-      /* hide search controls on print */
-      #q, #sev, #clear, #incPick, #subPick, label[for="subPick"], label[for="incPick"]{ display:none !important; }
-    }
-
   </style>
 </head>
 
@@ -1152,26 +1017,7 @@
       <p class="subhead">Real-time safety metrics across all active projects and subcontractors.</p>
 
       <div class="kpi-row" id="kpis">
-        <div class="kpi"><div class="val">—</div>
-      <!-- ✅ EXECUTIVE ANSWER BAR (self-serve, neutral) -->
-      <div class="answer-bar" id="answerBar" aria-label="Executive snapshot">
-        <div class="ab-left">
-          <div class="ab-title">Executive Snapshot</div>
-          <div class="ab-items">
-            <span class="ab-item"><span class="ab-k">Window</span><span class="ab-v" id="abWindow">—</span></span>
-            <span class="ab-item"><span class="ab-k">Incidents</span><span class="ab-v" id="abIncidents">—</span></span>
-            <span class="ab-item"><span class="ab-k">Top Area</span><span class="ab-v" id="abTopArea">—</span></span>
-            <span class="ab-item"><span class="ab-k">Concentration</span><span class="ab-v" id="abConc">—</span></span>
-            <span class="ab-item"><span class="ab-k">Top Sub</span><span class="ab-v" id="abTopSub">—</span></span>
-            <span class="ab-item"><span class="ab-k">Refresh</span><span class="ab-v" id="abRefresh">—</span></span>
-          </div>
-        </div>
-        <div class="ab-right">
-          <button class="ab-btn" id="btnPrint" type="button">Export / Print</button>
-          <button class="ab-btn ghost" id="btnClearDrill" type="button" style="display:none;">Clear Drill</button>
-        </div>
-      </div>
-<div class="lab">Total Man-Hours</div></div>
+        <div class="kpi"><div class="val">—</div><div class="lab">Total Man-Hours</div></div>
         <div class="kpi"><div class="val">—</div><div class="lab">TRIR</div></div>
         <div class="kpi"><div class="val">—</div><div class="lab">LTIR</div></div>
         <div class="kpi"><div class="val">—</div><div class="lab">Total Recordables</div></div>
@@ -1725,33 +1571,24 @@ function computeTelemetryWindow(incNorm, subsAll, window){
       return (x*100).toFixed(1) + "%";
     }
 
-    
-function buildMiniTable(rows, total, drillType){
+    function buildMiniTable(rows, total){
       if(!rows || !rows.length) return `<div class="small">No data in window.</div>`;
-      const dtype = drillType || "";
       return `
         <table class="mini">
           <thead><tr><th>Rank</th><th>Name</th><th>Count</th><th>Share</th></tr></thead>
           <tbody>
-            ${rows.map((r,i)=>{
-              const name = safeText(r.name||r.sub||"—");
-              const count = (r.count ?? r.incWin ?? 0);
-              const share = total ? fmtPct((count/total)) : "—";
-              const btn = dtype ? `<button class="mini-link drill" type="button" data-drill-type="${escapeHtml(dtype)}" data-drill-val="${escapeHtml(name)}">${escapeHtml(name)}</button>` : escapeHtml(name);
-              return `
-                <tr>
-                  <td class="mono">${i+1}</td>
-                  <td>${btn}</td>
-                  <td class="mono">${count}</td>
-                  <td class="mono">${share}</td>
-                </tr>
-              `;
-            }).join("")}
+            ${rows.map((r,i)=>`
+              <tr>
+                <td class="mono">${i+1}</td>
+                <td>${safeText(r.name||r.sub||"—")}</td>
+                <td class="mono">${r.count ?? r.incWin ?? 0}</td>
+                <td class="mono">${total ? fmtPct(((r.count ?? r.incWin ?? 0)/total)) : "—"}</td>
+              </tr>
+            `).join("")}
           </tbody>
         </table>
       `;
     }
-
 
     function renderTelemetry(tele){
       // Insights
@@ -1788,8 +1625,8 @@ function buildMiniTable(rows, total, drillType){
       if(tTopArea) tTopArea.textContent = tele.topArea ? tele.topArea.name : "—";
       if(tConcShare) tConcShare.textContent = tele.topAreaShare !== null ? fmtPct(tele.topAreaShare) : "—";
 
-      if(tTopSubsTable) tTopSubsTable.innerHTML = buildMiniTable(tele.topSubs, tele.total, "sub");
-      if(tTopProjectsTable) tTopProjectsTable.innerHTML = buildMiniTable(tele.topProjects, tele.total, "project");
+      if(tTopSubsTable) tTopSubsTable.innerHTML = buildMiniTable(tele.topSubs, tele.total);
+      if(tTopProjectsTable) tTopProjectsTable.innerHTML = buildMiniTable(tele.topProjects, tele.total);
 
       if(tele.top10k){
         if(tTop10kSub) tTop10kSub.textContent = tele.top10k.sub || "—";
@@ -1801,123 +1638,8 @@ function buildMiniTable(rows, total, drillType){
         if(tTop10kInc) tTop10kInc.textContent = "—";
       }
 
-      // Answer bar
-      updateAnswerBar(tele);
-
-      // Drivers panel wiring
+      // Drivers modal wiring
       wireTelemetryDrivers(tele);
-    }
-
-
-    /* ===========================
-       DRILL-DOWN (click to filter)
-    =========================== */
-    let DRILL = { sub: null, project: null };
-
-    function setDrill(next){
-      DRILL = { sub: next?.sub || null, project: next?.project || null };
-      const btn = document.getElementById("btnClearDrill");
-      if (btn){
-        const on = !!(DRILL.sub || DRILL.project);
-        btn.style.display = on ? "inline-flex" : "none";
-      }
-      // reflect in answer bar
-      const top = [];
-      if (DRILL.sub) top.push(`Sub: ${DRILL.sub}`);
-      if (DRILL.project) top.push(`Project: ${DRILL.project}`);
-      const el = document.getElementById("abTopArea");
-      if (el && top.length) el.textContent = top.join(" • ");
-      // re-render incidents if we have data
-      if (window.__INC_RAW__) renderIncidentsTable(window.__INC_RAW__);
-      // scroll user to incidents section so they see the filter effect instantly
-      const q = document.getElementById("q");
-      if (q) q.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    function clearDrill(){
-      DRILL = { sub: null, project: null };
-      const btn = document.getElementById("btnClearDrill");
-      if (btn) btn.style.display = "none";
-      if (window.__INC_RAW__) renderIncidentsTable(window.__INC_RAW__);
-      // restore answer bar top area from telemetry on next updateTelemetry()
-    }
-
-    function wireGlobalDrillClicks(){
-      if (document.body.dataset.drillWired === "1") return;
-      document.body.dataset.drillWired = "1";
-
-      document.addEventListener("click", (e)=>{
-        const t = e.target;
-        if (!(t instanceof Element)) return;
-
-        // mini-table clicks
-        const drill = t.closest?.(".drill");
-        if (drill){
-          e.preventDefault();
-          const dtype = drill.getAttribute("data-drill-type");
-          const dval = drill.getAttribute("data-drill-val") || "";
-          if (!dtype) return;
-
-          if (dtype === "sub"){
-            setDrill({ sub: dval, project: null });
-          } else if (dtype === "project"){
-            setDrill({ sub: null, project: dval });
-          } else if (dtype === "area"){
-            // Expect "Sub • Project"
-            const parts = dval.split("•").map(s=>s.trim());
-            const sub = parts[0] || null;
-            const project = parts[1] || null;
-            setDrill({ sub, project });
-          }
-        }
-      });
-    }
-
-    /* ===========================
-       ANSWER BAR (auto-filled)
-    =========================== */
-    function updateAnswerBar(tele){
-      const w = document.getElementById("abWindow");
-      const i = document.getElementById("abIncidents");
-      const a = document.getElementById("abTopArea");
-      const c = document.getElementById("abConc");
-      const s = document.getElementById("abTopSub");
-      const r = document.getElementById("abRefresh");
-
-      if (w) w.textContent = tele ? `${tele.start.toLocaleDateString()} → ${tele.end.toLocaleDateString()} (${tele.windowLabel})` : "—";
-      if (i) i.textContent = tele ? String(tele.total ?? 0) : "—";
-      if (a && !((DRILL.sub || DRILL.project))) a.textContent = tele?.topArea?.name || "—";
-      if (c) c.textContent = tele && tele.topAreaShare !== null ? fmtPct(tele.topAreaShare) : "—";
-      if (s) s.textContent = tele?.topSubs?.[0]?.name ? `${tele.topSubs[0].name} (${tele.topSubs[0].count})` : "—";
-      if (r) r.textContent = new Date().toLocaleString();
-    }
-
-    /* ===========================
-       PRINT / EXPORT
-    =========================== */
-    let PRINT_MODE = false;
-    function wirePrint(){
-      const btn = document.getElementById("btnPrint");
-      if (!btn || btn.dataset.wired === "1") return;
-      btn.dataset.wired = "1";
-      btn.addEventListener("click", ()=>{
-        PRINT_MODE = true;
-        if (window.__INC_RAW__) renderIncidentsTable(window.__INC_RAW__);
-        window.print();
-        // reset after print dialog
-        setTimeout(()=>{
-          PRINT_MODE = false;
-          if (window.__INC_RAW__) renderIncidentsTable(window.__INC_RAW__);
-        }, 400);
-      });
-
-      const clearBtn = document.getElementById("btnClearDrill");
-      if (clearBtn && clearBtn.dataset.wired !== "1"){
-        clearBtn.dataset.wired = "1";
-        clearBtn.addEventListener("click", ()=>{
-          clearDrill();
-        });
-      }
     }
 
     function openTelePanel(title, sub, bodyHtml){
@@ -1968,20 +1690,20 @@ function buildMiniTable(rows, total, drillType){
       };
 
       once(btnArea, ()=>{
-        const body = buildMiniTable(tele.topAreas, tele.total, "area");
+        const body = buildMiniTable(tele.topAreas, tele.total);
         openTelePanel("Area distribution", "Sub • Project (Window)", body);
       });
       once(btnSubs, ()=>{
-        const body = buildMiniTable(tele.topSubs, tele.total, "sub");
+        const body = buildMiniTable(tele.topSubs, tele.total);
         openTelePanel("Subcontractor distribution", "Counts by subcontractor (Window)", body);
       });
       once(btnProj, ()=>{
-        const body = buildMiniTable(tele.topProjects, tele.total, "project");
+        const body = buildMiniTable(tele.topProjects, tele.total);
         openTelePanel("Project distribution", "Counts by project (Window)", body);
       });
       once(btn10k, ()=>{
         const rows = (tele.subs10k||[]).slice(0,10).map((r)=>({name:r.sub, count:r.incWin}));
-        const body = buildMiniTable(rows, tele.total, "sub") + `<div class="small">Hours shown in card (YTD from SUBS).</div>`;
+        const body = buildMiniTable(rows, tele.total) + `<div class="small">Hours shown in card (YTD from SUBS).</div>`;
         openTelePanel("≥10,000 hours filter", "Top subs by window incidents (filtered)", body);
       });
 
@@ -2246,32 +1968,19 @@ function buildMiniTable(rows, total, drillType){
         ));
       }
 
-
-      // Drill-down filters (from mini tables)
-      if (DRILL && (DRILL.sub || DRILL.project)){
-        if (DRILL.sub){
-          rows = rows.filter(r => String(r.Subcontractor || "").trim().toLowerCase() === String(DRILL.sub).trim().toLowerCase());
-        }
-        if (DRILL.project){
-          rows = rows.filter(r => String(r.Project || "").trim().toLowerCase() === String(DRILL.project).trim().toLowerCase());
-        }
-      }
-
       rows.sort((a,b)=>{
         const da = Date.parse(a.Date) || 0;
         const db = Date.parse(b.Date) || 0;
         return db - da;
       });
 
-      const cap = PRINT_MODE ? 20 : ((q || sev || (DRILL && (DRILL.sub || DRILL.project))) ? 15 : 5);
+      const cap = (q || sev) ? 10 : 5;
       const shown = rows.slice(0, cap);
 
       document.getElementById("incHint").textContent =
-        (PRINT_MODE)
-          ? `Print view: showing top ${Math.min(cap, rows.length)} incidents.`
-          : (q || sev || (DRILL && (DRILL.sub || DRILL.project)))
-            ? `Showing top ${Math.min(cap, rows.length)} matches (capped).` + ((DRILL && (DRILL.sub || DRILL.project)) ? " (drill applied)" : "")
-            : "Showing latest 5 incidents.";
+        (q || sev)
+          ? `Showing top ${Math.min(cap, rows.length)} matches (capped).`
+          : "Showing latest 5 incidents.";
 
       const list = document.getElementById("incidentList");
       if (!shown.length){
@@ -2298,36 +2007,26 @@ function buildMiniTable(rows, total, drillType){
 
     /*** init ***/
     (async function init(){
-      setStatus("Loading data…");
-
-      const results = await Promise.allSettled([
-        fetchTable(KPI_CSV),
-        fetchTable(SUBS_CSV),
-        fetchTable(INCIDENTS_CSV)
-      ]);
-
-      const kpis = (results[0].status === "fulfilled") ? results[0].value : [];
-      const subs = (results[1].status === "fulfilled") ? results[1].value : [];
-      const inc  = (results[2].status === "fulfilled") ? results[2].value : [];
-
-      // If something failed, keep the page alive but be honest in status/hints.
-      const failK = results[0].status !== "fulfilled";
-      const failS = results[1].status !== "fulfilled";
-      const failI = results[2].status !== "fulfilled";
-
       try {
-        // Normalize incidents once for telemetry + drill
+        setStatus("Loading data…");
+
+        const [kpis, subs, inc] = await Promise.all([
+          fetchTable(KPI_CSV),
+          fetchTable(SUBS_CSV),
+          fetchTable(INCIDENTS_CSV)
+        ]);
+
+        // Normalize incidents once for IOI drivers (neutral rollup)
         INC_NORM = normalizeIncidentRows(inc);
-        window.__INC_RAW__ = inc;
 
-        if (!failK) renderKPIs(kpis);
-        if (!failS) renderSubs(subs);
+        renderKPIs(kpis);
+        renderSubs(subs);
 
-        // Incidents section still renders even if empty
+        // Incidents
         renderIncidentsTable(inc);
         renderIncidentsLookup(inc);
 
-        // Auto-select latest incident into detail panel (if any)
+        // Auto-select latest incident into detail panel
         const latest = normalizeIncidentRows(inc).sort((a,b)=>{
           const da = Date.parse(a.Date) || 0;
           const db = Date.parse(b.Date) || 0;
@@ -2337,37 +2036,19 @@ function buildMiniTable(rows, total, drillType){
 
         // Sub incident panel close
         const subClose = document.getElementById("subIncClose");
-        if (subClose && !subClose.dataset.wired){
-          subClose.dataset.wired = "1";
-          subClose.addEventListener("click", ()=>{
-            document.getElementById("subIncPanel").style.display = "none";
-            setActiveSubCard("");
-          });
-        }
+        subClose.addEventListener("click", ()=>{
+          document.getElementById("subIncPanel").style.display = "none";
+          setActiveSubCard("");
+        });
 
-        // Incident filters
-        const qEl = document.getElementById("q");
-        const sevEl = document.getElementById("sev");
-        const clearEl = document.getElementById("clear");
-
-        if (qEl && !qEl.dataset.wired){
-          qEl.dataset.wired = "1";
-          qEl.addEventListener("input", ()=>renderIncidentsTable(inc));
-        }
-        if (sevEl && !sevEl.dataset.wired){
-          sevEl.dataset.wired = "1";
-          sevEl.addEventListener("change", ()=>renderIncidentsTable(inc));
-        }
-        if (clearEl && !clearEl.dataset.wired){
-          clearEl.dataset.wired = "1";
-          clearEl.addEventListener("click", (e)=>{
-            e.preventDefault();
-            if (qEl) qEl.value = "";
-            if (sevEl) sevEl.value = "";
-            clearDrill();
-            renderIncidentsTable(inc);
-          });
-        }
+        document.getElementById("q").addEventListener("input", ()=>renderIncidentsTable(inc));
+        document.getElementById("sev").addEventListener("change", ()=>renderIncidentsTable(inc));
+        document.getElementById("clear").addEventListener("click", (e)=>{
+          e.preventDefault();
+          document.getElementById("q").value = "";
+          document.getElementById("sev").value = "";
+          renderIncidentsTable(inc);
+        });
 
         // ✅ Telemetry (windowed) from INCIDENTS + SUBS
         let ACTIVE_WINDOW = 30; // 30 | 60 | "YTD"
@@ -2399,9 +2080,6 @@ function buildMiniTable(rows, total, drillType){
           if (title) title.textContent = (ACTIVE_WINDOW === "YTD") ? "Year to Date" : `Last ${ACTIVE_WINDOW} Days`;
           if (meta) meta.textContent = "Window incidents";
           if (wm) wm.textContent = `Window: ${tele.start.toLocaleDateString()} → ${tele.end.toLocaleDateString()} (${winLabel})`;
-
-          // refresh answer bar
-          updateAnswerBar(tele);
         }
 
         // Wire toggle buttons (once)
@@ -2416,33 +2094,17 @@ function buildMiniTable(rows, total, drillType){
           });
         });
 
-        // global wiring
-        wireGlobalDrillClicks();
-        wirePrint();
-
         // initial render
         setActiveWindow(30);
-
-        // status messaging
-        if (failK || failS || failI){
-          const parts = [];
-          if (failK) parts.push("KPI");
-          if (failS) parts.push("SUBS");
-          if (failI) parts.push("INCIDENTS");
-          setStatus(`Partial load: ${parts.join(", ")} failed. Page is still usable; refresh or verify publish links.`, true);
-
-          if (failS) document.getElementById("subHint").textContent = "Could not load subcontractor data. Verify your published SUBS CSV.";
-          if (failI) document.getElementById("incHint").textContent = "Could not load incidents. Verify your published INCIDENTS CSV.";
-        } else {
-          setStatus("");
-        }
-
+        setStatus("");
       } catch (err){
         console.error(err);
-        setStatus("Dashboard error. Check console + published CSV links, then refresh.", true);
+        setStatus("Data fetch failed. Check CSV publish links, then refresh.", true);
+        document.getElementById("subHint").textContent = "Could not load subcontractor data. Verify your published SUBS CSV.";
+        document.getElementById("incHint").textContent = "Could not load incidents. Verify your published INCIDENTS CSV.";
       }
     })();
-</script>
+  </script>
 </body>
 </html>
 
