@@ -1002,10 +1002,146 @@
       white-space: nowrap;
     }
 
+  
+    /* ==============================
+       SIMPLE LOGIN GATE (CLIENT-SIDE)
+       NOTE: This is NOT real security.
+    ============================== */
+    .auth-overlay{
+      position: fixed;
+      inset: 0;
+      z-index: 100000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,.72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 18px;
+    }
+    .auth-overlay.show{ display:flex; }
+
+    .auth-card{
+      width: min(520px, 92vw);
+      border-radius: 22px;
+      padding: 18px 18px 16px;
+      background:
+        radial-gradient(900px 600px at 15% 10%, rgba(159,28,31,.18), transparent 55%),
+        radial-gradient(700px 420px at 80% 20%, rgba(104,12,25,.18), transparent 60%),
+        linear-gradient(180deg, rgba(14,14,15,1) 0%, rgba(10,10,11,1) 100%);
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: 0 30px 90px rgba(0,0,0,.65);
+      color: var(--cream);
+    }
+    .auth-title{
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-size: 14px;
+      margin: 0 0 8px;
+    }
+    .auth-sub{
+      margin: 0 0 14px;
+      color: rgba(214,211,207,.78);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .auth-row{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      flex-wrap: wrap;
+    }
+    .auth-input{
+      flex: 1 1 260px;
+      font-family: inherit;
+      font-size: 14px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--cream);
+      outline:none;
+      min-height: 44px;
+    }
+    .auth-input::placeholder{ color: rgba(242,239,235,.55); }
+    .auth-btn{
+      min-height: 44px;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-weight: 900;
+      letter-spacing:.04em;
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(159,28,31,.26);
+      color: var(--cream);
+      cursor:pointer;
+      box-shadow: inset 0 0 0 1px rgba(159,28,31,.18);
+    }
+    .auth-btn:hover{ filter: brightness(1.06); }
+    .auth-btn:active{ transform: translateY(1px); }
+
+    .auth-err{
+      margin-top: 10px;
+      color: #ffb3b3;
+      font-size: 12px;
+      font-weight: 700;
+      display:none;
+    }
+    .auth-err.show{ display:block; }
+
+    /* Hide app until unlocked */
+    .protected.hide{ display:none !important; }
+
+    /* Tiny logout button (optional) */
+    .logout-btn{
+      position: fixed;
+      right: 14px;
+      bottom: 14px;
+      z-index: 99999;
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.14);
+      color: rgba(242,239,235,.9);
+      font-weight: 800;
+      letter-spacing:.02em;
+      cursor:pointer;
+      display:none;
+    }
+    .logout-btn:hover{ background: rgba(255,255,255,.10); }
+
   </style>
 </head>
 
 <body>
+
+  <!-- ==============================
+       SIMPLE LOGIN GATE (CLIENT-SIDE)
+       NOTE: This is NOT real security.
+       Anyone with the file can bypass.
+       Use a real hosted auth for true security.
+  ============================== -->
+  <div id="authOverlay" class="auth-overlay" aria-hidden="true">
+    <div class="auth-card" role="dialog" aria-modal="true" aria-label="Login">
+      <div class="auth-title">Protected Dashboard</div>
+      <p class="auth-sub">
+        Enter the password to view this dashboard. (Client-side gate only.)
+      </p>
+      <div class="auth-row">
+        <input id="authPass" class="auth-input" type="password" placeholder="Password…" autocomplete="current-password" />
+        <button id="authBtn" class="auth-btn" type="button">Unlock</button>
+      </div>
+      <div id="authErr" class="auth-err">Nope. Wrong password.</div>
+      <div class="auth-sub" style="margin-top:12px;">
+        Tip: press <strong>Enter</strong> to submit.
+      </div>
+    </div>
+  </div>
+  <button id="logoutBtn" class="logout-btn" type="button" title="Lock dashboard">Lock</button>
+
+  <div id="protectedApp" class="protected hide">
+
   <header class="brand-header">
     <img src="coopersteel-logo.png" alt="Cooper Steel" class="brand-logo">
   </header>
@@ -1169,6 +1305,100 @@
   </div>
 
   <script>
+    
+    /* ==============================
+       SIMPLE LOGIN GATE (CLIENT-SIDE)
+       NOTE: This is NOT real security.
+       For real security, use hosted auth.
+    ============================== */
+    const AUTH_SESSION_KEY = "cs_dash_unlocked_v1";
+    const DASH_PASSWORD = "Logan"; // <-- change this to your password
+
+    function showAuth(){
+      const ov = document.getElementById("authOverlay");
+      const app = document.getElementById("protectedApp");
+      const pass = document.getElementById("authPass");
+      const err = document.getElementById("authErr");
+      const logout = document.getElementById("logoutBtn");
+
+      if (ov) { ov.classList.add("show"); ov.setAttribute("aria-hidden","false"); }
+      if (app) app.classList.add("hide");
+      if (logout) logout.style.display = "none";
+      if (err) err.classList.remove("show");
+      if (pass){
+        pass.value = "";
+        setTimeout(()=>pass.focus(), 50);
+      }
+      document.body.style.overflow = "hidden";
+    }
+
+    function hideAuth(){
+      const ov = document.getElementById("authOverlay");
+      const app = document.getElementById("protectedApp");
+      const logout = document.getElementById("logoutBtn");
+
+      if (ov) { ov.classList.remove("show"); ov.setAttribute("aria-hidden","true"); }
+      if (app) app.classList.remove("hide");
+      if (logout) logout.style.display = "inline-flex";
+      document.body.style.overflow = "";
+    }
+
+    function unlock(){
+      const pass = document.getElementById("authPass");
+      const err = document.getElementById("authErr");
+      const val = (pass?.value || "").trim();
+
+      if (!DASH_PASSWORD || DASH_PASSWORD === "CHANGE_ME"){
+        // Safety: if you forgot to set a password, don't brick the page.
+        console.warn("[Auth] DASH_PASSWORD is not set. Unlocking anyway.");
+        sessionStorage.setItem(AUTH_SESSION_KEY, "1");
+        hideAuth();
+        return true;
+      }
+
+      if (val === DASH_PASSWORD){
+        sessionStorage.setItem(AUTH_SESSION_KEY, "1");
+        hideAuth();
+        return true;
+      }
+
+      if (err) err.classList.add("show");
+      if (pass){
+        pass.value = "";
+        pass.focus();
+      }
+      return false;
+    }
+
+    function lock(){
+      sessionStorage.removeItem(AUTH_SESSION_KEY);
+      showAuth();
+    }
+
+    // Wire up auth UI immediately (before data loads)
+    (function initAuthGate(){
+      const btn = document.getElementById("authBtn");
+      const pass = document.getElementById("authPass");
+      const logout = document.getElementById("logoutBtn");
+
+      if (btn && !btn.dataset.wired){
+        btn.dataset.wired = "1";
+        btn.addEventListener("click", unlock);
+      }
+      if (pass && !pass.dataset.wired){
+        pass.dataset.wired = "1";
+        pass.addEventListener("keydown", (e)=>{ if (e.key === "Enter") unlock(); });
+      }
+      if (logout && !logout.dataset.wired){
+        logout.dataset.wired = "1";
+        logout.addEventListener("click", lock);
+      }
+
+      if (sessionStorage.getItem(AUTH_SESSION_KEY) === "1") hideAuth();
+      else showAuth();
+    })();
+
+
     /*** CONFIG: your published CSV URLs ***/
     const KPI_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=152373673&single=true&output=csv";
     const SUBS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=466735545&single=true&output=csv";
@@ -2005,7 +2235,6 @@ function computeTelemetryWindow(incNorm, subsAll, window){
   </script>
 </body>
 </html>
-
 
 
 
