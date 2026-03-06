@@ -1002,7 +1002,46 @@
       white-space: nowrap;
     }
 
-  
+    /* ---------- Injury Analytics ---------- */
+    .injury-section{
+      margin: 26px 0 34px;
+    }
+    .injury-section-head{
+      margin: 0 0 14px;
+      padding: 0 2px;
+    }
+    .injury-section-head h2{
+      margin:0 0 6px;
+      font-size:20px;
+      color: var(--cream);
+    }
+    .injury-section-head p{
+      margin:0;
+      font-size:13px;
+      color: rgba(242,239,235,.78);
+    }
+    .injury-grid{
+      margin-top: 10px;
+    }
+    .injury-card{
+      min-height: 320px;
+    }
+    .injury-card .ioi-card-b{
+      padding-top: 10px;
+    }
+    .injury-footnote{
+      margin-top: 12px;
+      padding: 0 2px;
+      font-size: 12px;
+      color: rgba(242,239,235,.72);
+    }
+    .dim-empty{
+      color: rgba(242,239,235,.72);
+      font-size:12px;
+      padding-top: 8px;
+    }
+
+
     /* ==============================
        SIMPLE LOGIN GATE (CLIENT-SIDE)
        NOTE: This is NOT real security.
@@ -1232,6 +1271,60 @@
 
         </div>
       </div>
+
+      <div class="injury-section">
+        <div class="injury-section-head">
+          <h2>Injury Signature Analytics</h2>
+        </div>
+
+        <div class="ioi-insight-grid injury-grid">
+          <div class="ioi-card injury-card">
+            <div class="ioi-card-h">
+              <div class="k">Body Part Distribution</div>
+            </div>
+            <div class="ioi-card-b">
+              <div class="mini-table" id="bodyPartTable">—</div>
+            </div>
+            <div class="ioi-card-f">
+            </div>
+          </div>
+
+          <div class="ioi-card injury-card">
+            <div class="ioi-card-h">
+              <div class="k">Nature of Injury</div>
+            </div>
+            <div class="ioi-card-b">
+              <div class="mini-table" id="natureTable">—</div>
+            </div>
+            <div class="ioi-card-f">
+            </div>
+          </div>
+
+          <div class="ioi-card injury-card">
+            <div class="ioi-card-h">
+              <div class="k">Mechanism</div>
+            </div>
+            <div class="ioi-card-b">
+              <div class="mini-table" id="mechanismTable">—</div>
+            </div>
+            <div class="ioi-card-f">
+            </div>
+          </div>
+
+          <div class="ioi-card injury-card">
+            <div class="ioi-card-h">
+              <div class="k">Day of Week</div>
+            </div>
+            <div class="ioi-card-b">
+              <div class="mini-table" id="dayTable">—</div>
+            </div>
+            <div class="ioi-card-f">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
 <div class="section">
         <h2>Subcontractor Performance</h2>
         <p>Top subcontractors by hours are shown below. Use the lookup to view any subcontractor.</p>
@@ -1406,6 +1499,12 @@
 
     /* ✅ PASTE YOUR PUB_IOI PUBLISHED CSV LINK HERE */
     const IOI_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=303885721&single=true&output=csv";
+
+    const NATURE_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=1755388549&single=true&output=csv";
+    const BODY_PART_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=1787496507&single=true&output=csv";
+    const MECHANISM_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=4709382&single=true&output=csv";
+    const DAYOFWEEK_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=1983006757&single=true&output=csv";
+
 
     /*** helpers ***/
     const bust = (url) => url + (url.includes("?") ? "&" : "?") + "t=" + Date.now();
@@ -2133,15 +2232,87 @@ function computeTelemetryWindow(incNorm, subsAll, window){
       `).join("");
     }
 
+
+    /*** DIMENSION ANALYTICS ***/
+    function normalizeDimensionRows(rows, primaryKeys){
+      return (rows || []).map(r => {
+        const label = primaryKeys.map(k => r[k]).find(v => String(v || "").trim() !== "")
+          || r.Label || r.Name || r.Category || "";
+        const count = toNumber(r.Count ?? r.Total ?? r.Incidents ?? r.Value ?? 0);
+        return {
+          label: String(label || "").trim(),
+          count
+        };
+      }).filter(x => x.label && x.label.toLowerCase() !== "total" && x.label.toLowerCase() !== "grand total");
+    }
+
+    function buildDimensionTable(rows, opts={}){
+      const topN = opts.topN || 7;
+      const ordered = (rows || []).slice(0, topN);
+      const total = ordered.reduce((a,b)=> a + (Number(b.count)||0), 0);
+
+      if (!ordered.length){
+        return `<div class="dim-empty">No data available.</div>`;
+      }
+
+      return `
+        <table class="mini">
+          <thead><tr><th>Rank</th><th>Name</th><th>Count</th><th>Share</th></tr></thead>
+          <tbody>
+            ${ordered.map((r,i)=>`
+              <tr>
+                <td class="mono">${i+1}</td>
+                <td>${safeText(r.label)}</td>
+                <td class="mono">${r.count}</td>
+                <td class="mono">${total ? fmtPct(r.count / total) : "—"}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderDimensionAnalytics(bodyRows, natureRows, mechanismRows, dayRows){
+      const bodyEl = document.getElementById("bodyPartTable");
+      const natureEl = document.getElementById("natureTable");
+      const mechEl = document.getElementById("mechanismTable");
+      const dayEl = document.getElementById("dayTable");
+
+      const body = normalizeDimensionRows(bodyRows, ["BodyPart"]);
+      const nature = normalizeDimensionRows(natureRows, ["NatureOfInjury"]);
+      const mech = normalizeDimensionRows(mechanismRows, ["Mechanism"]);
+      let day = normalizeDimensionRows(dayRows, ["DayOfWeek"]);
+
+      const dayOrder = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+      day.sort((a,b)=>{
+        const ai = dayOrder.indexOf(a.label);
+        const bi = dayOrder.indexOf(b.label);
+        if (ai !== -1 && bi !== -1) return ai - bi;
+        if (ai !== -1) return -1;
+        if (bi !== -1) return 1;
+        return b.count - a.count;
+      });
+
+      if (bodyEl) bodyEl.innerHTML = buildDimensionTable(body, { topN: 7 });
+      if (natureEl) natureEl.innerHTML = buildDimensionTable(nature, { topN: 7 });
+      if (mechEl) mechEl.innerHTML = buildDimensionTable(mech, { topN: 7 });
+      if (dayEl) dayEl.innerHTML = buildDimensionTable(day, { topN: 7 });
+    }
+
+
     /*** init ***/
     (async function init(){
       try {
         setStatus("Loading data…");
 
-        const [kpis, subs, inc] = await Promise.all([
+        const [kpis, subs, inc, bodyParts, natures, mechanisms, days] = await Promise.all([
           fetchTable(KPI_CSV),
           fetchTable(SUBS_CSV),
-          fetchTable(INCIDENTS_CSV)
+          fetchTable(INCIDENTS_CSV),
+          fetchTable(BODY_PART_CSV),
+          fetchTable(NATURE_CSV),
+          fetchTable(MECHANISM_CSV),
+          fetchTable(DAYOFWEEK_CSV)
         ]);
 
         // Normalize incidents once for IOI drivers (neutral rollup)
@@ -2149,6 +2320,7 @@ function computeTelemetryWindow(incNorm, subsAll, window){
 
         renderKPIs(kpis);
         renderSubs(subs);
+        renderDimensionAnalytics(bodyParts, natures, mechanisms, days);
 
         // Incidents
         renderIncidentsTable(inc);
@@ -2235,7 +2407,6 @@ function computeTelemetryWindow(incNorm, subsAll, window){
   </script>
 </body>
 </html>
-
 
 
 
