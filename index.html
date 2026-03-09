@@ -1022,9 +1022,20 @@
     }
     .injury-grid{
       margin-top: 10px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
     .injury-card{
       min-height: 320px;
+    }
+    @media (max-width: 1100px){
+      .injury-grid{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 720px){
+      .injury-grid{
+        grid-template-columns: 1fr;
+      }
     }
     .injury-card .ioi-card-b{
       padding-top: 10px;
@@ -1236,7 +1247,6 @@
               <div class="mini-table" id="tTopSubsTable">—</div>
             </div>
             <div class="ioi-card-f">
-              <span class="muted">Counts by subcontractor</span>
             </div>
           </div>
 
@@ -1249,15 +1259,13 @@
               <div class="mini-table" id="tTopProjectsTable">—</div>
             </div>
             <div class="ioi-card-f">
-              <span class="muted">Counts by project</span>
             </div>
           </div>
 
           <div class="ioi-card" id="ioiCard10k">
             <div class="ioi-card-h">
               <div class="k">≥10,000 Hours Filter</div>
-              <div class="meta">Subs w/ meaningful exposure</div>
-            </div>
+</div>
             <div class="ioi-card-b">
               <div class="row"><div class="label">Top sub (window incidents)</div><div class="value" id="tTop10kSub">—</div></div>
               <div class="row"><div class="label">Hours (YTD)</div><div class="value" id="tTop10kHours">—</div></div>
@@ -1275,13 +1283,14 @@
       <div class="injury-section">
         <div class="injury-section-head">
           <h2>Injury Signature Analytics</h2>
+          <p>Executive rollups showing what is getting hurt, how it is getting hurt, and when incidents are occurring.</p>
         </div>
 
         <div class="ioi-insight-grid injury-grid">
           <div class="ioi-card injury-card">
             <div class="ioi-card-h">
               <div class="k">Body Part Distribution</div>
-            </div>
+</div>
             <div class="ioi-card-b">
               <div class="mini-table" id="bodyPartTable">—</div>
             </div>
@@ -1292,7 +1301,7 @@
           <div class="ioi-card injury-card">
             <div class="ioi-card-h">
               <div class="k">Nature of Injury</div>
-            </div>
+</div>
             <div class="ioi-card-b">
               <div class="mini-table" id="natureTable">—</div>
             </div>
@@ -1303,7 +1312,7 @@
           <div class="ioi-card injury-card">
             <div class="ioi-card-h">
               <div class="k">Mechanism</div>
-            </div>
+</div>
             <div class="ioi-card-b">
               <div class="mini-table" id="mechanismTable">—</div>
             </div>
@@ -1314,15 +1323,36 @@
           <div class="ioi-card injury-card">
             <div class="ioi-card-h">
               <div class="k">Day of Week</div>
-            </div>
+</div>
             <div class="ioi-card-b">
               <div class="mini-table" id="dayTable">—</div>
             </div>
             <div class="ioi-card-f">
             </div>
           </div>
-        </div>
 
+          <div class="ioi-card injury-card">
+            <div class="ioi-card-h">
+              <div class="k">Time of Day</div>
+</div>
+            <div class="ioi-card-b">
+              <div class="mini-table" id="timeTable">—</div>
+            </div>
+            <div class="ioi-card-f">
+            </div>
+          </div>
+
+          <div class="ioi-card injury-card">
+            <div class="ioi-card-h">
+              <div class="k">Top Risk Signatures</div>
+</div>
+            <div class="ioi-card-b">
+              <div class="mini-table" id="riskTable">—</div>
+            </div>
+            <div class="ioi-card-f">
+            </div>
+          </div>
+        </div>
       </div>
 
 <div class="section">
@@ -1504,6 +1534,8 @@
     const BODY_PART_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=1787496507&single=true&output=csv";
     const MECHANISM_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=4709382&single=true&output=csv";
     const DAYOFWEEK_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=1983006757&single=true&output=csv";
+    const TIME_OF_DAY_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=1637334887&single=true&output=csv";
+    const RISK_SIGNATURES_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=579125110&single=true&output=csv";
 
 
     /*** helpers ***/
@@ -2016,8 +2048,7 @@ function computeTelemetryWindow(incNorm, subsAll, window){
       wrap.innerHTML = top.map(r => `
         <div class="card clickable" data-sub="${r.sub}">
           <h3>${r.sub}</h3>
-          <div class="meta">YTD exposure & rates</div>
-          <div class="kv">
+<div class="kv">
             <div class="k">Hours</div><div class="v">${r.hours.toLocaleString()}</div>
             <div class="k">Incidents</div><div class="v">${r.incidents}</div>
             <div class="k">Recordables</div><div class="v">${r.recordables}</div>
@@ -2100,12 +2131,10 @@ function computeTelemetryWindow(incNorm, subsAll, window){
         <div class="inc-row">
           <div>
             <strong>${safeText(r.Date) || "—"}</strong>
-            <div class="meta">${safeText(r.IncidentID) || "—"}</div>
-          </div>
+</div>
           <div>
             <strong>${safeText(r.Subcontractor) || "—"} ${pillForSeverity(r.Severity)}</strong>
-            <div class="meta">${safeText(r.Project) || ""}</div>
-          </div>
+</div>
           <div style="text-align:right;">
             ${r.ReportLink ? `<a class="link" href="${r.ReportLink}" target="_blank" rel="noopener">View report</a>` : `<span class="small">—</span>`}
           </div>
@@ -2219,12 +2248,10 @@ function computeTelemetryWindow(incNorm, subsAll, window){
         <div class="inc-row">
           <div>
             <strong>${safeText(r.Date) || "—"}</strong>
-            <div class="meta">${safeText(r.IncidentID) || "—"}</div>
-          </div>
+</div>
           <div>
             <strong>${safeText(r.Subcontractor) || "—"} ${pillForSeverity(r.Severity)}</strong>
-            <div class="meta">${safeText(r.Project) || ""}</div>
-          </div>
+</div>
           <div style="text-align:right;">
             ${r.ReportLink ? `<a class="link" href="${r.ReportLink}" target="_blank" rel="noopener">View report</a>` : `<span class="small">—</span>`}
           </div>
@@ -2272,7 +2299,7 @@ function computeTelemetryWindow(incNorm, subsAll, window){
       `;
     }
 
-    function renderDimensionAnalytics(bodyRows, natureRows, mechanismRows, dayRows){
+    function renderDimensionAnalytics(bodyRows, natureRows, mechanismRows, dayRows, timeRows, riskRows){
       const bodyEl = document.getElementById("bodyPartTable");
       const natureEl = document.getElementById("natureTable");
       const mechEl = document.getElementById("mechanismTable");
@@ -2297,6 +2324,39 @@ function computeTelemetryWindow(incNorm, subsAll, window){
       if (natureEl) natureEl.innerHTML = buildDimensionTable(nature, { topN: 7 });
       if (mechEl) mechEl.innerHTML = buildDimensionTable(mech, { topN: 7 });
       if (dayEl) dayEl.innerHTML = buildDimensionTable(day, { topN: 7 });
+      renderTimeTable(timeRows);
+      renderRiskTable(riskRows);
+    }
+
+
+    function renderRiskTable(rows){
+      const el = document.getElementById("riskTable");
+      if(!el) return;
+
+      const data = (rows || []).map(r => {
+        const body = String(r.BodyPart || r["Body Part"] || "").trim();
+        const mech = String(r.Mechanism || "").trim();
+        const count = toNumber(r.Count ?? r.count ?? 0);
+        return {
+          label: [body, mech].filter(Boolean).join(" + "),
+          count
+        };
+      }).filter(x => x.label);
+
+      el.innerHTML = buildDimensionTable(data, { topN: 7 });
+    }
+
+    function renderTimeTable(rows){
+      const el = document.getElementById("timeTable");
+      if(!el) return;
+
+      const data = (rows || []).map(r => {
+        const label = String(r["Hour Range"] || r.HourRange || r.Hour || r.Label || "").trim();
+        const count = toNumber(r.Count ?? r.count ?? 0);
+        return { label, count };
+      }).filter(x => x.label);
+
+      el.innerHTML = buildDimensionTable(data, { topN: 12 });
     }
 
 
@@ -2305,14 +2365,16 @@ function computeTelemetryWindow(incNorm, subsAll, window){
       try {
         setStatus("Loading data…");
 
-        const [kpis, subs, inc, bodyParts, natures, mechanisms, days] = await Promise.all([
+        const [kpis, subs, inc, bodyParts, natures, mechanisms, days, timeRows, riskRows] = await Promise.all([
           fetchTable(KPI_CSV),
           fetchTable(SUBS_CSV),
           fetchTable(INCIDENTS_CSV),
           fetchTable(BODY_PART_CSV),
           fetchTable(NATURE_CSV),
           fetchTable(MECHANISM_CSV),
-          fetchTable(DAYOFWEEK_CSV)
+          fetchTable(DAYOFWEEK_CSV),
+          fetchTable(TIME_OF_DAY_CSV),
+          fetchTable(RISK_SIGNATURES_CSV)
         ]);
 
         // Normalize incidents once for IOI drivers (neutral rollup)
@@ -2320,7 +2382,7 @@ function computeTelemetryWindow(incNorm, subsAll, window){
 
         renderKPIs(kpis);
         renderSubs(subs);
-        renderDimensionAnalytics(bodyParts, natures, mechanisms, days);
+        renderDimensionAnalytics(bodyParts, natures, mechanisms, days, timeRows, riskRows);
 
         // Incidents
         renderIncidentsTable(inc);
@@ -2407,6 +2469,7 @@ function computeTelemetryWindow(incNorm, subsAll, window){
   </script>
 </body>
 </html>
+
 
 
 
