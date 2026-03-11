@@ -1161,6 +1161,65 @@
     }
     .logout-btn:hover{ background: rgba(255,255,255,.10); }
 
+
+
+    /* ---------- Emerging Risk Signals ---------- */
+    .alert-stack{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap:14px;
+      align-items: stretch;
+    }
+    #ioiCardEmergingRisk{
+      grid-column: 1 / -1;
+      min-height: 0;
+    }
+    #ioiCardEmergingRisk .ioi-card-b{
+      padding-top: 14px;
+    }
+    @media (max-width: 640px){
+      #ioiCardEmergingRisk{ grid-column: auto; }
+    }
+    .alert-card{
+      border-radius: 18px;
+      padding: 16px 16px 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+    .alert-card.stable{
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border-color: rgba(255,255,255,.12);
+    }
+    .alert-card.elevated,
+    .alert-card.critical{
+      background:
+        radial-gradient(600px 240px at 10% 10%, rgba(159,28,31,.16), transparent 55%),
+        linear-gradient(180deg, rgba(159,28,31,.14), rgba(104,12,25,.10));
+      border-color: rgba(159,28,31,.42);
+      box-shadow: inset 0 0 0 1px rgba(159,28,31,.18), 0 14px 34px rgba(0,0,0,.20);
+    }
+    .alert-kicker{
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: #ffd3d3;
+      margin-bottom: 8px;
+    }
+    .alert-title{
+      font-size: 14px;
+      font-weight: 800;
+      line-height: 1.45;
+      color: var(--cream);
+      margin-bottom: 8px;
+    }
+    .alert-detail{
+      font-size: 12px;
+      line-height: 1.45;
+      color: rgba(242,239,235,.78);
+    }
+
   </style>
 </head>
 
@@ -1277,12 +1336,32 @@
             </div>
           </div>
 
+          <div class="ioi-card" id="ioiCardEmergingRisk">
+            <div class="ioi-card-h">
+              <div class="k">Emerging Risk Signals</div>
+              <div class="meta" id="emergingRiskSignalsMeta">Recent — vs baseline —</div>
+            </div>
+            <div class="ioi-card-b">
+              <div class="alert-stack" id="emergingRiskSignals">
+                <div class="alert-card stable">
+                  <div class="alert-kicker">STABLE WINDOW</div>
+                  <div class="alert-title">No emerging risk signals detected in the selected window.</div>
+                  <div class="alert-detail">Body part + mechanism spike detection will render here.</div>
+                </div>
+              </div>
+            </div>
+            <div class="ioi-card-f">
+              <span class="muted">Body part + mechanism spike detection</span>
+            </div>
+          </div>
+
         </div>
       </div>
 
       <div class="injury-section">
         <div class="injury-section-head">
           <h2>Injury Signature Analytics</h2>
+          <p>Executive rollups showing what is getting hurt, how it is getting hurt, and when incidents are occurring.</p>
         </div>
 
         <div class="ioi-insight-grid injury-grid">
@@ -1524,7 +1603,7 @@
     /*** CONFIG: your published CSV URLs ***/
     const KPI_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=152373673&single=true&output=csv";
     const SUBS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=466735545&single=true&output=csv";
-    const INCIDENTS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=1844704592&single=true&output=csv";
+    const INCIDENTS_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=535693387&single=true&output=csv";
 
     /* ✅ PASTE YOUR PUB_IOI PUBLISHED CSV LINK HERE */
     const IOI_CSV = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRrvHagkDQ72AeZe3sWPeJ_DJKgqL9Ipfw9WCdX0sAsRNxOhg_tJ9IhjkIo0Kij2vb4pBXqKyE6cCNJ/pub?gid=303885721&single=true&output=csv";
@@ -1984,6 +2063,188 @@ function computeTelemetryWindow(incNorm, subsAll, window){
 
      
     
+
+
+    function computeEmergingRiskSignals(incidents, start, end) {
+      const MS_PER_DAY = 24 * 60 * 60 * 1000;
+      const dayDiff = Math.max(1, Math.round((end - start) / MS_PER_DAY) + 1);
+
+      const baselineMultiplier = 4;
+      const baselineDays = Math.max(30, dayDiff * baselineMultiplier);
+
+      const baselineEnd = new Date(start);
+      baselineEnd.setDate(baselineEnd.getDate() - 1);
+      baselineEnd.setHours(23,59,59,999);
+
+      const baselineStart = new Date(start);
+      baselineStart.setDate(baselineStart.getDate() - baselineDays);
+      baselineStart.setHours(0,0,0,0);
+
+      const inRange = (d, a, b) => d && d >= a && d <= b;
+      const clean = v => String(v || "").trim();
+      const sigKey = r => `${clean(r.BodyPart)} + ${clean(r.Mechanism)}`;
+
+      const validRows = (incidents || []).filter(r =>
+        r && r.DateObj instanceof Date && !isNaN(r.DateObj) && clean(r.BodyPart) && clean(r.Mechanism)
+      );
+
+      const recentRows = validRows.filter(r => inRange(r.DateObj, start, end));
+      const baselineRows = validRows.filter(r => inRange(r.DateObj, baselineStart, baselineEnd));
+
+      const recentTotal = recentRows.length;
+      const baselineTotal = baselineRows.length;
+
+      const countBy = rows => {
+        const map = new Map();
+        rows.forEach(r => {
+          const key = sigKey(r);
+          map.set(key, (map.get(key) || 0) + 1);
+        });
+        return map;
+      };
+
+      const recentCounts = countBy(recentRows);
+      const baselineCounts = countBy(baselineRows);
+
+      const MIN_WINDOW_COUNT = 2;
+      const MIN_BASELINE_COUNT_FOR_RATIO = 3;
+      const MIN_SHARE_RATIO = 1.75;
+      const MIN_ABSOLUTE_SHARE_LIFT = 0.05;
+      const MAX_DISPLAY_RATIO = 9.9;
+
+      const alerts = [];
+
+      for (const [signature, windowCount] of recentCounts.entries()) {
+        if (windowCount < MIN_WINDOW_COUNT) continue;
+
+        const baselineCount = baselineCounts.get(signature) || 0;
+        const windowShare = recentTotal ? windowCount / recentTotal : 0;
+        const baselineShare = baselineTotal ? baselineCount / baselineTotal : 0;
+        const absoluteLift = windowShare - baselineShare;
+
+        if (baselineCount < MIN_BASELINE_COUNT_FOR_RATIO) {
+          if (windowCount >= 3 && windowShare >= 0.12) {
+            alerts.push({
+              type: "new",
+              severity: windowCount >= 4 ? "critical" : "elevated",
+              signature,
+              windowCount,
+              baselineCount,
+              recentTotal,
+              baselineTotal,
+              windowShare,
+              baselineShare,
+              ratio: null,
+              label: "NEW EMERGING PATTERN",
+              message: `${signature} injuries are appearing as a new concentration in the selected window.`,
+              detail: `Window: ${windowCount}/${recentTotal}. Baseline: ${baselineCount}/${baselineTotal}`
+            });
+          }
+          continue;
+        }
+
+        if (!baselineShare) continue;
+
+        const shareRatio = windowShare / baselineShare;
+
+        if (shareRatio >= MIN_SHARE_RATIO && absoluteLift >= MIN_ABSOLUTE_SHARE_LIFT) {
+          const cappedRatio = Math.min(shareRatio, MAX_DISPLAY_RATIO);
+          const roundedRatio = Math.round(cappedRatio * 10) / 10;
+
+          let severity = "elevated";
+          let label = "ELEVATED RISK";
+
+          if (shareRatio >= 3 || absoluteLift >= 0.12) {
+            severity = "critical";
+            label = "CRITICAL SPIKE";
+          }
+
+          alerts.push({
+            type: "ratio",
+            severity,
+            signature,
+            windowCount,
+            baselineCount,
+            recentTotal,
+            baselineTotal,
+            windowShare,
+            baselineShare,
+            ratio: roundedRatio,
+            label,
+            message: `${signature} injuries are ${roundedRatio}× above baseline.`,
+            detail: `Window: ${windowCount}/${recentTotal}. Baseline: ${baselineCount}/${baselineTotal}`
+          });
+        }
+      }
+
+      alerts.sort((a, b) => {
+        const score = x => {
+          if (x.type === "new") return (x.windowCount * 10) + x.windowShare;
+          return ((x.ratio || 0) * 10) + (x.windowCount * 2) + x.windowShare;
+        };
+        return score(b) - score(a);
+      });
+
+      return {
+        alerts: alerts.slice(0, 3),
+        recentTotal,
+        baselineTotal,
+        baselineStart,
+        baselineEnd,
+        start,
+        end
+      };
+    }
+
+    function renderEmergingRiskSignals(tele){
+      const host = document.getElementById("emergingRiskSignals");
+      const meta = document.getElementById("emergingRiskSignalsMeta");
+      if (!host || !meta || !tele) return;
+
+      const result = computeEmergingRiskSignals(INC_NORM || [], tele.start, tele.end);
+      meta.textContent = `Recent ${result.recentTotal} vs baseline ${result.baselineTotal}`;
+
+      if (!result.recentTotal) {
+        host.innerHTML = `
+          <div class="alert-card stable">
+            <div class="alert-kicker">STABLE WINDOW</div>
+            <div class="alert-title">No incidents in the selected window.</div>
+            <div class="alert-detail">There are no body-part/mechanism signatures to evaluate for this period.</div>
+          </div>
+        `;
+        return;
+      }
+
+      if (!result.baselineTotal) {
+        host.innerHTML = `
+          <div class="alert-card stable">
+            <div class="alert-kicker">INSUFFICIENT BASELINE</div>
+            <div class="alert-title">Historical comparison window is too thin for spike detection.</div>
+            <div class="alert-detail">Recent incidents: ${result.recentTotal}. Add more historical incident depth to enable stronger baseline comparisons.</div>
+          </div>
+        `;
+        return;
+      }
+
+      if (!result.alerts.length) {
+        host.innerHTML = `
+          <div class="alert-card stable">
+            <div class="alert-kicker">STABLE WINDOW</div>
+            <div class="alert-title">No emerging risk signals detected in the selected window.</div>
+            <div class="alert-detail">No body-part/mechanism signature cleared the spike threshold against baseline.</div>
+          </div>
+        `;
+        return;
+      }
+
+      host.innerHTML = result.alerts.map(a => `
+        <div class="alert-card ${a.severity === "critical" ? "critical" : "elevated"}">
+          <div class="alert-kicker">⚠ ${a.label}</div>
+          <div class="alert-title">${a.message}</div>
+          <div class="alert-detail">${a.detail}</div>
+        </div>
+      `).join("");
+    }
 /*** SUBS ***/
     let SUBS_ALL = [];
 
@@ -2146,14 +2407,48 @@ function computeTelemetryWindow(incNorm, subsAll, window){
     }
 
     function normalizeIncidentRows(rows){
-      return rows.map(r => ({
-        Date: r.Date || r.date || "",
-        IncidentID: r.IncidentID || r.IncidentId || r.ID || r.Id || "",
-        Subcontractor: r.Subcontractor || r.subcontractor || r.Sub || "",
-        Project: r.Project || r.project || "",
-        Severity: r.Severity || r.severity || "",
-        ReportLink: r.ReportLink || r.reportlink || r.Link || ""
-      })).filter(x => x.IncidentID && String(x.IncidentID).trim().toLowerCase() !== "incidentid");
+      const pick = (row, candidates=[]) => {
+        for (const key of candidates){
+          if (row[key] !== undefined && row[key] !== null && String(row[key]).trim() !== "") {
+            return String(row[key]).trim();
+          }
+        }
+
+        const norm = s => String(s || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+        const wanted = candidates.map(norm);
+
+        for (const [k,v] of Object.entries(row || {})){
+          if (v === undefined || v === null || String(v).trim() === "") continue;
+          const nk = norm(k);
+          if (wanted.includes(nk)) return String(v).trim();
+        }
+        return "";
+      };
+
+      return (rows || []).map(r => {
+        const date = pick(r, ["Date","date","DATE","Incident Date","IncidentDate","Date of Incident","Injury Date"]);
+        return {
+          Date: date,
+          DateObj: parseDateAny(date),
+          IncidentID: pick(r, ["IncidentID","IncidentId","ID","Id","Case Number","CaseNumber","Record ID"]),
+          Subcontractor: pick(r, ["Subcontractor","subcontractor","Sub","Employer","Contractor","ERECTOR","Trade Partner"]),
+          Project: pick(r, ["Project","project","Job","Job Name","JOB NAME / #","Project Name","Site","Location"]),
+          IncidentType: pick(r, ["IncidentType","Incident Types","IncidentTypes","Type","Type of Incident"]),
+          Severity: pick(r, ["Severity","severity","INCIDENT OUTCOME","Outcome","Recordability","Classification","Incident Severity"]),
+          Recordable: pick(r, ["Recordable","recordable","Recordable?","OSHA Recordable"]),
+          LostTime: pick(r, ["LostTime","losttime","Lost Time","LTR","Lost Work Time"]),
+          Description: pick(r, ["Description","description","Narrative","Summary"]),
+          BodyPart: pick(r, ["BodyPart","Body Part","BODY PART INJURED","Body Part(s)","Body Part Injured","Affected Body Part","Injured Body Part","bodypart"]),
+          Mechanism: pick(r, ["Mechanism","mechanism","NATURE OF INCIDENT","Incident Mechanism","Injury Mechanism","Cause","Primary Cause","Event Type","Exposure Type"]),
+          NatureOfInjury: pick(r, ["NatureOfInjury","Nature Of Injury","Nature of Injury","INJURY TYPE","Type of Injury","natureofinjury"]),
+          Time: pick(r, ["Time","time"]),
+          DayOfWeek: pick(r, ["DayOfWeek","Day Of Week","DAY OF WEEK"]),
+          ReportLink: pick(r, ["ReportLink","reportlink","Link","Report Link","URL","Report URL"])
+        };
+      }).filter(x => {
+        const idOk = String(x.IncidentID || "").trim().toLowerCase() !== "incidentid";
+        return idOk && (x.Date || x.Subcontractor || x.Project || x.BodyPart || x.Mechanism);
+      });
     }
 
     function renderIncidentDetail(item){
@@ -2431,6 +2726,7 @@ function computeTelemetryWindow(incNorm, subsAll, window){
           const win = (ACTIVE_WINDOW === "YTD") ? "YTD" : ACTIVE_WINDOW;
           const tele = computeTelemetryWindow(INC_NORM, SUBS_ALL, win);
           renderTelemetry(tele);
+          renderEmergingRiskSignals(tele);
 
           // update labels
           const title = document.getElementById("ioiWindowTitle");
@@ -2468,7 +2764,6 @@ function computeTelemetryWindow(incNorm, subsAll, window){
   </script>
 </body>
 </html>
-
 
 
 
